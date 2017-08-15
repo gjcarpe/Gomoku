@@ -9,5 +9,6 @@ public class Janela extends JFrame
 		setSize(800, 600);
 		setLocationRelativeTo(null);
 		setVisible(true);
+		setTitle("Gomoku");
 	}
 }
