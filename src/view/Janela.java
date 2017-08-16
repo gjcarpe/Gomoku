@@ -23,9 +23,9 @@ public class Janela extends JFrame {
 
 	private ImageIcon iconePosicaoSemPeca;
 
-	private ImageIcon iconePosicaoPecaAmarela;
+	private ImageIcon iconePosicaoPecaBranca;
 
-	private ImageIcon iconePosicaoPecaVermelha;
+	private ImageIcon iconePosicaoPecaPreta;
 
 	public Janela() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -94,16 +94,37 @@ public class Janela extends JFrame {
 				botao.setBounds(300 + (j * 23), 89 + (i * 23), 23, 23);
 				botao.setVisible(true);
 				botao.setIcon(this.iconePosicaoSemPeca);
+<<<<<<< HEAD
 				botao.addMouseListener(new TratadorBotaoTabuleiro());
+=======
+				botao.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						botao.setIcon(iconePosicaoPecaBranca);
+						// botao.setBackground(Color.Black);
+					}
+				});
+>>>>>>> 42c3d384c18d8b02f707608d73aa0715c3d85516
 				container.add(botao);
 				this.botoesTabuleiro[i][j] = botao;
 			}
 		}
 	}
+<<<<<<< HEAD
 	
 	public JButton[][] getBotoesTabuleiro()
 	{
 		return this.botoesTabuleiro;
+=======
+
+	public void criarIcones() {
+		this.iconePosicaoSemPeca = new ImageIcon(getClass().getResource(
+				"/imagens/PosicaoSemPeca.png"));
+		this.iconePosicaoPecaBranca = new ImageIcon(getClass().getResource(
+				"/imagens/PosicaoPecaBranca.png"));
+		this.iconePosicaoPecaPreta = new ImageIcon(getClass().getResource(
+				"/imagens/PosicaoPecaPreta.png"));
+
+>>>>>>> 42c3d384c18d8b02f707608d73aa0715c3d85516
 	}
 
 }
