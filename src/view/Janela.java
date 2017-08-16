@@ -4,14 +4,13 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-public class Janela extends JFrame {
+public class Janela extends JFrame 
+{
 	private static final long serialVersionUID = -419158925384719190L;
 
 	private JButton[][] botoesTabuleiro = new JButton[15][15];
@@ -23,11 +22,14 @@ public class Janela extends JFrame {
 
 	private ImageIcon iconePosicaoSemPeca;
 
+	@SuppressWarnings("unused")
 	private ImageIcon iconePosicaoPecaBranca;
 
+	@SuppressWarnings("unused")
 	private ImageIcon iconePosicaoPecaPreta;
 
-	public Janela() {
+	public Janela() 
+	{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("Gomoku");
 		setSize(800, 600);
@@ -77,10 +79,10 @@ public class Janela extends JFrame {
 	{
 		this.iconePosicaoSemPeca = new ImageIcon(getClass().getResource(
 				"/imagens/PosicaoSemPeca.png"));
-		this.iconePosicaoPecaAmarela = new ImageIcon(getClass().getResource(
-				"/imagens/PosicaoPecaAmarela.png"));
-		this.iconePosicaoPecaVermelha = new ImageIcon(getClass().getResource(
-				"/imagens/PosicaoPecaVermelha.png"));
+		this.iconePosicaoPecaBranca = new ImageIcon(getClass().getResource(
+				"/imagens/PosicaoPecaBranca.png"));
+		this.iconePosicaoPecaPreta = new ImageIcon(getClass().getResource(
+				"/imagens/PosicaoPecaPreta.png"));
 	}
 	
 	private void criarBotoesTabuleiro()
@@ -94,37 +96,16 @@ public class Janela extends JFrame {
 				botao.setBounds(300 + (j * 23), 89 + (i * 23), 23, 23);
 				botao.setVisible(true);
 				botao.setIcon(this.iconePosicaoSemPeca);
-<<<<<<< HEAD
 				botao.addMouseListener(new TratadorBotaoTabuleiro());
-=======
-				botao.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						botao.setIcon(iconePosicaoPecaBranca);
-						// botao.setBackground(Color.Black);
-					}
-				});
->>>>>>> 42c3d384c18d8b02f707608d73aa0715c3d85516
-				container.add(botao);
+				this.container.add(botao);
 				this.botoesTabuleiro[i][j] = botao;
 			}
 		}
 	}
-<<<<<<< HEAD
 	
 	public JButton[][] getBotoesTabuleiro()
 	{
 		return this.botoesTabuleiro;
-=======
-
-	public void criarIcones() {
-		this.iconePosicaoSemPeca = new ImageIcon(getClass().getResource(
-				"/imagens/PosicaoSemPeca.png"));
-		this.iconePosicaoPecaBranca = new ImageIcon(getClass().getResource(
-				"/imagens/PosicaoPecaBranca.png"));
-		this.iconePosicaoPecaPreta = new ImageIcon(getClass().getResource(
-				"/imagens/PosicaoPecaPreta.png"));
-
->>>>>>> 42c3d384c18d8b02f707608d73aa0715c3d85516
 	}
 
 }

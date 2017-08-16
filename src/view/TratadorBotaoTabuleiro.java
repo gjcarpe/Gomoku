@@ -3,7 +3,8 @@ package view;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class TratadorBotaoTabuleiro implements MouseListener {
+public class TratadorBotaoTabuleiro implements MouseListener 
+{
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
