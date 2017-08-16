@@ -67,38 +67,43 @@ public class Janela extends JFrame {
 		container.add(novoJogo);
 		container.add(saida);
 		
-		this.criarIcones();
-
-		// Cria os botoes do tabuleiro
-		for (int i = 0; i < 15; i++) {
-			for (int j = 0; j < 15; j++) {
-				JButton botao = new JButton();
-				botao.setName("" + i + j);
-				botao.setBounds(300 + (j * 23), 89 + (i * 23), 23, 23);
-				botao.setVisible(true);
-				botao.setIcon(this.iconePosicaoSemPeca);
-				botao.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						botao.setIcon(iconePosicaoPecaVermelha);
-						// botao.setBackground(Color.Black);
-					}
-				});
-				container.add(botao);
-				this.botoesTabuleiro[i][j] = botao;
-			}
-		}
+		this.criarIconesPecas();
+		this.criarBotoesTabuleiro();
 
 		setVisible(true);
 	}
 
-	public void criarIcones() {
+	private void criarIconesPecas() 
+	{
 		this.iconePosicaoSemPeca = new ImageIcon(getClass().getResource(
 				"/imagens/PosicaoSemPeca.png"));
 		this.iconePosicaoPecaAmarela = new ImageIcon(getClass().getResource(
 				"/imagens/PosicaoPecaAmarela.png"));
 		this.iconePosicaoPecaVermelha = new ImageIcon(getClass().getResource(
 				"/imagens/PosicaoPecaVermelha.png"));
-
+	}
+	
+	private void criarBotoesTabuleiro()
+	{
+		for (int i = 0; i < 15; i++) 
+		{
+			for (int j = 0; j < 15; j++) 
+			{
+				JButton botao = new JButton();
+				botao.setName("" + i + j);
+				botao.setBounds(300 + (j * 23), 89 + (i * 23), 23, 23);
+				botao.setVisible(true);
+				botao.setIcon(this.iconePosicaoSemPeca);
+				botao.addMouseListener(new TratadorBotaoTabuleiro());
+				container.add(botao);
+				this.botoesTabuleiro[i][j] = botao;
+			}
+		}
+	}
+	
+	public JButton[][] getBotoesTabuleiro()
+	{
+		return this.botoesTabuleiro;
 	}
 
 }
