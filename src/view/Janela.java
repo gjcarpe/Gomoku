@@ -7,31 +7,36 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-public class Janela extends JFrame
-{
+public class Janela extends JFrame {
 	private static final long serialVersionUID = -419158925384719190L;
 
 	private JButton[][] botoesTabuleiro = new JButton[15][15];
-	
+
 	private Color corTexto;
 	private Font fonte;
 	private boolean bordasLigadas;
 	private Container container;
-	
-	public Janela()
-	{
+
+	private ImageIcon iconePosicaoSemPeca;
+
+	private ImageIcon iconePosicaoPecaAmarela;
+
+	private ImageIcon iconePosicaoPecaVermelha;
+
+	public Janela() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("Gomoku");
 		setSize(800, 600);
 		setLocationRelativeTo(null);
-		
+
 		this.corTexto = Color.RED;
 		this.fonte = new Font("Arial", Font.BOLD, 25);
 		this.bordasLigadas = true;
-		
+
 		this.container = this.getContentPane();
 		this.container.setLayout(null);
 
@@ -46,7 +51,7 @@ public class Janela extends JFrame
 		novoJogo.setOpaque(false);
 		novoJogo.addActionListener(new TratadorNovoJogo());
 		novoJogo.addMouseListener(new TratadorMousePassou(novoJogo));
-        
+
 		JButton saida = new JButton("Sair");
 		saida.setFont(this.fonte);
 		saida.setForeground(this.corTexto);
@@ -58,27 +63,42 @@ public class Janela extends JFrame
 		saida.setOpaque(false);
 		saida.addActionListener(new TratadorSair());
 		saida.addMouseListener(new TratadorMousePassou(saida));
-	
+
 		container.add(novoJogo);
 		container.add(saida);
 		
-		// Cria os botões do tabuleiro
+		this.criarIcones();
+
+		// Cria os botoes do tabuleiro
 		for (int i = 0; i < 15; i++) {
 			for (int j = 0; j < 15; j++) {
 				JButton botao = new JButton();
 				botao.setName("" + i + j);
 				botao.setBounds(300 + (j * 23), 89 + (i * 23), 23, 23);
 				botao.setVisible(true);
+				botao.setIcon(this.iconePosicaoSemPeca);
 				botao.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						botao.setIcon(iconePosicaoPecaVermelha);
+						// botao.setBackground(Color.Black);
 					}
 				});
 				container.add(botao);
 				this.botoesTabuleiro[i][j] = botao;
 			}
 		}
-        
+
 		setVisible(true);
 	}
-	
+
+	public void criarIcones() {
+		this.iconePosicaoSemPeca = new ImageIcon(getClass().getResource(
+				"/imagens/PosicaoSemPeca.png"));
+		this.iconePosicaoPecaAmarela = new ImageIcon(getClass().getResource(
+				"/imagens/PosicaoPecaAmarela.png"));
+		this.iconePosicaoPecaVermelha = new ImageIcon(getClass().getResource(
+				"/imagens/PosicaoPecaVermelha.png"));
+
+	}
+
 }
