@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -11,6 +13,8 @@ import javax.swing.JFrame;
 public class Janela extends JFrame
 {
 	private static final long serialVersionUID = -419158925384719190L;
+
+	private JButton[][] botoesTabuleiro = new JButton[15][15];
 	
 	private Color corTexto;
 	private Font fonte;
@@ -57,6 +61,22 @@ public class Janela extends JFrame
 	
 		container.add(novoJogo);
 		container.add(saida);
+		
+		// Cria os botões do tabuleiro
+		for (int i = 0; i < 15; i++) {
+			for (int j = 0; j < 15; j++) {
+				JButton botao = new JButton();
+				botao.setName("" + i + j);
+				botao.setBounds(300 + (j * 23), 89 + (i * 23), 23, 23);
+				botao.setVisible(true);
+				botao.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					}
+				});
+				container.add(botao);
+				this.botoesTabuleiro[i][j] = botao;
+			}
+		}
         
 		setVisible(true);
 	}
