@@ -17,16 +17,18 @@ public class Janela extends JFrame
 
 	private Color corTexto;
 	private Font fonte;
+
+
 	private boolean bordasLigadas;
 	private Container container;
 
-	private ImageIcon iconePosicaoSemPeca;
+	public static ImageIcon iconePosicaoSemPeca;
 
-	@SuppressWarnings("unused")
-	private ImageIcon iconePosicaoPecaBranca;
 
-	@SuppressWarnings("unused")
-	private ImageIcon iconePosicaoPecaPreta;
+	public static ImageIcon iconePosicaoPecaBranca;
+
+
+	public static ImageIcon iconePosicaoPecaPreta;
 
 	public Janela() 
 	{
@@ -77,11 +79,11 @@ public class Janela extends JFrame
 
 	private void criarIconesPecas() 
 	{
-		this.iconePosicaoSemPeca = new ImageIcon(getClass().getResource(
+		iconePosicaoSemPeca = new ImageIcon(getClass().getResource(
 				"/imagens/PosicaoSemPeca.png"));
-		this.iconePosicaoPecaBranca = new ImageIcon(getClass().getResource(
+		iconePosicaoPecaBranca = new ImageIcon(getClass().getResource(
 				"/imagens/PosicaoPecaBranca.png"));
-		this.iconePosicaoPecaPreta = new ImageIcon(getClass().getResource(
+		iconePosicaoPecaPreta = new ImageIcon(getClass().getResource(
 				"/imagens/PosicaoPecaPreta.png"));
 	}
 	
@@ -95,8 +97,8 @@ public class Janela extends JFrame
 				botao.setName("" + i + j);
 				botao.setBounds(300 + (j * 23), 89 + (i * 23), 23, 23);
 				botao.setVisible(true);
-				botao.setIcon(this.iconePosicaoSemPeca);
-				botao.addMouseListener(new TratadorBotaoTabuleiro());
+				botao.setIcon(iconePosicaoSemPeca);
+				botao.addMouseListener(new TratadorBotaoTabuleiro(botao));
 				this.container.add(botao);
 				this.botoesTabuleiro[i][j] = botao;
 			}
