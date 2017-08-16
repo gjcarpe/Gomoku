@@ -23,9 +23,9 @@ public class Janela extends JFrame {
 
 	private ImageIcon iconePosicaoSemPeca;
 
-	private ImageIcon iconePosicaoPecaAmarela;
+	private ImageIcon iconePosicaoPecaBranca;
 
-	private ImageIcon iconePosicaoPecaVermelha;
+	private ImageIcon iconePosicaoPecaPreta;
 
 	public Janela() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -79,7 +79,7 @@ public class Janela extends JFrame {
 				botao.setIcon(this.iconePosicaoSemPeca);
 				botao.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						botao.setIcon(iconePosicaoPecaVermelha);
+						botao.setIcon(iconePosicaoPecaBranca);
 						// botao.setBackground(Color.Black);
 					}
 				});
@@ -94,10 +94,10 @@ public class Janela extends JFrame {
 	public void criarIcones() {
 		this.iconePosicaoSemPeca = new ImageIcon(getClass().getResource(
 				"/imagens/PosicaoSemPeca.png"));
-		this.iconePosicaoPecaAmarela = new ImageIcon(getClass().getResource(
-				"/imagens/PosicaoPecaAmarela.png"));
-		this.iconePosicaoPecaVermelha = new ImageIcon(getClass().getResource(
-				"/imagens/PosicaoPecaVermelha.png"));
+		this.iconePosicaoPecaBranca = new ImageIcon(getClass().getResource(
+				"/imagens/PosicaoPecaBranca.png"));
+		this.iconePosicaoPecaPreta = new ImageIcon(getClass().getResource(
+				"/imagens/PosicaoPecaPreta.png"));
 
 	}
 
