@@ -10,7 +10,8 @@ public class TratadorBotaoTabuleiro implements MouseListener
 
 	private JButton botao;
 
-	public TratadorBotaoTabuleiro(JButton botao) {
+	public TratadorBotaoTabuleiro(JButton botao)
+	{
 		this.botao = botao;
 	}
 
@@ -39,8 +40,8 @@ public class TratadorBotaoTabuleiro implements MouseListener
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+	public void mouseReleased(MouseEvent arg0) 
+	{
 		botao.setIcon(Janela.iconePosicaoPecaPreta);
 	}
 
