@@ -84,6 +84,7 @@ public class Gomoku
 	public void passeTurno()
 	{
 		// TODO
+		// Verifica HashMap para colocar sequencias novas
 		this.turno++;
 	}
 	
@@ -93,10 +94,14 @@ public class Gomoku
 	{
 		// Cor da peça determinada pelo valor de turno atual.
 		// TODO
-		if (turno % 2 == 0)
+		if (this.getTurno() % 2 == 0)
 			this.tabuleiro[x][y] = Peca.PECA_BRANCA;
-		else
+		else {
 			this.tabuleiro[x][y] = Peca.PECA_PRETA;
+			passeTurno();
+			this.miniMax(); // Computador executa uma jogada
+		}
+		passeTurno();
 		
 	}
 	
