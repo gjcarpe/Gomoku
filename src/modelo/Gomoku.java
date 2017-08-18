@@ -120,6 +120,7 @@ public class Gomoku
 		return resultado;
 	}
 	
+	// Código semi-copiado do impl MiniMax do moodle
 	@SuppressWarnings("unused")
 	public ArrayList<int[]> gerarJogadas()
 	{
@@ -140,13 +141,20 @@ public class Gomoku
 		
 	}
 	
+	// Código semi-copiado do impl MiniMax do moodle	
 	public int[] miniMax() {
 		ArrayList<int[]> jogadas = gerarJogadas();
 		int limite = jogadas.size();
+		int resultadoMelhor = Integer.MIN_VALUE;
+		int[] jogadaMelhor = new int[] {8, 8};
+		int resultado;
 		for (int i = 0; i < limite; i++){
 			int[] jogada = jogadas.get(i);
-			this.avalieJogada(jogada[0], jogada[1]);
+			resultado = this.avalieJogada(jogada[0], jogada[1]);
+			if (resultado > resultadoMelhor)
+				jogadaMelhor = jogada;
 		}
+		return jogadaMelhor;
 	}
 }
 
