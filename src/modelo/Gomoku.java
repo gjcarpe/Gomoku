@@ -147,6 +147,7 @@ public class Gomoku
 			int[] jogada = jogadas.get(i);
 			this.avalieJogada(jogada[0], jogada[1]);
 		}
+		return null;
 	}
 }
 
