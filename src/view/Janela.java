@@ -22,7 +22,7 @@ public class Janela extends JFrame
 	private Font fonte;
 	private boolean bordasLigadas;
 	private Container container;
-	private Controle controle = new Controle();
+	private Controle controle;
 
 	private void criarIconesPecas() 
 	{
@@ -41,11 +41,11 @@ public class Janela extends JFrame
 			for (int j = 0; j < 15; j++) 
 			{
 				JButton botao = new JButton();
-				botao.setName("" + i + j);
+				botao.setName("[" + i + "][" + j + "]");
 				botao.setBounds(300 + (j * 23), 89 + (i * 23), 23, 23);
 				botao.setVisible(true);
 				botao.setIcon(iconePosicaoSemPeca);
-				botao.addMouseListener(new TratadorBotaoTabuleiro(botao, controle, i, j));
+				botao.addMouseListener(new TratadorBotaoTabuleiro(this, botao, i, j));
 				this.container.add(botao);
 				this.botoesTabuleiro[i][j] = botao;
 			}
@@ -79,7 +79,8 @@ public class Janela extends JFrame
 		setTitle("Gomoku");
 		setSize(800, 600);
 		setLocationRelativeTo(null);
-
+		
+		this.controle = new Controle();
 		this.corTexto = Color.RED;
 		this.fonte = new Font("Arial", Font.BOLD, 25);
 		this.bordasLigadas = true;
@@ -176,7 +177,7 @@ public class Janela extends JFrame
 	}
 	
 	public void novoJogo()
-	{
+	{		
 		Component novoJogo = this.encontreComponentePorNome("novoJogo");
 		novoJogo.setVisible(false);
 		novoJogo.setEnabled(false);
@@ -192,6 +193,8 @@ public class Janela extends JFrame
 	
 	public void umJogador()
 	{
+		this.controle.novoJogoUmJogador();
+		
 		Component umJogador = this.encontreComponentePorNome("umJogador");
 		umJogador.setVisible(false);
 		umJogador.setEnabled(false);
@@ -207,6 +210,8 @@ public class Janela extends JFrame
 	
 	public void doisJogadores()
 	{
+		this.controle.novoJogoDoisJogadores();
+		
 		Component umJogador = this.encontreComponentePorNome("umJogador");
 		umJogador.setVisible(false);
 		umJogador.setEnabled(false);
@@ -222,6 +227,8 @@ public class Janela extends JFrame
 	
 	public void encerrar()
 	{
+		this.controle.encerrar();
+		
 		Component encerrar = this.encontreComponentePorNome("encerrar");
 		encerrar.setVisible(false);
 		encerrar.setEnabled(false);
@@ -231,4 +238,13 @@ public class Janela extends JFrame
 		novoJogo.setEnabled(true);
 	}
 
+	public void jogada(int x, int y) 
+	{
+		this.controle.jogada(x, y);
+	}
+	
+	public int getTurno() 
+	{
+		return this.controle.getTurno();
+	}
 }

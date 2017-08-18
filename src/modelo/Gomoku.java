@@ -43,8 +43,8 @@ public class Gomoku
 	
 	/*
 	 * 	Observação sobre turno:
-	 * 	o jogador 1 tem os turnos pares 
-	 *  e jogador 2 tem os turnos ímpares.
+	 * 	o jogador 1 (branco) tem os turnos pares 
+	 *  e jogador 2 (preto) tem os turnos ímpares.
 	 *  Quando passa turno apenas incrementa 1.
 	 */
 	
@@ -62,12 +62,9 @@ public class Gomoku
 		// Note que List é uma interface.
 		ArrayList<ParOrdenado> listaDeAdjacentes = new ArrayList<ParOrdenado>();
 		
-		// TODO
-		for (int i = x-1; i <= x+1 ; i++){
-			for (int j = y-1; j <= y+1; j++){
-				listaDeAdjacentes.add(new ParOrdenado(i, j));
-			}
-		}
+		for (int i = x-1; i <= x+1 ; i++)
+			for (int j = y-1; j <= y+1; j++)
+				listaDeAdjacentes.add(new ParOrdenado(i, j));		
 		
 		return listaDeAdjacentes;
 	}
@@ -88,7 +85,6 @@ public class Gomoku
 		this.turno++;
 	}
 	
-	// Headers - da heurística
 	
 	public void jogada(int x, int y)
 	{
@@ -96,13 +92,9 @@ public class Gomoku
 		// TODO
 		if (this.getTurno() % 2 == 0)
 			this.tabuleiro[x][y] = Peca.PECA_BRANCA;
-		else {
+		else 
 			this.tabuleiro[x][y] = Peca.PECA_PRETA;
-			passeTurno();
-			this.miniMax(); // Computador executa uma jogada
-		}
-		passeTurno();
-		
+		this.passeTurno();
 	}
 	
 	// Dá um valor de pontuação para o tabuleiro simulando uma jogada.
@@ -120,8 +112,3 @@ public class Gomoku
 		// TODO
 	}
 }
-
-
-
-
-

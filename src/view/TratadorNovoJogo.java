@@ -18,8 +18,6 @@ public class TratadorNovoJogo implements ActionListener
 	{
 		System.out.println("NOVO JOGO");
 		this.pai.novoJogo();
-		
-		// TODO Controle - Novo Jogo
 	}
 
 }

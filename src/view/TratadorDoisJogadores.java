@@ -17,7 +17,6 @@ public class TratadorDoisJogadores implements ActionListener
 	{
 		System.out.println("2 JOGADORES");
 		this.pai.doisJogadores();
-		// TODO Controle - modo doisJogadores
 	}
 
 }
