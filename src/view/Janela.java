@@ -87,6 +87,20 @@ public class Janela extends JFrame
 		this.container = this.getContentPane();
 		this.container.setLayout(null);
 		
+		Botao info = new Botao("Info");
+		info.setName("info");
+		info.setFont(new Font("Arial", Font.PLAIN, 12));
+		info.setForeground(this.corTexto);
+		info.setBounds(300, 470, 350, 80);
+		info.setFocusPainted(false);
+		info.setMargin(new Insets(0, 0, 0, 0));
+		info.setContentAreaFilled(false);
+		info.setBorderPainted(this.bordasLigadas);
+		info.setOpaque(false);
+		info.addMouseListener(new TratadorMousePassou(info, info));
+		info.setVisible(true);
+		info.setEnabled(true);
+		
 		Botao novoJogo = new Botao("Novo Jogo");
 		novoJogo.setName("novoJogo");
 		novoJogo.setFont(this.fonte);
@@ -98,7 +112,7 @@ public class Janela extends JFrame
 		novoJogo.setBorderPainted(this.bordasLigadas);
 		novoJogo.setOpaque(false);
 		novoJogo.addActionListener(new TratadorNovoJogo(this));
-		novoJogo.addMouseListener(new TratadorMousePassou(novoJogo));
+		novoJogo.addMouseListener(new TratadorMousePassou(novoJogo, info));
 		
 		Botao encerrar = new Botao("Encerrar Jogo");
 		encerrar.setName("encerrar");
@@ -111,7 +125,7 @@ public class Janela extends JFrame
 		encerrar.setBorderPainted(this.bordasLigadas);
 		encerrar.setOpaque(false);
 		encerrar.addActionListener(new TratadorEncerrar(this));
-		encerrar.addMouseListener(new TratadorMousePassou(encerrar));
+		encerrar.addMouseListener(new TratadorMousePassou(encerrar, info));
 		encerrar.setVisible(false);
 		encerrar.setEnabled(false);
 		
@@ -126,7 +140,7 @@ public class Janela extends JFrame
 		umJogador.setBorderPainted(this.bordasLigadas);
 		umJogador.setOpaque(false);
 		umJogador.addActionListener(new TratadorUmJogador(this));
-		umJogador.addMouseListener(new TratadorMousePassou(umJogador));
+		umJogador.addMouseListener(new TratadorMousePassou(umJogador, info));
 		umJogador.setVisible(false);
 		umJogador.setEnabled(false);
 		
@@ -141,23 +155,9 @@ public class Janela extends JFrame
 		doisJogadores.setBorderPainted(this.bordasLigadas);
 		doisJogadores.setOpaque(false);
 		doisJogadores.addActionListener(new TratadorDoisJogadores(this));
-		doisJogadores.addMouseListener(new TratadorMousePassou(doisJogadores));
+		doisJogadores.addMouseListener(new TratadorMousePassou(doisJogadores, info));
 		doisJogadores.setVisible(false);
 		doisJogadores.setEnabled(false);
-		
-		Botao info = new Botao("Info");
-		info.setName("info");
-		info.setFont(this.fonte);
-		info.setForeground(this.corTexto);
-		info.setBounds(300, 470, 350, 80);
-		info.setFocusPainted(false);
-		info.setMargin(new Insets(0, 0, 0, 0));
-		info.setContentAreaFilled(false);
-		info.setBorderPainted(this.bordasLigadas);
-		info.setOpaque(false);
-		info.addMouseListener(new TratadorInfo(this, info));
-		info.setVisible(true);
-		info.setEnabled(true);
 		
 		Botao sair = new Botao("Sair");
 		sair.setName("sair");
@@ -170,8 +170,25 @@ public class Janela extends JFrame
 		sair.setBorderPainted(this.bordasLigadas);
 		sair.setOpaque(false);
 		sair.addActionListener(new TratadorSair());
-		sair.addMouseListener(new TratadorMousePassou(sair));
-
+		sair.addMouseListener(new TratadorMousePassou(sair, info));
+		
+		// Descrições dos botões
+		
+		String descricao;
+		
+		descricao = "Inicia um novo jogo.";
+		novoJogo.setDescricao(descricao);
+		descricao = "Iniciar partida com um Jogador.";
+		umJogador.setDescricao(descricao);
+		descricao = "Iniciar partida com dois Jogadores.";
+		doisJogadores.setDescricao(descricao);
+		descricao = "Este é o campo de descrições.";
+		info.setDescricao(descricao);
+		descricao = "Encerrar a partida.";
+		encerrar.setDescricao(descricao);
+		descricao = "Sair do programa";
+		sair.setDescricao(descricao);
+		
 		container.add(novoJogo);
 		container.add(umJogador);
 		container.add(doisJogadores);

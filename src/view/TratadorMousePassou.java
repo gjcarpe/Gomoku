@@ -7,34 +7,41 @@ import java.awt.event.MouseListener;
 public class TratadorMousePassou implements MouseListener 
 {	
 	private Botao botao;
+	private Botao info;
 	private Color corPadrao;
 	
-	public TratadorMousePassou(Botao botao) 
+	public TratadorMousePassou(Botao botao, Botao info) 
 	{
 		this.botao = botao;
+		this.info = info;
 		this.corPadrao = botao.getForeground();
 	}
 	
 	@Override
-	public void mouseEntered(MouseEvent arg0) 
+	public void mouseEntered(MouseEvent e) 
 	{
-		this.botao.setForeground(Color.YELLOW);
+		if(!this.botao.equals(this.info))
+			this.botao.setForeground(Color.YELLOW);
+		
+		Botao emissor = (Botao) e.getComponent();
+		this.info.setText(emissor.getDescricao());
 	}
 	
 	@Override
-	public void mouseExited(MouseEvent arg0) 
+	public void mouseExited(MouseEvent e) 
 	{
 		this.botao.setForeground(this.corPadrao);
+		this.info.setText("");
 	}
 	
 	@Override
-	public void mouseClicked(MouseEvent arg0) {}
+	public void mouseClicked(MouseEvent e) {}
 
 
 	@Override
-	public void mousePressed(MouseEvent arg0) {}
+	public void mousePressed(MouseEvent e) {}
 
 	@Override
-	public void mouseReleased(MouseEvent arg0) {}
+	public void mouseReleased(MouseEvent e) {}
 
 }
