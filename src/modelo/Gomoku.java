@@ -86,6 +86,7 @@ public class Gomoku
 	public void passeTurno()
 	{
 		this.turno++;
+		this.verifiqueSeGanhou();
 	}
 	
 	// Cor da peça determinada pelo valor de turno atual.
