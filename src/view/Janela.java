@@ -7,7 +7,6 @@ import java.awt.Font;
 import java.awt.Insets;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import controle.Controle;
@@ -16,7 +15,7 @@ public class Janela extends JFrame
 {
 	private static final long serialVersionUID = -419158925384719190L;
 
-	private JButton[][] botoesTabuleiro = new JButton[15][15];
+	private Botao[][] botoesTabuleiro = new Botao[15][15];
 
 	private Color corTexto;
 	private Font fonte;
@@ -40,7 +39,7 @@ public class Janela extends JFrame
 		{
 			for (int j = 0; j < 15; j++) 
 			{
-				JButton botao = new JButton();
+				Botao botao = new Botao("");
 				botao.setName("[" + i + "][" + j + "]");
 				botao.setBounds(300 + (j * 23), 89 + (i * 23), 23, 23);
 				botao.setVisible(true);
@@ -88,7 +87,7 @@ public class Janela extends JFrame
 		this.container = this.getContentPane();
 		this.container.setLayout(null);
 		
-		JButton novoJogo = new JButton("Novo Jogo");
+		Botao novoJogo = new Botao("Novo Jogo");
 		novoJogo.setName("novoJogo");
 		novoJogo.setFont(this.fonte);
 		novoJogo.setForeground(this.corTexto);
@@ -101,7 +100,7 @@ public class Janela extends JFrame
 		novoJogo.addActionListener(new TratadorNovoJogo(this));
 		novoJogo.addMouseListener(new TratadorMousePassou(novoJogo));
 		
-		JButton encerrar = new JButton("Encerrar Jogo");
+		Botao encerrar = new Botao("Encerrar Jogo");
 		encerrar.setName("encerrar");
 		encerrar.setFont(this.fonte);
 		encerrar.setForeground(this.corTexto);
@@ -116,7 +115,7 @@ public class Janela extends JFrame
 		encerrar.setVisible(false);
 		encerrar.setEnabled(false);
 		
-		JButton umJogador = new JButton("1 Jogador");
+		Botao umJogador = new Botao("1 Jogador");
 		umJogador.setName("umJogador");
 		umJogador.setFont(this.fonte);
 		umJogador.setForeground(this.corTexto);
@@ -131,7 +130,7 @@ public class Janela extends JFrame
 		umJogador.setVisible(false);
 		umJogador.setEnabled(false);
 		
-		JButton doisJogadores = new JButton("2 Jogadores");
+		Botao doisJogadores = new Botao("2 Jogadores");
 		doisJogadores.setName("doisJogadores");
 		doisJogadores.setFont(this.fonte);
 		doisJogadores.setForeground(this.corTexto);
@@ -146,21 +145,21 @@ public class Janela extends JFrame
 		doisJogadores.setVisible(false);
 		doisJogadores.setEnabled(false);
 		
-		JButton info = new JButton("Info");
+		Botao info = new Botao("Info");
 		info.setName("info");
 		info.setFont(this.fonte);
 		info.setForeground(this.corTexto);
-		info.setBounds(20, 120, 180, 80);
+		info.setBounds(300, 470, 350, 80);
 		info.setFocusPainted(false);
 		info.setMargin(new Insets(0, 0, 0, 0));
 		info.setContentAreaFilled(false);
 		info.setBorderPainted(this.bordasLigadas);
 		info.setOpaque(false);
 		info.addMouseListener(new TratadorInfo(this, info));
-		info.setVisible(false);
-		info.setEnabled(false);
+		info.setVisible(true);
+		info.setEnabled(true);
 		
-		JButton sair = new JButton("Sair");
+		Botao sair = new Botao("Sair");
 		sair.setName("sair");
 		sair.setFont(this.fonte);
 		sair.setForeground(this.corTexto);
@@ -186,7 +185,7 @@ public class Janela extends JFrame
 		setVisible(true);
 	}
 	
-	public JButton[][] getBotoesTabuleiro()
+	public Botao[][] getBotoesTabuleiro()
 	{
 		return this.botoesTabuleiro;
 	}

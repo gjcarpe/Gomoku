@@ -3,14 +3,12 @@ package view;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.JButton;
-
 public class TratadorInfo implements MouseListener 
 {
 	private Janela pai;
-	private JButton botao;
+	private Botao botao;
 	
-	public TratadorInfo(Janela pai, JButton botao) 
+	public TratadorInfo(Janela pai, Botao botao) 
 	{
 		this.pai = pai;
 		this.botao = botao;

@@ -6,9 +6,10 @@ public class Botao extends JButton
 {
 	private String descricao;
 	
-	public Botao()
+	public Botao(String texto)
 	{
 		this.descricao = "";
+		this.setText(texto);
 	}
 	
 	public void setDescricao(String descricao)
