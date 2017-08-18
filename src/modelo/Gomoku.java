@@ -102,8 +102,7 @@ public class Gomoku
 			this.tabuleiro[x][y] = Peca.PECA_PRETA;
 			this.jogadaComputador(); // Computador executa uma jogada
 		}
-		passeTurno();
-		
+		this.passeTurno();
 	}
 	
 	private void jogadaComputador() {

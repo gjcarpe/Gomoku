@@ -5,33 +5,35 @@ import modelo.ModoDeJogo;
 
 public class Controle
 {
-	private static Gomoku gomoku = new Gomoku(ModoDeJogo.UM_JOGADOR);
+	private Gomoku gomoku;
 
 	public Controle()
 	{
 		// Alguns headers de métodos que terão de ser implementados
 	}
 	
-	public static void novoJogoUmJogador()
+	public void novoJogoUmJogador()
 	{
-		// TODO
-		//this.gomoku = new Gomoku(ModoDeJogo.UM_JOGADOR);
-		gomoku.encontreAdjacentes(10, 10);
+		this.gomoku = new Gomoku(ModoDeJogo.UM_JOGADOR);
 	}
 	
-	public static void novoJogoDoisJogadores()
+	public void novoJogoDoisJogadores()
 	{
-		// TODO
+		this.gomoku = new Gomoku(ModoDeJogo.DOIS_JOGADORES);
 	}
 	
 	public void encerrar()
 	{
-		// TODO
+		//this.gomoku.encerrar(); // TODO
 	}
 	
 	public void jogada(int x, int y)
 	{
-		// TODO
-		gomoku.jogada(x, y);
+		this.gomoku.jogada(x, y);
+	}
+
+	public int getTurno() 
+	{
+		return this.gomoku.getTurno();
 	}
 }

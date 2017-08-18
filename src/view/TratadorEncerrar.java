@@ -17,7 +17,6 @@ public class TratadorEncerrar implements ActionListener
 	{
 		System.out.println("ENCERRAR");
 		this.pai.encerrar();
-		// TODO - Controle - Encerrar
 	}
 
 }
