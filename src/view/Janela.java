@@ -146,6 +146,20 @@ public class Janela extends JFrame
 		doisJogadores.setVisible(false);
 		doisJogadores.setEnabled(false);
 		
+		JButton info = new JButton("Info");
+		info.setName("info");
+		info.setFont(this.fonte);
+		info.setForeground(this.corTexto);
+		info.setBounds(20, 120, 180, 80);
+		info.setFocusPainted(false);
+		info.setMargin(new Insets(0, 0, 0, 0));
+		info.setContentAreaFilled(false);
+		info.setBorderPainted(this.bordasLigadas);
+		info.setOpaque(false);
+		info.addMouseListener(new TratadorInfo(this, info));
+		info.setVisible(false);
+		info.setEnabled(false);
+		
 		JButton sair = new JButton("Sair");
 		sair.setName("sair");
 		sair.setFont(this.fonte);
@@ -162,6 +176,7 @@ public class Janela extends JFrame
 		container.add(novoJogo);
 		container.add(umJogador);
 		container.add(doisJogadores);
+		container.add(info);
 		container.add(encerrar);
 		container.add(sair);
 		

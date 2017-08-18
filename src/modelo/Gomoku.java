@@ -142,7 +142,7 @@ public class Gomoku
 	
 	public int[] miniMax() {
 		ArrayList<int[]> jogadas = gerarJogadas();
-		
+		return null;
 	}
 }
 
