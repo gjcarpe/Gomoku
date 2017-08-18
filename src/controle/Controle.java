@@ -1,18 +1,25 @@
 package controle;
 
+import modelo.Gomoku;
+import modelo.ModoDeJogo;
+
 public class Controle
 {
+	private static Gomoku gomoku = new Gomoku(ModoDeJogo.UM_JOGADOR);
+
 	public Controle()
 	{
 		// Alguns headers de métodos que terão de ser implementados
 	}
 	
-	public void novoJogoUmJogador()
+	public static void novoJogoUmJogador()
 	{
 		// TODO
+		//this.gomoku = new Gomoku(ModoDeJogo.UM_JOGADOR);
+		gomoku.encontreAdjacentes(10, 10);
 	}
 	
-	public void novoJogoDoisJogadores()
+	public static void novoJogoDoisJogadores()
 	{
 		// TODO
 	}
@@ -22,8 +29,9 @@ public class Controle
 		// TODO
 	}
 	
-	public void jogada()
+	public void jogada(int x, int y)
 	{
 		// TODO
+		gomoku.jogada(x, y);
 	}
 }

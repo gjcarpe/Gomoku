@@ -5,14 +5,22 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 
+import controle.Controle;
+
 public class TratadorBotaoTabuleiro implements MouseListener 
 {
 
 	private JButton botao;
+	private Controle controle;
+	private int x;
+	private int y;
 
-	public TratadorBotaoTabuleiro(JButton botao)
+	public TratadorBotaoTabuleiro(JButton botao, Controle controle, int x, int y)
 	{
 		this.botao = botao;
+		this.controle = controle;
+		this.x = x;
+		this.y = y;
 	}
 
 	@Override
@@ -43,6 +51,7 @@ public class TratadorBotaoTabuleiro implements MouseListener
 	public void mouseReleased(MouseEvent arg0) 
 	{
 		botao.setIcon(Janela.iconePosicaoPecaPreta);
+		controle.jogada(x, y);
 	}
 
 }

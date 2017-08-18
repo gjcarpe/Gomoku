@@ -63,6 +63,11 @@ public class Gomoku
 		ArrayList<ParOrdenado> listaDeAdjacentes = new ArrayList<ParOrdenado>();
 		
 		// TODO
+		for (int i = x-1; i <= x+1 ; i++){
+			for (int j = y-1; j <= y+1; j++){
+				listaDeAdjacentes.add(new ParOrdenado(i, j));
+			}
+		}
 		
 		return listaDeAdjacentes;
 	}
@@ -79,6 +84,7 @@ public class Gomoku
 	public void passeTurno()
 	{
 		// TODO
+		this.turno++;
 	}
 	
 	// Headers - da heurística
@@ -87,6 +93,11 @@ public class Gomoku
 	{
 		// Cor da peça determinada pelo valor de turno atual.
 		// TODO
+		if (turno % 2 == 0)
+			this.tabuleiro[x][y] = Peca.PECA_BRANCA;
+		else
+			this.tabuleiro[x][y] = Peca.PECA_PRETA;
+		
 	}
 	
 	// Dá um valor de pontuação para o tabuleiro simulando uma jogada.

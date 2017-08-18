@@ -10,6 +10,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import controle.Controle;
+
 public class Janela extends JFrame 
 {
 	private static final long serialVersionUID = -419158925384719190L;
@@ -20,6 +22,7 @@ public class Janela extends JFrame
 	private Font fonte;
 	private boolean bordasLigadas;
 	private Container container;
+	private Controle controle = new Controle();
 
 	private void criarIconesPecas() 
 	{
@@ -42,7 +45,7 @@ public class Janela extends JFrame
 				botao.setBounds(300 + (j * 23), 89 + (i * 23), 23, 23);
 				botao.setVisible(true);
 				botao.setIcon(iconePosicaoSemPeca);
-				botao.addMouseListener(new TratadorBotaoTabuleiro(botao));
+				botao.addMouseListener(new TratadorBotaoTabuleiro(botao, controle, i, j));
 				this.container.add(botao);
 				this.botoesTabuleiro[i][j] = botao;
 			}
