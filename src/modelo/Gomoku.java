@@ -85,27 +85,22 @@ public class Gomoku
 	
 	public void passeTurno()
 	{
-		// TODO
-		// Verifica HashMap para colocar sequencias novas
 		this.turno++;
+		this.verifiqueSeGanhou();
 	}
 	
-	// Headers - da heurística
-	
+	// Cor da peça determinada pelo valor de turno atual.
 	public void jogada(int x, int y)
 	{
-		// Cor da peça determinada pelo valor de turno atual.
-		// TODO
 		if (this.getTurno() % 2 == 0)
 			this.tabuleiro[x][y] = Peca.PECA_BRANCA;
-		else {
-			this.tabuleiro[x][y] = Peca.PECA_PRETA;
-			this.jogadaComputador(); // Computador executa uma jogada
-		}
+		else
+			this.tabuleiro[x][y] = Peca.PECA_PRETA;	
 		this.passeTurno();
 	}
 	
-	private void jogadaComputador() {
+	public void jogadaComputador() 
+	{
 		int [] jogadaPC = this.miniMax();
 		jogada(jogadaPC[0], jogadaPC[1]);
 	}
