@@ -35,19 +35,21 @@ public class TratadorBotaoTabuleiro implements MouseListener
 	@Override
 	public void mouseReleased(MouseEvent arg0) 
 	{
+		int turno = this.pai.getTurno();
 		if(!this.botao.getIcon().equals(Janela.iconePosicaoSemPeca))
 			System.out.println("INVÁLIDO");
 		else
 		{
-			System.out.println("CLICOU NO BOTÃO [" + this.x + "][" + this.y + "]");
-			int turno = this.pai.getTurno();
-			System.out.println("TURNO:" + turno);
-			pai.jogada(x, y);
-			if(turno % 2 == 0)
-				botao.setIcon(Janela.iconePosicaoPecaBranca);
-			else
-				botao.setIcon(Janela.iconePosicaoPecaPreta);
-
+			if(turno >= 0)
+			{
+				System.out.println("CLICOU NO BOTÃO [" + this.x + "][" + this.y + "]");
+				System.out.println("TURNO:" + turno);
+				pai.jogada(x, y, turno);
+				if(turno % 2 == 0)
+					botao.setIcon(Janela.iconePosicaoPecaBranca);
+				else
+					botao.setIcon(Janela.iconePosicaoPecaPreta);
+			}
 		}
 	}
 }

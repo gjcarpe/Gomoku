@@ -21,7 +21,8 @@ public class TratadorMousePassou implements MouseListener
 	public void mouseEntered(MouseEvent e) 
 	{
 		if(!this.botao.equals(this.info))
-			this.botao.setForeground(Color.YELLOW);
+			if(this.corPadrao != Color.WHITE && this.corPadrao != Color.BLACK)
+				this.botao.setForeground(Color.YELLOW);
 		
 		Botao emissor = (Botao) e.getComponent();
 		this.info.setText(emissor.getDescricao());

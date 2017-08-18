@@ -24,15 +24,15 @@ public class Controle
 	
 	public void encerrar()
 	{
-		//this.gomoku.encerrar(); // TODO
+		this.gomoku = null;
 	}
 	
-	public void jogada(int x, int y)
+	public void jogada(int x, int y) throws Exception
 	{
 		this.gomoku.jogada(x, y);
 	}
 
-	public int getTurno() 
+	public int getTurno() throws Exception
 	{
 		return this.gomoku.getTurno();
 	}

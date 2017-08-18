@@ -15,13 +15,12 @@ public class Janela extends JFrame
 {
 	private static final long serialVersionUID = -419158925384719190L;
 
-	private Botao[][] botoesTabuleiro = new Botao[15][15];
-
+	private boolean bordasLigadas;
 	private Color corTexto;
 	private Font fonte;
-	private boolean bordasLigadas;
 	private Container container;
 	private Controle controle;
+	private Botao[][] botoesTabuleiro;
 
 	private void criarIconesPecas() 
 	{
@@ -35,12 +34,13 @@ public class Janela extends JFrame
 	
 	private void criarBotoesTabuleiro()
 	{
+		this.botoesTabuleiro = new Botao[15][15];
 		for (int i = 0; i < 15; i++) 
 		{
 			for (int j = 0; j < 15; j++) 
 			{
 				Botao botao = new Botao("");
-				botao.setName("[" + i + "][" + j + "]");
+				botao.setName("" + i + j);
 				botao.setBounds(300 + (j * 23), 89 + (i * 23), 23, 23);
 				botao.setVisible(true);
 				botao.setIcon(iconePosicaoSemPeca);
@@ -74,20 +74,25 @@ public class Janela extends JFrame
 
 	public Janela() 
 	{
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setTitle("Gomoku");
-		setSize(800, 600);
-		setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setTitle("Gomoku");
+		this.setSize(800, 600);
+		this.setResizable(false);
+		this.setLocationRelativeTo(null);
+		
+		
+		// Parâmetros de controle
 		
 		this.controle = new Controle();
 		this.corTexto = Color.RED;
 		this.fonte = new Font("Arial", Font.BOLD, 25);
 		this.bordasLigadas = true;
-
 		this.container = this.getContentPane();
 		this.container.setLayout(null);
 		
-		Botao info = new Botao("Info");
+		// Criação dos botões da interface
+		
+		Botao info = new Botao("");
 		info.setName("info");
 		info.setFont(new Font("Arial", Font.PLAIN, 12));
 		info.setForeground(this.corTexto);
@@ -159,6 +164,20 @@ public class Janela extends JFrame
 		doisJogadores.setVisible(false);
 		doisJogadores.setEnabled(false);
 		
+		Botao turno = new Botao("");
+		turno.setName("turno");
+		turno.setFont(new Font("Arial", Font.PLAIN, 12));
+		turno.setForeground(Color.WHITE);
+		turno.setBounds(300, 20, 350, 40);
+		turno.setFocusPainted(false);
+		turno.setMargin(new Insets(0, 0, 0, 0));
+		turno.setContentAreaFilled(false);
+		turno.setBorderPainted(this.bordasLigadas);
+		turno.setOpaque(false);
+		turno.addMouseListener(new TratadorMousePassou(turno, info));
+		turno.setVisible(false);
+		turno.setEnabled(false);
+		
 		Botao sair = new Botao("Sair");
 		sair.setName("sair");
 		sair.setFont(this.fonte);
@@ -178,18 +197,29 @@ public class Janela extends JFrame
 		
 		descricao = "Inicia um novo jogo.";
 		novoJogo.setDescricao(descricao);
-		descricao = "Iniciar partida com um Jogador.";
-		umJogador.setDescricao(descricao);
-		descricao = "Iniciar partida com dois Jogadores.";
-		doisJogadores.setDescricao(descricao);
-		descricao = "Este é o campo de descrições.";
-		info.setDescricao(descricao);
+		
 		descricao = "Encerrar a partida.";
 		encerrar.setDescricao(descricao);
+		
+		descricao = "Iniciar partida com um Jogador.";
+		umJogador.setDescricao(descricao);
+		
+		descricao = "Iniciar partida com dois Jogadores.";
+		doisJogadores.setDescricao(descricao);
+		
+		descricao = "Mostra de quem é a vez de jogar.";
+		turno.setDescricao(descricao);
+		
+		descricao = "Este é o campo de descrições.";
+		info.setDescricao(descricao);
+		
 		descricao = "Sair do programa";
 		sair.setDescricao(descricao);
 		
+		// Adiciona os botões da interface ao container
+		
 		container.add(novoJogo);
+		container.add(turno);
 		container.add(umJogador);
 		container.add(doisJogadores);
 		container.add(info);
@@ -237,6 +267,12 @@ public class Janela extends JFrame
 		Component encerrar = this.encontreComponentePorNome("encerrar");
 		encerrar.setVisible(true);
 		encerrar.setEnabled(true);
+		
+		Botao turno = (Botao) this.encontreComponentePorNome("turno");
+		turno.setForeground(Color.WHITE);
+		turno.setText("JOGADOR BRANCO");
+		turno.setVisible(true);
+		turno.setEnabled(true);
 	}
 	
 	public void doisJogadores()
@@ -254,11 +290,27 @@ public class Janela extends JFrame
 		Component encerrar = this.encontreComponentePorNome("encerrar");
 		encerrar.setVisible(true);
 		encerrar.setEnabled(true);
+		
+		Botao turno = (Botao) this.encontreComponentePorNome("turno");
+		turno.setForeground(Color.WHITE);
+		turno.setText("JOGADOR BRANCO");
+		turno.setVisible(true);
+		turno.setEnabled(true);
 	}
 	
 	public void encerrar()
 	{
 		this.controle.encerrar();
+		
+		Botao atual;
+		for (int i = 0; i < 15; i++) 
+		{
+			for (int j = 0; j < 15; j++) 
+			{
+				atual = (Botao) this.encontreComponentePorNome("" + i + j);
+				atual.setIcon(iconePosicaoSemPeca);
+			}
+		}
 		
 		Component encerrar = this.encontreComponentePorNome("encerrar");
 		encerrar.setVisible(false);
@@ -267,15 +319,48 @@ public class Janela extends JFrame
 		Component novoJogo = this.encontreComponentePorNome("novoJogo");
 		novoJogo.setVisible(true);
 		novoJogo.setEnabled(true);
+		
+		Botao turno = (Botao) this.encontreComponentePorNome("turno");
+		turno.setText("");
+		turno.setVisible(false);
+		turno.setEnabled(false);	
 	}
 
-	public void jogada(int x, int y) 
+	public void jogada(int x, int y, int turnoAtual) 
 	{
-		this.controle.jogada(x, y);
+		try 
+		{
+			this.controle.jogada(x, y);
+			
+			Botao turno = (Botao) this.encontreComponentePorNome("turno");
+			if(turnoAtual % 2 == 0) // O valor aqui é reverso devido à sequência de eventos
+			{
+				turno.setForeground(Color.BLACK);
+				turno.setText("JOGADOR PRETO");
+			}
+			else
+			{
+				turno.setForeground(Color.WHITE);
+				turno.setText("JOGADOR BRANCO");
+			}
+		} 
+		catch (Exception e) 
+		{
+			System.out.println("EXCEPTION JOGADA");
+		}
 	}
 	
 	public int getTurno() 
 	{
-		return this.controle.getTurno();
+		int resultado = -1;
+		try 
+		{
+			resultado = this.controle.getTurno();
+		} 
+		catch (Exception e) 
+		{
+			System.out.println("EXCEPTION TURNO");
+		}
+		return resultado;
 	}
 }
