@@ -142,7 +142,11 @@ public class Gomoku
 	
 	public int[] miniMax() {
 		ArrayList<int[]> jogadas = gerarJogadas();
-		
+		int limite = jogadas.size();
+		for (int i = 0; i < limite; i++){
+			int[] jogada = jogadas.get(i);
+			this.avalieJogada(jogada[0], jogada[1]);
+		}
 	}
 }
 
