@@ -77,6 +77,8 @@ public class Gomoku
 		boolean resultado = false;
 		
 		// TODO
+		//if (HashMap tem sequência de tamanho 5)
+		// resultado = true;
 		
 		return resultado;
 	}
@@ -98,13 +100,17 @@ public class Gomoku
 			this.tabuleiro[x][y] = Peca.PECA_BRANCA;
 		else {
 			this.tabuleiro[x][y] = Peca.PECA_PRETA;
-			passeTurno();
-			this.miniMax(); // Computador executa uma jogada
+			this.jogadaComputador(); // Computador executa uma jogada
 		}
 		passeTurno();
 		
 	}
 	
+	private void jogadaComputador() {
+		int [] jogadaPC = this.miniMax();
+		jogada(jogadaPC[0], jogadaPC[1]);
+	}
+
 	// Dá um valor de pontuação para o tabuleiro simulando uma jogada.
 	public int avalieJogada(int x, int y)
 	{
@@ -115,9 +121,29 @@ public class Gomoku
 		return resultado;
 	}
 	
-	public void miniMax()
+	@SuppressWarnings("unused")
+	public ArrayList<int[]> gerarJogadas()
 	{
 		// TODO
+		ArrayList<int[]> jogadas = new ArrayList<int []>();
+		//if (verifiqueSeGanhou())
+		if (false)
+			return jogadas;
+	
+		int limite = tabuleiro.length;
+		for (int i = 0; i < limite; i++) {
+			for (int j = 0; j < limite; j++) {
+				if (tabuleiro[i][j] == Peca.SEM_PECA)
+					jogadas.add( new int[] {i, j});
+			}
+		}
+		return jogadas;
+		
+	}
+	
+	public int[] miniMax() {
+		ArrayList<int[]> jogadas = gerarJogadas();
+		
 	}
 }
 
