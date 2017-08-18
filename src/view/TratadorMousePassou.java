@@ -4,14 +4,12 @@ import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.JButton;
-
 public class TratadorMousePassou implements MouseListener 
 {	
-	private JButton botao;
+	private Botao botao;
 	private Color corPadrao;
 	
-	public TratadorMousePassou(JButton botao) 
+	public TratadorMousePassou(Botao botao) 
 	{
 		this.botao = botao;
 		this.corPadrao = botao.getForeground();
