@@ -2,24 +2,26 @@ package controle;
 
 import modelo.Gomoku;
 import modelo.ModoDeJogo;
+import view.Janela;
 
 public class Controle
 {
 	private Gomoku gomoku;
+	private Janela janela;
 
-	public Controle()
+	public Controle(Janela janela)
 	{
-		// Alguns headers de métodos que terão de ser implementados
+		this.janela = janela;
 	}
 	
 	public void novoJogoUmJogador()
 	{
-		this.gomoku = new Gomoku(ModoDeJogo.UM_JOGADOR);
+		this.gomoku = new Gomoku(this, ModoDeJogo.UM_JOGADOR);
 	}
 	
 	public void novoJogoDoisJogadores()
 	{
-		this.gomoku = new Gomoku(ModoDeJogo.DOIS_JOGADORES);
+		this.gomoku = new Gomoku(this, ModoDeJogo.DOIS_JOGADORES);
 	}
 	
 	public void encerrar()
@@ -35,5 +37,21 @@ public class Controle
 	public int getTurno() throws Exception
 	{
 		return this.gomoku.getTurno();
+	}
+	
+	public void fimDeJogo(int num)
+	{
+		// 0 = branco ganhou 
+		// 1 = preto ganhou
+		if(num == 0)
+		{
+			System.err.println("VITÓRIA BRANCO");
+		}
+		else
+		{
+			System.err.println("VITÓRIA PRETO");
+		}
+		this.encerrar();
+		this.janela.encerrar();
 	}
 }

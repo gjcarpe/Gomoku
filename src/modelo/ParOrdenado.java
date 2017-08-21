@@ -20,5 +20,13 @@ public class ParOrdenado
 	{
 		return y;
 	}
+	
+	public boolean eIgual(ParOrdenado outro)
+	{
+		boolean resultado = false;
+		if(this.x == outro.getX() && this.y == outro.getY())
+			resultado = true;
+		return resultado;
+	}
 
 }

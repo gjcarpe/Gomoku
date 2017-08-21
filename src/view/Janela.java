@@ -21,7 +21,7 @@ public class Janela extends JFrame
 	private Container container;
 	private Controle controle;
 	private Botao[][] botoesTabuleiro;
-
+	
 	private void criarIconesPecas() 
 	{
 		iconePosicaoSemPeca = new ImageIcon(
@@ -34,19 +34,21 @@ public class Janela extends JFrame
 	
 	private void criarBotoesTabuleiro()
 	{
+		int x = 0;
 		this.botoesTabuleiro = new Botao[15][15];
 		for (int i = 0; i < 15; i++) 
 		{
 			for (int j = 0; j < 15; j++) 
 			{
 				Botao botao = new Botao("");
-				botao.setName("" + i + j);
+				botao.setName("" + x);
 				botao.setBounds(300 + (j * 23), 89 + (i * 23), 23, 23);
 				botao.setVisible(true);
 				botao.setIcon(iconePosicaoSemPeca);
 				botao.addMouseListener(new TratadorBotaoTabuleiro(this, botao, i, j));
 				this.container.add(botao);
 				this.botoesTabuleiro[i][j] = botao;
+				x++;
 			}
 		}
 	}
@@ -80,10 +82,9 @@ public class Janela extends JFrame
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		
-		
 		// Parâmetros de controle
 		
-		this.controle = new Controle();
+		this.controle = new Controle(this);
 		this.corTexto = Color.RED;
 		this.fonte = new Font("Arial", Font.BOLD, 25);
 		this.bordasLigadas = true;
@@ -301,14 +302,15 @@ public class Janela extends JFrame
 	public void encerrar()
 	{
 		this.controle.encerrar();
-		
+		int x = 0;
 		Botao atual;
 		for (int i = 0; i < 15; i++) 
 		{
 			for (int j = 0; j < 15; j++) 
 			{
-				atual = (Botao) this.encontreComponentePorNome("" + i + j);
+				atual = (Botao) this.encontreComponentePorNome("" + x);
 				atual.setIcon(iconePosicaoSemPeca);
+				x++;
 			}
 		}
 		
@@ -323,7 +325,7 @@ public class Janela extends JFrame
 		Botao turno = (Botao) this.encontreComponentePorNome("turno");
 		turno.setText("");
 		turno.setVisible(false);
-		turno.setEnabled(false);	
+		turno.setEnabled(false);
 	}
 
 	public void jogada(int x, int y, int turnoAtual) 
