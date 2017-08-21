@@ -99,12 +99,74 @@ public class Gomoku
 		{
 			for (int j = y-1; j <= y+1; j++)
 			{
-				if(i >= 0 && j >= 0 && i < 15 && j < 15)
-					if(this.tabuleiro[i][j] == corPeca && x != i & y != j)
-						listaDeAdjacentes.add(new ParOrdenado(i, j));
+				if(i >= 0 && j >= 0 && i < 15 && j < 15) // Se está no intervalo da matriz
+				{
+					if(x != i && y != j) // e não for o próprio ponto
+					{
+						if(this.tabuleiro[i][j] == corPeca)
+						{
+							listaDeAdjacentes.add(new ParOrdenado(i, j));
+						}
+					}
+					else
+					{
+						if(x == i && y != j)
+						{
+							if(this.tabuleiro[i][j] == corPeca)
+							{
+								listaDeAdjacentes.add(new ParOrdenado(i, j));
+							}
+						}
+						if(x != i && y == j)
+						{
+							if(this.tabuleiro[i][j] == corPeca)
+							{
+								listaDeAdjacentes.add(new ParOrdenado(i, j));
+							}
+						}
+					}
+				}	
 			}
 		}
 		return listaDeAdjacentes;
+	}
+	
+	public Orientacao determineOrientacao(ParOrdenado origem, ParOrdenado destino)
+	{
+		Orientacao resultado = Orientacao.SEM_ORIENTACAO;
+		
+		if(origem.getX() > destino.getX())
+		{
+			if(origem.getY() > destino.getY())
+				resultado = Orientacao.NOROESTE;
+			if(origem.getY() == destino.getY())
+				resultado = Orientacao.OESTE;
+			if(origem.getY() < destino.getY())
+				resultado = Orientacao.SUDOESTE;
+		}
+		else
+		{
+			if(origem.getX() < destino.getX())
+			{
+				if(origem.getY() > destino.getY())
+					resultado = Orientacao.NORDESTE;
+				if(origem.getY() == destino.getY())
+					resultado = Orientacao.LESTE;
+				if(origem.getY() < destino.getY())
+					resultado = Orientacao.SUDESTE;
+			}
+			else
+			{
+				if(origem.getX() == destino.getX())
+				{
+					if(origem.getY() > destino.getY())
+						resultado = Orientacao.NORTE;
+					if(origem.getY() < destino.getY())
+						resultado = Orientacao.SUL;
+				}
+			}
+		}
+		return resultado;
 	}
 	
 	// Com base em uma jogada vai criar e atualizar as sequências
@@ -254,44 +316,6 @@ public class Gomoku
 		}
 	}
 	
-	public Orientacao determineOrientacao(ParOrdenado origem, ParOrdenado destino)
-	{
-		Orientacao resultado = Orientacao.SEM_ORIENTACAO;
-		
-		if(origem.getX() > destino.getX())
-		{
-			if(origem.getY() > destino.getY())
-				resultado = Orientacao.NOROESTE;
-			if(origem.getY() == destino.getY())
-				resultado = Orientacao.NORTE;
-			if(origem.getY() < destino.getY())
-				resultado = Orientacao.NORDESTE;
-		}
-		else
-		{
-			if(origem.getX() < destino.getX())
-			{
-				if(origem.getY() > destino.getY())
-					resultado = Orientacao.SUDOESTE;
-				if(origem.getY() == destino.getY())
-					resultado = Orientacao.SUL;
-				if(origem.getY() < destino.getY())
-					resultado = Orientacao.SUDESTE;
-			}
-			else
-			{
-				if(origem.getX() == destino.getX())
-				{
-					if(origem.getY() > destino.getY())
-						resultado = Orientacao.OESTE;
-					if(origem.getY() < destino.getY())
-						resultado = Orientacao.LESTE;
-				}
-			}
-		}
-		return resultado;
-	}
-	
 	public boolean verifiqueSeGanhou()
 	{
 		boolean resultado = false;
@@ -334,7 +358,7 @@ public class Gomoku
 		if (false)
 			return jogadas;
 	
-		int limite = tabuleiro.length;
+		int limite = tabuleiro.length; // NOTA: cuidado ao usar tabuleiro.lenght -> = 15
 		for (int i = 0; i < limite; i++) {
 			for (int j = 0; j < limite; j++) {
 				if (tabuleiro[i][j] == Peca.SEM_PECA)
