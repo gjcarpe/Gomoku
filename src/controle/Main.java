@@ -1,7 +1,7 @@
 package controle;
 
-import testes.Teste;
-//import view.Janela;
+//import testes.Teste;
+import view.Janela;
 
 public class Main 
 {
@@ -9,7 +9,7 @@ public class Main
 	public static void main(String[] args) 
 	{
 		System.out.println("Iniciar...");
-		//Janela janela = new Janela();
-		Teste teste = new Teste();
+		Janela janela = new Janela();
+		//Teste teste = new Teste();
 	}
 }

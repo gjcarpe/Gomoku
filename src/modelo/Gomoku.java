@@ -102,7 +102,7 @@ public class Gomoku
 				if(i >= 0 && j >= 0 && i < 15 && j < 15) // Se está no intervalo da matriz
 				{
 					if(x != i && y != j) // e não for o próprio ponto
-					{
+					{ // possível melhora: (!(x == i && y == j))
 						if(this.tabuleiro[i][j] == corPeca)
 						{
 							listaDeAdjacentes.add(new ParOrdenado(i, j));
@@ -194,6 +194,7 @@ public class Gomoku
 			int tam = 1; // tamanho da sequência
 			for(int i = 0; i < adjacentes.size(); i++)
 			{
+				tam = 1;
 				atual = adjacentes.get(i);
 				orientacaoAtual = this.determineOrientacao(pontoInicial, atual);
 				xAtual = atual.getX();
@@ -230,10 +231,10 @@ public class Gomoku
 					}
 					if(orientacaoAtual == Orientacao.OESTE)
 					{
-						xAtual++;
+						xAtual--;
 						if(xAtual < 0)
 						{
-							xAtual--;
+							xAtual++;
 							break;
 						}
 					}
