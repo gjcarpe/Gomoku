@@ -16,6 +16,7 @@ public class Controle
 	
 	public void iniciarJanela()
 	{
+		System.out.println("Iniciar...");
 		this.janela = new Janela(this);
 	}
 	

@@ -145,20 +145,6 @@ public class Gomoku
 		return resultado;
 	}
 	
-/*	public boolean possuiParReverso(int xCentro, int yCentro, int xAdj, int yAdj)
-	{
-		boolean resultado = false;
-		ParOrdenado centro = new ParOrdenado(xCentro, yCentro);
-		ParOrdenado adj = new ParOrdenado(xAdj, xAdj);
-		Orientacao atual = this.determineOrientacao(centro, adj);
-		Orientacao reversa = this.orientacaoReversa(atual);
-		
-		//for()
-		
-		
-		return resultado;
-	} */
-	
 	// Dado um par (x,y) da matriz, retorna em uma lista todos os pontos de MESMA cor vizinhos.
 	public ArrayList<ParOrdenado> encontreAdjacentes(int x, int y, Peca corPeca)
 	{
@@ -194,19 +180,37 @@ public class Gomoku
 		return listaDeAdjacentes;
 	}
 	
-/*	public ArrayList<ParOrdenado> verifiqueRedundanciaDeAdjacentes(ArrayList<ParOrdenado> lista)
+	// Este método remove os pontos adjacentes reversos repetidos, se existirem.
+	public ArrayList<ParOrdenado> limparAdj(ArrayList<ParOrdenado> adjacentes, ParOrdenado central)
 	{
 		ArrayList<ParOrdenado> resultado = new ArrayList<ParOrdenado>();
 		ParOrdenado atual = null;
+		ParOrdenado seguinte = null;
 		Orientacao orAtual = Orientacao.SEM_ORIENTACAO;
-		while(lista.isEmpty() == false)
+		Orientacao reversa = Orientacao.SEM_ORIENTACAO;
+		Orientacao orSeguinte = Orientacao.SEM_ORIENTACAO;
+		
+		while(adjacentes.size() > 0)
 		{
-			atual = lista.get(0);
-			//orAtual = this.determineOrientacao(origem, destino)
+			atual = adjacentes.get(0);
+			orAtual = this.determineOrientacao(central, atual);
+			reversa = this.orientacaoReversa(orAtual);
+			for(int i = 1; i < adjacentes.size(); i++)
+			{
+				seguinte = adjacentes.get(i);
+				orSeguinte = this.determineOrientacao(central, seguinte);
+				if(orSeguinte == reversa)
+				{
+					adjacentes.remove(seguinte);
+					break;
+				}
+			}
+			resultado.add(atual);
+			adjacentes.remove(atual);
 		}
 		
 		return resultado;
-	} */
+	}
 	
 	// Com base em uma jogada vai criar e atualizar as sequências
 	public void crieSequencia(int x, int y, Peca corPeca)
@@ -222,22 +226,117 @@ public class Gomoku
 			pontoFinal = pontoInicial;
 			nova = new Sequencia(pontoInicial, pontoFinal, corPeca, Orientacao.SEM_ORIENTACAO, 1);
 			this.sequenciasUm.add(nova);
-			System.out.println("Adicionada nova sequênciaUm");
+			System.out.println("Adicionada nova Sequência-1");
 		}
 		else // Senão verifica os adjacentes
 		{
+			adjacentes = this.limparAdj(adjacentes, pontoInicial); // Remove as redundancias
 			ParOrdenado atual = null;
+			int tam = 0; // tamanho da sequência
 			int xAtual = 0;
 			int yAtual = 0;
 			Orientacao orientacaoAtual = Orientacao.SEM_ORIENTACAO;
-			int tam = 1; // tamanho da sequência
+			
 			for(int i = 0; i < adjacentes.size(); i++)
 			{
-				tam = 1;
+				tam = 0;
 				atual = adjacentes.get(i);
 				orientacaoAtual = this.determineOrientacao(pontoInicial, atual);
 				xAtual = atual.getX();
 				yAtual = atual.getY();
+				
+				// Verifica a primeira metade
+				while(this.tabuleiro[xAtual][yAtual] == corPeca)
+				{
+					tam++;
+					if(orientacaoAtual == Orientacao.NORTE)
+					{
+						yAtual--;
+						if(yAtual < 0)
+						{
+							yAtual++;
+							break;
+						}
+					}
+					if(orientacaoAtual == Orientacao.SUL)
+					{
+						yAtual++;
+						if(yAtual > 14)
+						{
+							yAtual--;
+							break;
+						}
+					}
+					if(orientacaoAtual == Orientacao.LESTE)
+					{
+						xAtual++;
+						if(xAtual > 14)
+						{
+							xAtual--;
+							break;
+						}
+					}
+					if(orientacaoAtual == Orientacao.OESTE)
+					{
+						xAtual--;
+						if(xAtual < 0)
+						{
+							xAtual++;
+							break;
+						}
+					}
+					if(orientacaoAtual == Orientacao.NORDESTE)
+					{
+						xAtual++;
+						yAtual--;
+						if(xAtual > 14 || yAtual < 0)
+						{
+							xAtual--;
+							yAtual++;
+							break;
+						}
+					}
+					if(orientacaoAtual == Orientacao.NOROESTE)
+					{
+						xAtual--;
+						yAtual--;
+						if(xAtual < 0 || yAtual < 0)
+						{
+							xAtual++;
+							yAtual++;
+							break;
+						}
+					}
+					if(orientacaoAtual == Orientacao.SUDOESTE)
+					{
+						xAtual--;
+						yAtual++;
+						if(xAtual < 0 || yAtual > 14)
+						{
+							xAtual++;
+							yAtual--;
+							break;
+						}
+					}
+					if(orientacaoAtual == Orientacao.SUDESTE)
+					{
+						xAtual++;
+						yAtual++;
+						if(xAtual > 14 || yAtual > 14)
+						{
+							xAtual--;
+							yAtual--;
+							break;
+						}
+					}
+				}
+				
+				// Verifica a outra potencial metade
+				
+				orientacaoAtual = this.orientacaoReversa(orientacaoAtual); // Reverte a orientação
+				xAtual = pontoInicial.getX(); // Restaura X
+				yAtual = pontoInicial.getY(); // Restaura Y
+				
 				while(this.tabuleiro[xAtual][yAtual] == corPeca)
 				{
 					tam++;
@@ -327,13 +426,23 @@ public class Gomoku
 				nova = new Sequencia(pontoInicial, pontoFinal, corPeca, orientacaoAtual, tam);
 				
 				if(tam == 2)
+				{
 					this.sequenciasDois.add(nova);
+					System.out.println("Adicionada nova Sequência-2");
+				}
 				if(tam == 3)
+				{
 					this.sequenciasTres.add(nova);
+					System.out.println("Adicionada nova Sequência-3");
+				}
 				if(tam == 4)
+				{
 					this.sequenciasQuatro.add(nova);
+					System.out.println("Adicionada nova Sequência-4");
+				}
 				if(tam == 5)
 				{
+					System.out.println("SEQUENCIA-5 ENCONTRADA");
 					if(corPeca == Peca.PECA_BRANCA)
 						this.controle.fimDeJogo(0); // Zero para brancas
 					else

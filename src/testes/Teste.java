@@ -10,7 +10,6 @@ import modelo.ParOrdenado;
 import modelo.Peca;
 import view.Janela;
 
-@SuppressWarnings("unused")
 public class Teste 
 {
 	Controle controle;
@@ -25,26 +24,29 @@ public class Teste
 		this.janela = controle.getJanela();
 		this.gomoku = new Gomoku(controle, ModoDeJogo.DOIS_JOGADORES);
 		this.tabuleiro = gomoku.getTabuleiro();
-		this.teste();
 	}
 	
-	private void teste() 
+	public void teste() 
 	{
 		conteSemPeca();
 		testeTabuleiro();
+		testeOrientacao();
 		testeOrientacaoReversa();
+		testeRemocaoAdjacentes();
 	}	
-	
-	private void testeOrientacaoReversa()
+
+	private void conteSemPeca()
 	{
-		System.out.println(gomoku.orientacaoReversa(Orientacao.NORTE).toString());
-		System.out.println(gomoku.orientacaoReversa(Orientacao.SUL).toString());
-		System.out.println(gomoku.orientacaoReversa(Orientacao.LESTE).toString());
-		System.out.println(gomoku.orientacaoReversa(Orientacao.OESTE).toString());
-		System.out.println(gomoku.orientacaoReversa(Orientacao.NORDESTE).toString());
-		System.out.println(gomoku.orientacaoReversa(Orientacao.SUDOESTE).toString());
-		System.out.println(gomoku.orientacaoReversa(Orientacao.NOROESTE).toString());
-		System.out.println(gomoku.orientacaoReversa(Orientacao.SUDESTE).toString());
+		int x = 0;
+		for (int i = 0; i < tabuleiro.length; i++) 
+		{
+			for (int j = 0; j < tabuleiro.length; j++) 
+			{
+				if(tabuleiro[i][j] == Peca.SEM_PECA)
+					x++;
+			}
+		}
+		System.out.println("Número de casas do tabuleiro SEM_PECA = " + x);
 	}
 	
 	private void testeTabuleiro()
@@ -84,27 +86,27 @@ public class Teste
 		System.out.println("ORIENTACAO = " + or.toString());
 	}
 	
-	private void conteSemPeca()
+	private void testeOrientacaoReversa()
 	{
-		int x = 0;
-		for (int i = 0; i < tabuleiro.length; i++) 
-		{
-			for (int j = 0; j < tabuleiro.length; j++) 
-			{
-				if(tabuleiro[i][j] == Peca.SEM_PECA)
-					x++;
-			}
-		}
-		System.out.println("Número de casas do tabuleiro SEM_PECA = " + x);
+		System.out.println(gomoku.orientacaoReversa(Orientacao.NORTE).toString());
+		System.out.println(gomoku.orientacaoReversa(Orientacao.SUL).toString());
+		System.out.println(gomoku.orientacaoReversa(Orientacao.LESTE).toString());
+		System.out.println(gomoku.orientacaoReversa(Orientacao.OESTE).toString());
+		System.out.println(gomoku.orientacaoReversa(Orientacao.NORDESTE).toString());
+		System.out.println(gomoku.orientacaoReversa(Orientacao.SUDOESTE).toString());
+		System.out.println(gomoku.orientacaoReversa(Orientacao.NOROESTE).toString());
+		System.out.println(gomoku.orientacaoReversa(Orientacao.SUDESTE).toString());
 	}
 	
-	/*
-	 * Métodos ok:
-	 *  - Encontre adjacentes
-	 *  - Determine orientação
-	 *  
-	 * TODO Falta arrumar o criar Sequência
-	 * 
-	 */
-	
+	private void testeRemocaoAdjacentes() 
+	{
+		int x = 1;
+		int y = 1;
+		ArrayList<ParOrdenado> adjacentes = gomoku.encontreAdjacentes(x, y, Peca.PECA_BRANCA);
+		ArrayList<ParOrdenado> resultado = gomoku.limparAdj(adjacentes, new ParOrdenado(x, y));
+		System.out.println("TAMANHO RESULTADO = " + resultado + ".\n");
+		for(int i = 0; i < resultado.size(); i++)
+			System.out.println("[" + resultado.get(i).getX() +"]["+ resultado.get(i).getY() + "]");
+		
+	}
 }
