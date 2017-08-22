@@ -13,20 +13,42 @@ import view.Janela;
 @SuppressWarnings("unused")
 public class Teste 
 {
-	
-	Janela janela = new Janela();
-	Controle controle = new Controle(janela);
-	Gomoku gomoku = new Gomoku(controle, ModoDeJogo.DOIS_JOGADORES);
-	Peca[][] tabuleiro = gomoku.getTabuleiro();
+	Controle controle;
+	Janela janela;
+	Gomoku gomoku;
+	Peca[][] tabuleiro;
 	
 	public Teste()
 	{
+		this.controle = new Controle();
+		this.controle.iniciarJanela();
+		this.janela = controle.getJanela();
+		this.gomoku = new Gomoku(controle, ModoDeJogo.DOIS_JOGADORES);
+		this.tabuleiro = gomoku.getTabuleiro();
 		this.teste();
 	}
 	
 	private void teste() 
 	{
 		conteSemPeca();
+		testeTabuleiro();
+		testeOrientacaoReversa();
+	}	
+	
+	private void testeOrientacaoReversa()
+	{
+		System.out.println(gomoku.orientacaoReversa(Orientacao.NORTE).toString());
+		System.out.println(gomoku.orientacaoReversa(Orientacao.SUL).toString());
+		System.out.println(gomoku.orientacaoReversa(Orientacao.LESTE).toString());
+		System.out.println(gomoku.orientacaoReversa(Orientacao.OESTE).toString());
+		System.out.println(gomoku.orientacaoReversa(Orientacao.NORDESTE).toString());
+		System.out.println(gomoku.orientacaoReversa(Orientacao.SUDOESTE).toString());
+		System.out.println(gomoku.orientacaoReversa(Orientacao.NOROESTE).toString());
+		System.out.println(gomoku.orientacaoReversa(Orientacao.SUDESTE).toString());
+	}
+	
+	private void testeTabuleiro()
+	{
 		tabuleiro[0][0] = Peca.PECA_BRANCA;
 		tabuleiro[1][0] = Peca.PECA_BRANCA;
 		tabuleiro[2][0] = Peca.PECA_BRANCA;
@@ -47,6 +69,11 @@ public class Teste
 		System.out.println("" + adjacentes.get(0).getX() + "|" + adjacentes.get(0).getY());
 		System.out.println("" + adjacentes.get(1).getX() + "|" + adjacentes.get(1).getY());
 		System.out.println("" + adjacentes.get(2).getX() + "|" + adjacentes.get(2).getY());
+		System.out.println("" + adjacentes.get(3).getX() + "|" + adjacentes.get(3).getY());
+		System.out.println("" + adjacentes.get(4).getX() + "|" + adjacentes.get(4).getY());
+		System.out.println("" + adjacentes.get(5).getX() + "|" + adjacentes.get(5).getY());
+		System.out.println("" + adjacentes.get(6).getX() + "|" + adjacentes.get(6).getY());
+		System.out.println("" + adjacentes.get(7).getX() + "|" + adjacentes.get(7).getY());
 	}
 	
 	private void testeOrientacao()

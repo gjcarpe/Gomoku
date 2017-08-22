@@ -9,9 +9,19 @@ public class Controle
 	private Gomoku gomoku;
 	private Janela janela;
 
-	public Controle(Janela janela)
+	public Controle()
 	{
-		this.janela = janela;
+		
+	}
+	
+	public void iniciarJanela()
+	{
+		this.janela = new Janela(this);
+	}
+	
+	public Janela getJanela() // Usado apenas para testes
+	{
+		return this.janela;
 	}
 	
 	public void novoJogoUmJogador()

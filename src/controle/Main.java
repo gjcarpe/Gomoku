@@ -1,15 +1,14 @@
 package controle;
 
-//import testes.Teste;
-import view.Janela;
+import testes.Teste;
 
 public class Main 
 {
-	@SuppressWarnings("unused")
 	public static void main(String[] args) 
 	{
 		System.out.println("Iniciar...");
-		Janela janela = new Janela();
-		//Teste teste = new Teste();
+		//Controle controle = new Controle();
+		//controle.iniciarJanela();
+		Teste teste = new Teste();
 	}
 }

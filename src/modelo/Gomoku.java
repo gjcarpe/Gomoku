@@ -11,12 +11,11 @@ public class Gomoku
 	private int turno;
 	private ModoDeJogo modoDeJogo;
 	private Peca[][] tabuleiro;
-	private HashMap<String, Sequencia> sequencias;
-	private int numSequenciasUm;
-	private int numSequenciasDois;
-	private int numSequenciasTres;
-	private int numSequenciasQuatro;
-	private int numSequenciasCinco;
+
+	private ArrayList<Sequencia> sequenciasUm;
+	private ArrayList<Sequencia> sequenciasDois;
+	private ArrayList<Sequencia> sequenciasTres;
+	private ArrayList<Sequencia> sequenciasQuatro;
 	
 	private void inicializarTabuleiro()
 	{
@@ -35,12 +34,10 @@ public class Gomoku
 		this.controle = controle;
 		this.turno = 0;
 		this.modoDeJogo = modo;
-		this.sequencias = new HashMap<>();
-		this.numSequenciasUm = 0;
-		this.numSequenciasDois = 0;
-		this.numSequenciasTres = 0;
-		this.numSequenciasQuatro = 0;
-		this.numSequenciasCinco = 0;
+		this.sequenciasUm = new ArrayList<Sequencia>();
+		this.sequenciasDois = new ArrayList<Sequencia>();
+		this.sequenciasTres = new ArrayList<Sequencia>();
+		this.sequenciasQuatro = new ArrayList<Sequencia>();
 		this.inicializarTabuleiro();
 	}
 	
@@ -72,63 +69,14 @@ public class Gomoku
 		{
 			this.tabuleiro[x][y] = Peca.PECA_BRANCA;
 			this.crieSequencia(x, y, Peca.PECA_BRANCA);
-			
-			if(this.verifiqueSeGanhou() == true)
-				this.controle.fimDeJogo(0);
-			else
-				this.passeTurno();
+			this.passeTurno();
 		}
 		else
 		{
 			this.tabuleiro[x][y] = Peca.PECA_PRETA;
 			this.crieSequencia(x, y, Peca.PECA_PRETA);
-			
-			if(this.verifiqueSeGanhou() == true)	
-				this.controle.fimDeJogo(1);
-			else
-				this.passeTurno();
+			this.passeTurno();
 		}
-	}
-	
-	// Dado um par (x,y) da matriz, retorna em uma lista todos os pontos de MESMA cor vizinhos.
-	public ArrayList<ParOrdenado> encontreAdjacentes(int x, int y, Peca corPeca)
-	{
-		ArrayList<ParOrdenado> listaDeAdjacentes = new ArrayList<ParOrdenado>();
-		
-		for (int i = x-1; i <= x+1 ; i++)
-		{
-			for (int j = y-1; j <= y+1; j++)
-			{
-				if(i >= 0 && j >= 0 && i < 15 && j < 15) // Se está no intervalo da matriz
-				{
-					if(x != i && y != j) // e não for o próprio ponto
-					{ // possível melhora: (!(x == i && y == j))
-						if(this.tabuleiro[i][j] == corPeca)
-						{
-							listaDeAdjacentes.add(new ParOrdenado(i, j));
-						}
-					}
-					else
-					{
-						if(x == i && y != j)
-						{
-							if(this.tabuleiro[i][j] == corPeca)
-							{
-								listaDeAdjacentes.add(new ParOrdenado(i, j));
-							}
-						}
-						if(x != i && y == j)
-						{
-							if(this.tabuleiro[i][j] == corPeca)
-							{
-								listaDeAdjacentes.add(new ParOrdenado(i, j));
-							}
-						}
-					}
-				}	
-			}
-		}
-		return listaDeAdjacentes;
 	}
 	
 	public Orientacao determineOrientacao(ParOrdenado origem, ParOrdenado destino)
@@ -169,8 +117,100 @@ public class Gomoku
 		return resultado;
 	}
 	
+	public Orientacao orientacaoReversa(Orientacao or)
+	{
+		Orientacao resultado = Orientacao.SEM_ORIENTACAO;
+		
+		switch (or) 
+		{
+			case NORTE: resultado = Orientacao.SUL;
+				break;
+			case SUL: resultado = Orientacao.NORTE;
+				break;
+			case LESTE: resultado = Orientacao.OESTE;
+				break;
+			case OESTE: resultado = Orientacao.LESTE;
+				break;
+			case NORDESTE: resultado = Orientacao.SUDOESTE;
+				break;
+			case SUDOESTE: resultado = Orientacao.NORDESTE;
+				break;
+			case NOROESTE: resultado = Orientacao.SUDESTE;
+				break;
+			case SUDESTE: resultado = Orientacao.NOROESTE;
+				break;
+			default:
+				break;
+		}
+		
+		return resultado;
+	}
+	
+/*	public boolean possuiParReverso(int xCentro, int yCentro, int xAdj, int yAdj)
+	{
+		boolean resultado = false;
+		ParOrdenado centro = new ParOrdenado(xCentro, yCentro);
+		ParOrdenado adj = new ParOrdenado(xAdj, xAdj);
+		Orientacao atual = this.determineOrientacao(centro, adj);
+		Orientacao reversa = this.orientacaoReversa(atual);
+		
+		//for()
+		
+		
+		return resultado;
+	} */
+	
+	// Dado um par (x,y) da matriz, retorna em uma lista todos os pontos de MESMA cor vizinhos.
+	public ArrayList<ParOrdenado> encontreAdjacentes(int x, int y, Peca corPeca)
+	{
+		ArrayList<ParOrdenado> listaDeAdjacentes = new ArrayList<ParOrdenado>();
+		
+		for (int i = x-1; i <= x+1 ; i++)
+		{
+			for (int j = y-1; j <= y+1; j++)
+			{
+				if(i >= 0 && j >= 0 && i < 15 && j < 15) // Se está no intervalo da matriz
+				{
+					if(x != i && y != j) // e não for o próprio ponto
+					{
+						if(this.tabuleiro[i][j] == corPeca)
+							listaDeAdjacentes.add(new ParOrdenado(i, j));
+					}
+					else
+					{
+						if(x == i && y != j) // Condição em que apenas x é igual
+						{
+							if(this.tabuleiro[i][j] == corPeca)
+								listaDeAdjacentes.add(new ParOrdenado(i, j));	
+						}
+						if(x != i && y == j) // Condição em que apenas y é igual
+						{
+							if(this.tabuleiro[i][j] == corPeca)
+								listaDeAdjacentes.add(new ParOrdenado(i, j));
+						}
+					}
+				}	
+			}
+		}
+		return listaDeAdjacentes;
+	}
+	
+/*	public ArrayList<ParOrdenado> verifiqueRedundanciaDeAdjacentes(ArrayList<ParOrdenado> lista)
+	{
+		ArrayList<ParOrdenado> resultado = new ArrayList<ParOrdenado>();
+		ParOrdenado atual = null;
+		Orientacao orAtual = Orientacao.SEM_ORIENTACAO;
+		while(lista.isEmpty() == false)
+		{
+			atual = lista.get(0);
+			//orAtual = this.determineOrientacao(origem, destino)
+		}
+		
+		return resultado;
+	} */
+	
 	// Com base em uma jogada vai criar e atualizar as sequências
-	public void crieSequencia(int x, int y, Peca corPeca) // TODO Testar
+	public void crieSequencia(int x, int y, Peca corPeca)
 	{
 		ArrayList<ParOrdenado> adjacentes = this.encontreAdjacentes(x, y, corPeca);
 		ParOrdenado pontoInicial = new ParOrdenado(x, y);
@@ -182,10 +222,10 @@ public class Gomoku
 			// Cria uma sequência de 1 ponto
 			pontoFinal = pontoInicial;
 			nova = new Sequencia(pontoInicial, pontoFinal, corPeca, Orientacao.SEM_ORIENTACAO, 1);
-			this.sequencias.put("UM#" + this.numSequenciasUm, nova); 
-			this.numSequenciasUm++;
+			this.sequenciasUm.add(nova);
+			System.out.println("Adicionada nova sequênciaUm");
 		}
-		else
+		else // Senão verifica os adjacentes
 		{
 			ParOrdenado atual = null;
 			int xAtual = 0;
@@ -286,45 +326,22 @@ public class Gomoku
 				
 				pontoFinal = new ParOrdenado(xAtual, yAtual);
 				nova = new Sequencia(pontoInicial, pontoFinal, corPeca, orientacaoAtual, tam);
-				String id = "";
+				
 				if(tam == 2)
-				{
-					id = "DOIS#" + this.numSequenciasDois;
-					System.out.println(id);
-					this.numSequenciasDois++;
-				}
+					this.sequenciasDois.add(nova);
 				if(tam == 3)
-				{
-					id = "TRES#" + this.numSequenciasTres;
-					System.out.println(id);
-					this.numSequenciasTres++;
-				}
+					this.sequenciasTres.add(nova);
 				if(tam == 4)
-				{
-					id = "QUATRO#" + this.numSequenciasQuatro;
-					System.out.println(id);
-					this.numSequenciasQuatro++;
-				}
+					this.sequenciasQuatro.add(nova);
 				if(tam == 5)
 				{
-					id = "CINCO#" + this.numSequenciasCinco;
-					System.out.println(id);
-					this.numSequenciasCinco++;
+					if(corPeca == Peca.PECA_BRANCA)
+						this.controle.fimDeJogo(0); // Zero para brancas
+					else
+						this.controle.fimDeJogo(1); // Um para pretas
 				}
-				
-				this.sequencias.put(id, nova);
 			}
 		}
-	}
-	
-	public boolean verifiqueSeGanhou()
-	{
-		boolean resultado = false;
-		
-		if(this.numSequenciasCinco > 0)
-			resultado = true;
-
-		return resultado;
 	}
 	
 	public void passeTurno()

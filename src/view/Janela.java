@@ -74,7 +74,7 @@ public class Janela extends JFrame
 	public static ImageIcon iconePosicaoPecaBranca;
 	public static ImageIcon iconePosicaoPecaPreta;
 
-	public Janela() 
+	public Janela(Controle controle) 
 	{
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setTitle("Gomoku");
@@ -84,7 +84,7 @@ public class Janela extends JFrame
 		
 		// Parâmetros de controle
 		
-		this.controle = new Controle(this);
+		this.controle = controle;
 		this.corTexto = Color.RED;
 		this.fonte = new Font("Arial", Font.BOLD, 25);
 		this.bordasLigadas = true;
