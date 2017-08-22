@@ -1,10 +1,9 @@
 # Gomoku
 
-UFSC - INE5430 
+## UFSC - INE5430 
 
-Java implementation of the Gomoku game with Artificial Intelligence player.
+### Developed by [@gjcarpe](https://github.com/gjcarpe), [@JuanCuttle](https://github.com/JuanCuttle).
 
-Implemented by:
+Java implementation of the Gomoku game with Artificial Intelligence.
 
-@gjcarpe
-@JuanCuttle
+Game text, code and documentation in Brazilian Portuguese.
