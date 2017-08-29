@@ -301,7 +301,6 @@ public class Janela extends JFrame
 	
 	public void encerrar()
 	{
-		this.controle.encerrar();
 		int x = 0;
 		Botao atual;
 		for (int i = 0; i < 15; i++) 
@@ -332,8 +331,6 @@ public class Janela extends JFrame
 	{
 		try 
 		{
-			this.controle.jogada(x, y);
-			
 			Botao turno = (Botao) this.encontreComponentePorNome("turno");
 			if(turnoAtual % 2 == 0) // O valor aqui é reverso devido à sequência de eventos
 			{
@@ -345,6 +342,7 @@ public class Janela extends JFrame
 				turno.setForeground(Color.WHITE);
 				turno.setText("JOGADOR BRANCO");
 			}
+			this.controle.jogada(x, y);
 		} 
 		catch (Exception e) 
 		{
@@ -364,5 +362,19 @@ public class Janela extends JFrame
 			System.out.println("EXCEPTION TURNO");
 		}
 		return resultado;
+	}
+
+	public void vitoriaBranco() 
+	{
+		Botao turno = (Botao) this.encontreComponentePorNome("turno");
+		turno.setForeground(Color.WHITE);
+		turno.setText("VITÓRIA BRANCO");
+	}
+
+	public void vitoriaPreto() 
+	{
+		Botao turno = (Botao) this.encontreComponentePorNome("turno");
+		turno.setForeground(Color.BLACK);
+		turno.setText("VITÓRIA PRETO");
 	}
 }

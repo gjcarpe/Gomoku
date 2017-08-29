@@ -56,13 +56,15 @@ public class Controle
 		// 1 = preto ganhou
 		if(num == 0)
 		{
+			this.janela.vitoriaBranco();
 			System.err.println("VITÓRIA BRANCO");
 		}
 		else
 		{
+			this.janela.vitoriaPreto();
 			System.err.println("VITÓRIA PRETO");
 		}
 		this.encerrar();
-		this.janela.encerrar();
+		
 	}
 }
