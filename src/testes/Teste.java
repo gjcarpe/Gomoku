@@ -68,14 +68,10 @@ public class Teste
 		int y = 1;
 		ArrayList<ParOrdenado> adjacentes = gomoku.encontreAdjacentes(x, y, Peca.PECA_BRANCA);
 		System.out.println("ADJACENTES SIZE = " + adjacentes.size());
-		System.out.println("" + adjacentes.get(0).getX() + "|" + adjacentes.get(0).getY());
-		System.out.println("" + adjacentes.get(1).getX() + "|" + adjacentes.get(1).getY());
-		System.out.println("" + adjacentes.get(2).getX() + "|" + adjacentes.get(2).getY());
-		System.out.println("" + adjacentes.get(3).getX() + "|" + adjacentes.get(3).getY());
-		System.out.println("" + adjacentes.get(4).getX() + "|" + adjacentes.get(4).getY());
-		System.out.println("" + adjacentes.get(5).getX() + "|" + adjacentes.get(5).getY());
-		System.out.println("" + adjacentes.get(6).getX() + "|" + adjacentes.get(6).getY());
-		System.out.println("" + adjacentes.get(7).getX() + "|" + adjacentes.get(7).getY());
+		for (int i = 0; i < adjacentes.size(); i++) 
+		{
+			System.out.println("" + adjacentes.get(i).getX() + "|" + adjacentes.get(i).getY());
+		}
 	}
 	
 	private void testeOrientacao()
