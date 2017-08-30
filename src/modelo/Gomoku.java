@@ -57,6 +57,25 @@ public class Gomoku
 		this.inicializarTabuleiro();
 	}
 	
+	public ArrayList<Sequencia> getSequenciasUm()
+	{
+		return sequenciasUm;
+	}
+
+	public ArrayList<Sequencia> getSequenciasDois()
+	{
+		return sequenciasDois;
+	}
+	public ArrayList<Sequencia> getSequenciasTres()
+	{
+		return sequenciasTres;
+	}
+	
+	public ArrayList<Sequencia> getSequenciasQuatro()
+	{
+		return sequenciasQuatro;
+	}
+	
 	public int getValorDupla()
 	{
 		return this.valorDupla;

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Computador 
 {
 	private Gomoku gomoku;
+	private Gomoku gomokuParcial;
 	
 	public Computador(Gomoku gomoku)
 	{
@@ -26,11 +27,58 @@ public class Computador
 		int y = p.getY();
 		int resultado = 0;
 		
-		// TODO Com base na lista de sequências 
+		this.simulaJogada(x, y);
 		
+		// TODO Com base na lista de sequências 
+		ArrayList<Sequencia> sequencias4 = this.gomokuParcial.getSequenciasQuatro();
+		for (int i = 0; i < sequencias4.size(); i++){
+			if (sequencias4.get(i).getCorPeca() == Peca.PECA_PRETA){
+				resultado += this.gomokuParcial.getValorQuatro();
+			} else{
+				resultado -= this.gomokuParcial.getValorQuatro();
+			}
+		}
+		
+		ArrayList<Sequencia> sequencias3 = this.gomokuParcial.getSequenciasTres();
+		for (int i = 0; i < sequencias3.size(); i++){
+			if (sequencias3.get(i).getCorPeca() == Peca.PECA_PRETA){
+				resultado += this.gomokuParcial.getValorTripla();
+			} else{
+				resultado -= this.gomokuParcial.getValorTripla();
+			}
+		}
+		
+		ArrayList<Sequencia> sequencias2 = this.gomokuParcial.getSequenciasDois();
+		for (int i = 0; i < sequencias2.size(); i++){
+			if (sequencias2.get(i).getCorPeca() == Peca.PECA_PRETA){
+				resultado += this.gomokuParcial.getValorDupla();
+			} else{
+				resultado -= this.gomokuParcial.getValorDupla();
+			}
+		}
+		
+		ArrayList<Sequencia> sequencias1 = this.gomokuParcial.getSequenciasUm();
+		for (int i = 0; i < sequencias1.size(); i++){
+			if (sequencias1.get(i).getCorPeca() == Peca.PECA_PRETA){
+				resultado += 1;
+			} else{
+				resultado -= 1;
+			}
+		}
 		return resultado;
 	}
 	
+	private void simulaJogada(int x, int y) {
+		// TODO Auto-generated method stub
+		
+		this.gomokuParcial = this.gomoku;
+		
+		//Peca[][] tabuleiroParcial = this.gomokuParcial.getTabuleiro();
+		//tabuleiroParcial[x][y] = Peca.PECA_PRETA;
+		this.gomokuParcial.crieSequencia(x, y, Peca.PECA_PRETA);
+		
+	}
+
 	// Código semi-copiado do impl MiniMax do moodle
 	@SuppressWarnings("unused")
 	public ArrayList<ParOrdenado> gerarJogadas()
