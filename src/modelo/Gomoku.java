@@ -10,11 +10,17 @@ public class Gomoku
 	private int turno;
 	private ModoDeJogo modoDeJogo;
 	private Peca[][] tabuleiro;
-
+	private Computador computador;
+	
 	private ArrayList<Sequencia> sequenciasUm;
 	private ArrayList<Sequencia> sequenciasDois;
 	private ArrayList<Sequencia> sequenciasTres;
 	private ArrayList<Sequencia> sequenciasQuatro;
+	
+	private int valorDupla;
+	private int valorTripla;
+	private int valorQuadra;
+	private int valorQuintupla;
 	
 	private void inicializarTabuleiro()
 	{
@@ -33,11 +39,47 @@ public class Gomoku
 		this.controle = controle;
 		this.turno = 0;
 		this.modoDeJogo = modo;
+		if(modo.equals(ModoDeJogo.UM_JOGADOR))
+			this.computador = new Computador(this);
+	
 		this.sequenciasUm = new ArrayList<Sequencia>();
 		this.sequenciasDois = new ArrayList<Sequencia>();
 		this.sequenciasTres = new ArrayList<Sequencia>();
 		this.sequenciasQuatro = new ArrayList<Sequencia>();
+		
+		// Valores arbitrários - TODO Verificar
+		// Valor 1 peça = 1
+		this.valorDupla = 10;
+		this.valorTripla = 100;
+		this.valorQuadra = 1000;
+		this.valorQuintupla = Integer.MAX_VALUE;
+		
 		this.inicializarTabuleiro();
+	}
+	
+	public int getValorDupla()
+	{
+		return this.valorDupla;
+	}
+	
+	public int getValorTripla()
+	{
+		return this.valorTripla;
+	}
+	
+	public int getValorQuatro()
+	{
+		return this.valorQuadra;
+	}
+	
+	public int getValorQuintupla()
+	{
+		return this.valorQuintupla;
+	}
+	
+	public Computador getComputador()
+	{
+		return this.computador;
 	}
 	
 	public ModoDeJogo getModoDeJogo()
@@ -85,8 +127,8 @@ public class Gomoku
 			this.crieSequencia(x, y, Peca.PECA_BRANCA);
 			this.passeTurno();
 			
-			// TODO jogada computador
-			
+			this.computador.jogadaComputador();
+			this.passeTurno();
 		}
 	}
 	
@@ -468,5 +510,5 @@ public class Gomoku
 	{
 		this.turno++;
 	}
-
+	
 }
