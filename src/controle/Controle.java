@@ -2,6 +2,7 @@ package controle;
 
 import modelo.Gomoku;
 import modelo.ModoDeJogo;
+import modelo.ParOrdenado;
 import view.Janela;
 
 public class Controle
@@ -42,7 +43,7 @@ public class Controle
 	
 	public void jogada(int x, int y) throws Exception
 	{
-		this.gomoku.jogada(x, y);
+		this.gomoku.jogada(new ParOrdenado(x, y));
 	}
 
 	public int getTurno() throws Exception

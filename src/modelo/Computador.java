@@ -15,13 +15,15 @@ public class Computador
 	
 	public void jogadaComputador() 
 	{
-		int [] jogadaPC = this.miniMax();
-		this.gomoku.jogada(jogadaPC[0], jogadaPC[1]);
+		ParOrdenado jogadaPC = this.miniMax();
+		this.gomoku.jogada(jogadaPC);
 	}
 	
 	// Dá um valor de pontuação para o tabuleiro simulando uma jogada.
-	public int avalieJogada(int x, int y)
+	public int avalieJogada(ParOrdenado p)
 	{
+		int x = p.getX();
+		int y = p.getY();
 		int resultado = 0;
 		
 		// TODO Com base na lista de sequências 
@@ -31,9 +33,9 @@ public class Computador
 	
 	// Código semi-copiado do impl MiniMax do moodle
 	@SuppressWarnings("unused")
-	public ArrayList<int[]> gerarJogadas()
+	public ArrayList<ParOrdenado> gerarJogadas()
 	{
-		ArrayList<int[]> jogadas = new ArrayList<int []>();
+		ArrayList<ParOrdenado> jogadas = new ArrayList<ParOrdenado>();
 		//if (verifiqueSeGanhou())
 		if (false)
 			return jogadas;
@@ -44,7 +46,7 @@ public class Computador
 		for (int i = 0; i < limite; i++) {
 			for (int j = 0; j < limite; j++) {
 				if (tabuleiro[i][j] == Peca.SEM_PECA)
-					jogadas.add(new int[] {i, j});
+					jogadas.add(new ParOrdenado(i, j));
 			}
 		}
 		return jogadas;
@@ -52,15 +54,15 @@ public class Computador
 	}
 	
 	// Código semi-copiado do impl MiniMax do moodle	
-	public int[] miniMax() {
-		ArrayList<int[]> jogadas = gerarJogadas();
+	public ParOrdenado miniMax() {
+		ArrayList<ParOrdenado> jogadas = gerarJogadas();
 		int limite = jogadas.size();
 		int resultadoMelhor = Integer.MIN_VALUE;
-		int[] jogadaMelhor = new int[] {8, 8};
+		ParOrdenado jogadaMelhor = new ParOrdenado(8,8);
 		int resultado;
 		for (int i = 0; i < limite; i++){
-			int[] jogada = jogadas.get(i);
-			resultado = this.avalieJogada(jogada[0], jogada[1]);
+			ParOrdenado jogada = jogadas.get(i);
+			resultado = this.avalieJogada(jogada);
 			if (resultado > resultadoMelhor)
 				jogadaMelhor = jogada;
 		}

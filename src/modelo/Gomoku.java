@@ -104,8 +104,11 @@ public class Gomoku
 	}	
 	
 	// Cor da peça determinada pelo valor de turno atual.
-	public void jogada(int x, int y)
+	public void jogada(ParOrdenado p)
 	{
+		int x = p.getX();
+		int y = p.getY();
+		
 		if(this.modoDeJogo.equals(ModoDeJogo.DOIS_JOGADORES))
 		{
 			if (this.getTurno() % 2 == 0)
