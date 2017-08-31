@@ -26,6 +26,11 @@ public class Controle
 		return this.janela;
 	}
 	
+	public int getTurno() throws Exception
+	{
+		return this.gomoku.getTurno();
+	}
+	
 	public void novoJogoUmJogador()
 	{
 		this.gomoku = new Gomoku(this, ModoDeJogo.UM_JOGADOR);
@@ -45,10 +50,10 @@ public class Controle
 	{
 		this.gomoku.jogada(new ParOrdenado(x, y));
 	}
-
-	public int getTurno() throws Exception
+	
+	public void jogadaComputador(int x, int y) 
 	{
-		return this.gomoku.getTurno();
+		this.janela.jogadaComputador(x,y);
 	}
 	
 	public void fimDeJogo(int num)

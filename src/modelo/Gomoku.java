@@ -113,43 +113,57 @@ public class Gomoku
 	
 	public int getTurno()
 	{
-		/*
-		 * 	Observação sobre turno:
-		 * 	o jogador 1 tem os turnos pares, começando em 0.
-		 *  e jogador 2 tem os turnos ímpares.
-		 *  Quando passa turno apenas incrementa 1.
-		 */
 		return this.turno;
 	}	
+	
+	public void passeTurno()
+	{
+		this.turno++;
+	}
+	
+	/*
+	 * 	Observação sobre turno:
+	 * 	o jogador 1 tem os turnos pares, começando em 0.
+	 *  e jogador 2 tem os turnos ímpares.
+	 *  Quando passa turno apenas incrementa 1.
+	 */
 	
 	// Cor da peça determinada pelo valor de turno atual.
 	public void jogada(ParOrdenado p)
 	{
 		int x = p.getX();
 		int y = p.getY();
+		Sequencia jogada = null;
 		
 		if(this.modoDeJogo.equals(ModoDeJogo.DOIS_JOGADORES))
 		{
 			if (this.getTurno() % 2 == 0)
 			{
 				this.tabuleiro[x][y] = Peca.PECA_BRANCA;
-				this.crieSequencia(x, y, Peca.PECA_BRANCA);
+				jogada = this.crieSequencia(x, y, Peca.PECA_BRANCA);
+				this.adicioneSequencia(jogada);
 				this.passeTurno();
 			}
 			else
 			{
 				this.tabuleiro[x][y] = Peca.PECA_PRETA;
-				this.crieSequencia(x, y, Peca.PECA_PRETA);
+				jogada = this.crieSequencia(x, y, Peca.PECA_PRETA);
+				this.adicioneSequencia(jogada);
 				this.passeTurno();
 			}
 		}
 		else // Modo de jogo individual
 		{
 			this.tabuleiro[x][y] = Peca.PECA_BRANCA;
-			this.crieSequencia(x, y, Peca.PECA_BRANCA);
+			jogada = this.crieSequencia(x, y, Peca.PECA_BRANCA);
+			this.adicioneSequencia(jogada);
 			this.passeTurno();
 			
-			this.computador.jogadaComputador();
+			ParOrdenado ponto = this.computador.jogadaComputador(); // Computador calcula sua jogada
+			this.controle.jogadaComputador(ponto.getX(), ponto.getY()); // Atualiza interface
+			this.tabuleiro[ponto.getX()][ponto.getY()] = Peca.PECA_PRETA;
+			jogada = this.crieSequencia(ponto.getX(), ponto.getY(), Peca.PECA_PRETA);
+			this.adicioneSequencia(jogada);
 			this.passeTurno();
 		}
 	}
@@ -288,8 +302,41 @@ public class Gomoku
 		return resultado;
 	}
 	
+	public void adicioneSequencia(Sequencia sequencia)
+	{
+		
+		if(sequencia.getTamanho() == 1)
+		{
+			this.sequenciasUm.add(sequencia);
+			System.out.println("Adicionada nova Sequência-1");
+		}
+		if(sequencia.getTamanho() == 2)
+		{
+			this.sequenciasDois.add(sequencia);
+			System.out.println("Adicionada nova Sequência-2");
+		}
+		if(sequencia.getTamanho() == 3)
+		{
+			this.sequenciasTres.add(sequencia);
+			System.out.println("Adicionada nova Sequência-3");
+		}
+		if(sequencia.getTamanho() == 4)
+		{
+			this.sequenciasQuatro.add(sequencia);
+			System.out.println("Adicionada nova Sequência-4");
+		}
+		if(sequencia.getTamanho() == 5) // Caso detectada sequência 5 encerra o jogo
+		{
+			System.out.println("SEQUÊNCIA-5 CRIADA - FIM DE JOGO");
+			if(this.turno % 2 == 0)
+				this.controle.fimDeJogo(0); // Zero para brancas
+			else
+				this.controle.fimDeJogo(1); // Um para pretas
+		}
+	}
+	
 	// Com base em uma jogada vai criar e atualizar as sequências
-	public void crieSequencia(int x, int y, Peca corPeca)
+	public Sequencia crieSequencia(int x, int y, Peca corPeca)
 	{
 		ArrayList<ParOrdenado> adjacentes = this.encontreAdjacentes(x, y, corPeca);
 		ParOrdenado pontoInicial = new ParOrdenado(x, y);
@@ -301,8 +348,6 @@ public class Gomoku
 			// Cria uma sequência de 1 ponto
 			pontoFinal = pontoInicial;
 			nova = new Sequencia(pontoInicial, pontoFinal, corPeca, Orientacao.SEM_ORIENTACAO, 1);
-			this.sequenciasUm.add(nova);
-			System.out.println("Adicionada nova Sequência-1");
 		}
 		else // Senão verifica os adjacentes
 		{
@@ -500,37 +545,10 @@ public class Gomoku
 				
 				pontoFinal = new ParOrdenado(xAtual, yAtual);
 				nova = new Sequencia(pontoInicial, pontoFinal, corPeca, orientacaoAtual, tam);
-				
-				if(tam == 2)
-				{
-					this.sequenciasDois.add(nova);
-					System.out.println("Adicionada nova Sequência-2");
-				}
-				if(tam == 3)
-				{
-					this.sequenciasTres.add(nova);
-					System.out.println("Adicionada nova Sequência-3");
-				}
-				if(tam == 4)
-				{
-					this.sequenciasQuatro.add(nova);
-					System.out.println("Adicionada nova Sequência-4");
-				}
-				if(tam == 5)
-				{
-					System.out.println("SEQUENCIA-5 ENCONTRADA");
-					if(corPeca == Peca.PECA_BRANCA)
-						this.controle.fimDeJogo(0); // Zero para brancas
-					else
-						this.controle.fimDeJogo(1); // Um para pretas
-				}
 			}
 		}
-	}
-	
-	public void passeTurno()
-	{
-		this.turno++;
+		
+		return nova;
 	}
 	
 }

@@ -350,6 +350,21 @@ public class Janela extends JFrame
 		}
 	}
 	
+	// TODO TESTAR ESTE MÉTODO
+	public void jogadaComputador(int x, int y) // atualiza o botão da interface com a jogada da IA.
+	{
+		try
+		{
+			int num = (x * 15) + y;
+			Botao botao = (Botao) this.encontreComponentePorNome("" + num);
+			botao.setIcon(Janela.iconePosicaoPecaPreta);
+		} 
+		catch (Exception e) 
+		{
+			System.out.println("EXCEPTION JOGADA COMPUTADOR");
+		}
+	}
+	
 	public int getTurno() 
 	{
 		int resultado = -1;
@@ -377,4 +392,5 @@ public class Janela extends JFrame
 		turno.setForeground(Color.BLACK);
 		turno.setText("VITÓRIA PRETO");
 	}
+
 }
