@@ -111,7 +111,7 @@ public class Janela extends JFrame
 		
 		Botao info = new Botao("");
 		info.setName("info");
-		info.setFont(new Font("Arial", Font.PLAIN, 14));
+		info.setFont(new Font("Arial", Font.PLAIN, 15));
 		info.setForeground(this.corTexto);
 		info.setBounds(300, 470, 350, 80);
 		info.setFocusPainted(false);
@@ -403,6 +403,7 @@ public class Janela extends JFrame
 		} 
 		catch (Exception e) 
 		{
+			e.printStackTrace();
 			System.out.println("EXCEPTION TURNO");
 		}
 		return resultado;

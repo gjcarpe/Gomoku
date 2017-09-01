@@ -8,6 +8,7 @@ public class Gomoku
 {
 	private Controle controle;
 	private int turno;
+	private boolean vitoria;
 	private ModoDeJogo modoDeJogo;
 	private Peca[][] tabuleiro;
 	private Computador computador;
@@ -40,6 +41,7 @@ public class Gomoku
 	{
 		this.controle = controle;
 		this.turno = 0;
+		this.vitoria = false;
 		this.modoDeJogo = modo;
 		if(modo.equals(ModoDeJogo.UM_JOGADOR))
 			this.computador = new Computador(this);
@@ -109,6 +111,11 @@ public class Gomoku
 		return this.valorQuintupla;
 	}
 	
+	public boolean vitoria()
+	{
+		return this.vitoria;
+	}
+	
 	public Computador getComputador()
 	{
 		return this.computador;
@@ -175,13 +182,16 @@ public class Gomoku
 				this.adicioneSequencia(jogadas.get(i));
 			this.passeTurno();
 			
-			ParOrdenado ponto = this.computador.jogadaComputador(); // Computador calcula sua jogada
-			this.controle.jogadaComputador(ponto.getX(), ponto.getY()); // Atualiza interface
-			this.tabuleiro[ponto.getX()][ponto.getY()] = Peca.PECA_PRETA;
-			jogadas = this.crieSequencias(ponto.getX(), ponto.getY(), Peca.PECA_PRETA);
-			for (int i = 0; i < jogadas.size(); i++) 	
-				this.adicioneSequencia(jogadas.get(i));
-			this.passeTurno();
+			if(this.vitoria == false)
+			{
+				ParOrdenado ponto = this.computador.jogadaComputador(); // Computador calcula sua jogada
+				this.controle.jogadaComputador(ponto.getX(), ponto.getY()); // Atualiza interface
+				this.tabuleiro[ponto.getX()][ponto.getY()] = Peca.PECA_PRETA;
+				jogadas = this.crieSequencias(ponto.getX(), ponto.getY(), Peca.PECA_PRETA);
+				for (int i = 0; i < jogadas.size(); i++) 	
+					this.adicioneSequencia(jogadas.get(i));
+				this.passeTurno();
+			}
 		}
 	}
 	
@@ -345,6 +355,7 @@ public class Gomoku
 		if(sequencia.getTamanho() == 5) // Caso detectada sequência 5 encerra o jogo
 		{
 			System.out.println("SEQUÊNCIA-5 CRIADA - FIM DE JOGO");
+			this.vitoria = true;
 			if(this.turno % 2 == 0)
 				this.controle.fimDeJogo(0); // Zero para brancas
 			else
@@ -496,7 +507,7 @@ public class Gomoku
 		// TODO
 	}
 
-	public void removaSequenciasTemporarias(int x, int y, Peca corPeca) 
+	public void removaSequenciasTemporarias() 
 	{
 		// TODO Auto-generated method stub
 	}

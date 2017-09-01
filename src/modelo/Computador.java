@@ -17,8 +17,8 @@ public class Computador
 	public ParOrdenado jogadaComputador() 
 	{
 		ParOrdenado resultado = null;
-		//resultado = this.miniMax(0); // Testando nível zero por enquanto
-		resultado = this.jogadaAleatoria();
+		resultado = this.miniMax(0); // Testando nível zero por enquanto
+		//resultado = this.jogadaAleatoria();
 		return resultado;
 	}
 	
@@ -33,7 +33,7 @@ public class Computador
 		return resultado;
 	}
 	
-	public ParOrdenado miniMax(int profundidade) // TODO minimax profundidade
+	public ParOrdenado miniMax(int profundidade) // TODO minimax profundidade - recursividade
 	{
 		ParOrdenado resultado = null;
 		
@@ -54,18 +54,31 @@ public class Computador
 	{
 		ArrayList<ParOrdenado> jogadas = this.encontrePontosAdjacentesDeSequencias(Peca.PECA_PRETA);
 		ParOrdenado resultado = null;
-		ParOrdenado atual = null;
+		ParOrdenado parAtual = null;
+		int xAtual = 0;
+		int yAtual = 0;
 		
 		int valorInicial = this.calculePontuacaoDoTabuleiro();
 		int maiorValor = valorInicial; // Começa com a pontuação atual do tabuleiro
+		int valorAtual = 0;
+		
+		if(jogadas.size() > 0) // Caso de início de jogo - Jogar em algum ponto do centro
+			resultado = jogadas.get(0); // Caso base
+		else // No caso de não existirem jogadas candidatas é o caso do tabuleiro vazio
+			resultado = this.jogadaAleatoria(); // Realiza uma jogada qualquer
+		
 		
 		for(int i = 0; i < jogadas.size(); i++)
 		{
-			
-		}
-		
-		if(jogadas.size() == 0) // Caso de início de jogo - Jogar em algum ponto do centro
-		{	
+			parAtual = jogadas.get(i); // Pega um ponto candidato
+			this.gomoku.crieSequenciasTemporarias(xAtual, yAtual, Peca.PECA_PRETA); // Realiza uma jogada
+			valorAtual = this.calculePontuacaoDoTabuleiro(); // Calcula quanto vale agora
+			if(valorAtual > maiorValor) // Se é melhor que o atual
+			{
+				maiorValor = valorAtual; // Substitui
+				resultado = parAtual;
+			}
+			this.gomoku.removaSequenciasTemporarias(); // Restaura o tabuleiro
 		}
 
 		return resultado;
@@ -75,7 +88,7 @@ public class Computador
 	public ParOrdenado min() // TODO MIN
 	{
 		ParOrdenado resultado = null;
-		ArrayList<ParOrdenado> jogadas = this.encontrePontosAdjacentesDeSequencias(Peca.PECA_BRANCA);
+		//ArrayList<ParOrdenado> jogadas = this.encontrePontosAdjacentesDeSequencias(Peca.PECA_BRANCA);
 		return resultado;
 	}
 
@@ -170,22 +183,6 @@ public class Computador
 		}
 		
 		return resultado;
-	}
-	
-	// Simula a jogada
-	public void simularJogada(int x, int y, Peca corPeca) 
-	{
-		Peca[][] tabuleiro = this.gomoku.getTabuleiro();
-		tabuleiro[x][y] = corPeca;
-		this.gomoku.crieSequenciasTemporarias(x, y, corPeca);
-	}
-	
-	// Anula a jogada anteriormente simulada
-	public void anularJogada(int x, int y, Peca corPeca)
-	{
-		Peca[][] tabuleiro = this.gomoku.getTabuleiro();
-		tabuleiro[x][y] = corPeca;
-		this.gomoku.removaSequenciasTemporarias(x, y, corPeca);
 	}
 	
 	// Retorna uma lista com todos os pontos adjacentes de sequências candidatos a jogada da cor parâmetro

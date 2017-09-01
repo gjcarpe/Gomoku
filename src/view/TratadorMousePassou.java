@@ -8,7 +8,7 @@ public class TratadorMousePassou implements MouseListener
 {	
 	private Botao botao;
 	private Botao info;
-	private Color corPadrao;
+	private Color corPadrao; // TODO - Erro cor padrão durante passagem no turno preto
 	
 	public TratadorMousePassou(Botao botao, Botao info) 
 	{
