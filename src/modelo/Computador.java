@@ -1,6 +1,7 @@
 package modelo;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Computador 
 {
@@ -11,48 +12,67 @@ public class Computador
 		this.gomoku = gomoku;
 	}
 	
-	// *** Métodos da heurística *** // TODO EM IMPLEMENTAÇÃO
+	// *** Métodos da IA *** //
 	
 	public ParOrdenado jogadaComputador() 
 	{
 		ParOrdenado resultado = null;
-		//ParOrdenado jogadaPC = this.miniMax();
+		//resultado = this.miniMax(0); // Testando nível zero por enquanto
+		resultado = this.jogadaAleatoria();
 		return resultado;
 	}
 	
-	private ParOrdenado minimax(int profundidade) // TODO minimax profundidade
+	public ParOrdenado jogadaAleatoria() // Método para testes
+	{
+		ArrayList<ParOrdenado> jogadasPossiveis = this.pegarJogadasPossiveis();
+		ParOrdenado resultado = null;
+		Random rand = new Random();
+		int sorteado = rand.nextInt(jogadasPossiveis.size());
+		resultado = jogadasPossiveis.get(sorteado);
+		
+		return resultado;
+	}
+	
+	public ParOrdenado miniMax(int profundidade) // TODO minimax profundidade
 	{
 		ParOrdenado resultado = null;
-		ArrayList<ParOrdenado> jogadasPossiveis = this.pegarJogadasPossiveis();
-		// Neste array contém todos os ramos de jogadas, agora basta simplificar.
 		
-		// Podar aqui?
-		
-		// max (profundidade = par)
-		// calcule a melhor jogada deste turno
-		
-		// min (profundidade = ímpar)
-		// calcule a melhor jogada do turno do oponente
-		
-		// decida o melhor caminho da árvore de estados -> avaliarVantagem()
-		
-		// Repita até profundidade = 0
-		
-		
+		if(profundidade % 2 == 0) // Verifique em seu turno
+		{
+			resultado = this.max();
+		}
+		else // Verifique no turno do oponente
+		{
+			resultado = this.min();
+		}
 		
 		return resultado;
 	}
 	
 	// Encontra a melhor jogada no seu turno
-	public ParOrdenado max()
+	public ParOrdenado max() // TODO MAX
 	{
-		ParOrdenado resultado = null;
 		ArrayList<ParOrdenado> jogadas = this.encontrePontosAdjacentesDeSequencias(Peca.PECA_PRETA);
+		ParOrdenado resultado = null;
+		ParOrdenado atual = null;
+		
+		int valorInicial = this.calculePontuacaoDoTabuleiro();
+		int maiorValor = valorInicial; // Começa com a pontuação atual do tabuleiro
+		
+		for(int i = 0; i < jogadas.size(); i++)
+		{
+			
+		}
+		
+		if(jogadas.size() == 0) // Caso de início de jogo - Jogar em algum ponto do centro
+		{	
+		}
+
 		return resultado;
 	}
 	
 	// Encontra a melhor jogada no turno oponente
-	public ParOrdenado min()
+	public ParOrdenado min() // TODO MIN
 	{
 		ParOrdenado resultado = null;
 		ArrayList<ParOrdenado> jogadas = this.encontrePontosAdjacentesDeSequencias(Peca.PECA_BRANCA);
@@ -60,7 +80,7 @@ public class Computador
 	}
 
 	// Retorna uma lista com todos os espaços sem peça do tabuleiro
-	private ArrayList<ParOrdenado> pegarJogadasPossiveis()
+	public ArrayList<ParOrdenado> pegarJogadasPossiveis()
 	{
 		ArrayList<ParOrdenado> jogadas = new ArrayList<ParOrdenado>();
 		Peca[][] tabuleiro = this.gomoku.getTabuleiro();
@@ -77,11 +97,15 @@ public class Computador
 	
 	// Dá um valor de pontuação para o tabuleiro - Na forma de "Vantagem"
 	// Vantagem = suaPontuação - pontuaçãoOponente
-	private int pontuacaoDoTabuleiro()
+	public int calculePontuacaoDoTabuleiro()
 	{
 		int resultado = 0;
-		
+		ArrayList<Sequencia> sequencias1 = this.gomoku.getSequenciasUm();
+		ArrayList<Sequencia> sequencias2 = this.gomoku.getSequenciasDois();
+		ArrayList<Sequencia> sequencias3 = this.gomoku.getSequenciasTres();
 		ArrayList<Sequencia> sequencias4 = this.gomoku.getSequenciasQuatro();
+		ArrayList<Sequencia> temporarias = this.gomoku.getSequenciasTemporarias();
+		
 		for (int i = 0; i < sequencias4.size(); i++)
 		{
 			if(sequencias4.get(i).getCorPeca().equals(Peca.PECA_PRETA))
@@ -92,8 +116,7 @@ public class Computador
 					resultado -= this.gomoku.getValorQuatro();
 			}	
 		}
-		
-		ArrayList<Sequencia> sequencias3 = this.gomoku.getSequenciasTres();
+
 		for (int i = 0; i < sequencias3.size(); i++)
 		{
 			if(sequencias3.get(i).getCorPeca().equals(Peca.PECA_PRETA))
@@ -104,8 +127,7 @@ public class Computador
 					 resultado -= this.gomoku.getValorTripla();
 			 }	
 		}
-		
-		ArrayList<Sequencia> sequencias2 = this.gomoku.getSequenciasDois();
+
 		for (int i = 0; i < sequencias2.size(); i++)
 		{
 			if(sequencias2.get(i).getCorPeca().equals(Peca.PECA_PRETA))
@@ -117,15 +139,33 @@ public class Computador
 			}	
 		}
 		
-		ArrayList<Sequencia> sequencias1 = this.gomoku.getSequenciasUm();
 		for (int i = 0; i < sequencias1.size(); i++)
 		{
 			if(sequencias1.get(i).getCorPeca().equals(Peca.PECA_PRETA))
-				resultado += 1;
+				resultado += this.gomoku.getValorUma();
 			else
 			{
 				if(sequencias1.get(i).getCorPeca().equals(Peca.PECA_BRANCA))
-					resultado -= 1;
+					resultado -= this.gomoku.getValorUma();
+			}
+		}
+		
+		for(int i = 0; i < temporarias.size(); i++)
+		{
+			int tam = 0;
+			if(temporarias.get(i).getCorPeca().equals(Peca.PECA_PRETA))
+			{
+				tam = temporarias.get(i).getTamanho();
+				if(tam == 5)
+					resultado += this.gomoku.getValorQuintupla();
+				if(tam == 4)
+					resultado += this.gomoku.getValorQuatro();
+				if(tam == 3)
+					resultado += this.gomoku.getValorQuatro();
+				if(tam == 2)
+					resultado += this.gomoku.getValorQuatro();
+				if(tam == 1)
+					resultado += this.gomoku.getValorUma();
 			}
 		}
 		
@@ -133,7 +173,7 @@ public class Computador
 	}
 	
 	// Simula a jogada
-	private void simularJogada(int x, int y, Peca corPeca) 
+	public void simularJogada(int x, int y, Peca corPeca) 
 	{
 		Peca[][] tabuleiro = this.gomoku.getTabuleiro();
 		tabuleiro[x][y] = corPeca;
@@ -141,13 +181,14 @@ public class Computador
 	}
 	
 	// Anula a jogada anteriormente simulada
-	private void anularJogada(int x, int y, Peca corPeca)
+	public void anularJogada(int x, int y, Peca corPeca)
 	{
 		Peca[][] tabuleiro = this.gomoku.getTabuleiro();
 		tabuleiro[x][y] = corPeca;
 		this.gomoku.removaSequenciasTemporarias(x, y, corPeca);
 	}
 	
+	// Retorna uma lista com todos os pontos adjacentes de sequências candidatos a jogada da cor parâmetro
 	public ArrayList<ParOrdenado> encontrePontosAdjacentesDeSequencias(Peca corPeca) // TODO Testar
 	{
 		ArrayList<ParOrdenado> resultado = new ArrayList<ParOrdenado>();
@@ -233,7 +274,6 @@ public class Computador
 			}	
 			
 		}
-		
 		
 		// Faça o mesmo para as de três
 		for(int i = 0; i < this.gomoku.getSequenciasTres().size(); i++)
@@ -383,7 +423,6 @@ public class Computador
 			}
 		}
 		
-		
 		// Pegar todos os adjacentes para as de 1
 		for(int i = 0; i < this.gomoku.getSequenciasUm().size(); i++)
 		{
@@ -446,6 +485,4 @@ public class Computador
 		
 		return resultado;
 	}
-	
-
 }

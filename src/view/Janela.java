@@ -5,9 +5,12 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Insets;
+import java.io.File;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import controle.Controle;
 
@@ -70,12 +73,25 @@ public class Janela extends JFrame
 		return resultado;
 	}
 	
+	private void carregarImagemDeFundo()
+	{
+		try
+		{
+			this.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("src/imagens/background.png")))));
+		} 
+		catch (Exception e) 
+    	{
+    		e.printStackTrace();
+    	}
+	}
+	
 	public static ImageIcon iconePosicaoSemPeca;
 	public static ImageIcon iconePosicaoPecaBranca;
 	public static ImageIcon iconePosicaoPecaPreta;
 
 	public Janela(Controle controle) 
 	{
+		this.carregarImagemDeFundo();
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setTitle("Gomoku");
 		this.setSize(800, 600);
@@ -85,9 +101,9 @@ public class Janela extends JFrame
 		// Parâmetros de controle
 		
 		this.controle = controle;
-		this.corTexto = Color.RED;
+		this.corTexto = Color.CYAN;
 		this.fonte = new Font("Arial", Font.BOLD, 25);
-		this.bordasLigadas = true;
+		this.bordasLigadas = false;
 		this.container = this.getContentPane();
 		this.container.setLayout(null);
 		
@@ -95,7 +111,7 @@ public class Janela extends JFrame
 		
 		Botao info = new Botao("");
 		info.setName("info");
-		info.setFont(new Font("Arial", Font.PLAIN, 12));
+		info.setFont(new Font("Arial", Font.PLAIN, 14));
 		info.setForeground(this.corTexto);
 		info.setBounds(300, 470, 350, 80);
 		info.setFocusPainted(false);
@@ -327,12 +343,26 @@ public class Janela extends JFrame
 		turno.setEnabled(false);
 	}
 
-	public void jogada(int x, int y, int turnoAtual) 
+	public void jogada(int x, int y) 
+	{
+		try 
+		{
+			this.atualizarTurno();
+			this.controle.jogada(x, y);
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			System.out.println("EXCEPTION JOGADA");
+		}
+	}
+	
+	public void atualizarTurno()
 	{
 		try 
 		{
 			Botao turno = (Botao) this.encontreComponentePorNome("turno");
-			if(turnoAtual % 2 == 0) // O valor aqui é reverso devido à sequência de eventos
+			if(this.getTurno() % 2 == 0)
 			{
 				turno.setForeground(Color.BLACK);
 				turno.setText("JOGADOR PRETO");
@@ -342,16 +372,15 @@ public class Janela extends JFrame
 				turno.setForeground(Color.WHITE);
 				turno.setText("JOGADOR BRANCO");
 			}
-			this.controle.jogada(x, y);
 		} 
 		catch (Exception e) 
 		{
-			System.out.println("EXCEPTION JOGADA");
+			System.out.println("EXCEPTION ATUALIZAR TURNO");
 		}
 	}
 	
-	// TODO TESTAR ESTE MÉTODO
-	public void jogadaComputador(int x, int y) // atualiza o botão da interface com a jogada da IA.
+	// Atualiza o botão da interface com a jogada da IA.
+	public void jogadaComputador(int x, int y)
 	{
 		try
 		{

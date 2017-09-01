@@ -18,6 +18,7 @@ public class Gomoku
 	private ArrayList<Sequencia> sequenciasQuatro;
 	private ArrayList<Sequencia> sequenciasTemporarias;
 	
+	private int valorUma;
 	private int valorDupla;
 	private int valorTripla;
 	private int valorQuadra;
@@ -50,7 +51,7 @@ public class Gomoku
 		this.sequenciasTemporarias = new ArrayList<Sequencia>();
 		
 		// Valores arbitrários - TODO Verificar
-		// Valor 1 peça = 1
+		this.valorUma = 1;
 		this.valorDupla = 10;
 		this.valorTripla = 100;
 		this.valorQuadra = 1000;
@@ -81,6 +82,11 @@ public class Gomoku
 	public ArrayList<Sequencia> getSequenciasTemporarias()
 	{
 		return this.sequenciasTemporarias;
+	}
+	
+	public int getValorUma()
+	{
+		return this.valorUma;
 	}
 	
 	public int getValorDupla()
@@ -140,37 +146,41 @@ public class Gomoku
 	{
 		int x = p.getX();
 		int y = p.getY();
-		Sequencia jogada = null;
+		ArrayList<Sequencia> jogadas = null;
 		
 		if(this.modoDeJogo.equals(ModoDeJogo.DOIS_JOGADORES))
 		{
 			if (this.getTurno() % 2 == 0)
 			{
 				this.tabuleiro[x][y] = Peca.PECA_BRANCA;
-				jogada = this.crieSequencias(x, y, Peca.PECA_BRANCA);
-				this.adicioneSequencia(jogada);
+				jogadas = this.crieSequencias(x, y, Peca.PECA_BRANCA);
+				for (int i = 0; i < jogadas.size(); i++) 	
+					this.adicioneSequencia(jogadas.get(i));
 				this.passeTurno();
 			}
 			else
 			{
 				this.tabuleiro[x][y] = Peca.PECA_PRETA;
-				jogada = this.crieSequencias(x, y, Peca.PECA_PRETA);
-				this.adicioneSequencia(jogada);
+				jogadas = this.crieSequencias(x, y, Peca.PECA_PRETA);
+				for (int i = 0; i < jogadas.size(); i++) 	
+					this.adicioneSequencia(jogadas.get(i));
 				this.passeTurno();
 			}
 		}
 		else // Modo de jogo individual
 		{
 			this.tabuleiro[x][y] = Peca.PECA_BRANCA;
-			jogada = this.crieSequencias(x, y, Peca.PECA_BRANCA);
-			this.adicioneSequencia(jogada);
+			jogadas = this.crieSequencias(x, y, Peca.PECA_BRANCA);
+			for (int i = 0; i < jogadas.size(); i++) 	
+				this.adicioneSequencia(jogadas.get(i));
 			this.passeTurno();
 			
 			ParOrdenado ponto = this.computador.jogadaComputador(); // Computador calcula sua jogada
 			this.controle.jogadaComputador(ponto.getX(), ponto.getY()); // Atualiza interface
 			this.tabuleiro[ponto.getX()][ponto.getY()] = Peca.PECA_PRETA;
-			jogada = this.crieSequencias(ponto.getX(), ponto.getY(), Peca.PECA_PRETA);
-			this.adicioneSequencia(jogada);
+			jogadas = this.crieSequencias(ponto.getX(), ponto.getY(), Peca.PECA_PRETA);
+			for (int i = 0; i < jogadas.size(); i++) 	
+				this.adicioneSequencia(jogadas.get(i));
 			this.passeTurno();
 		}
 	}
@@ -284,8 +294,8 @@ public class Gomoku
 		ParOrdenado atual = null;
 		ParOrdenado seguinte = null;
 		Orientacao orAtual = Orientacao.SEM_ORIENTACAO;
-		Orientacao reversa = Orientacao.SEM_ORIENTACAO;
 		Orientacao orSeguinte = Orientacao.SEM_ORIENTACAO;
+		Orientacao reversa = Orientacao.SEM_ORIENTACAO;
 		
 		while(adjacentes.size() > 0)
 		{
@@ -343,8 +353,9 @@ public class Gomoku
 	}
 	
 	// Com base em uma jogada vai criar e atualizar as sequências
-	public Sequencia crieSequencias(int x, int y, Peca corPeca)
+	public ArrayList<Sequencia> crieSequencias(int x, int y, Peca corPeca)
 	{
+		ArrayList<Sequencia> resultado = new ArrayList<Sequencia>();
 		ArrayList<ParOrdenado> adjacentes = this.encontreAdjacentes(x, y, corPeca);
 		ParOrdenado pontoInicial = new ParOrdenado(x, y);
 		ParOrdenado pontoFinal = null;
@@ -355,6 +366,7 @@ public class Gomoku
 			// Cria uma sequência de 1 ponto
 			pontoFinal = pontoInicial;
 			nova = new Sequencia(pontoInicial, pontoFinal, corPeca, Orientacao.SEM_ORIENTACAO, 1);
+			resultado.add(nova);
 		}
 		else // Senão verifica os adjacentes
 		{
@@ -470,10 +482,11 @@ public class Gomoku
 				
 				pontoFinal = new ParOrdenado(xAtual, yAtual);
 				nova = new Sequencia(pontoInicial, pontoFinal, corPeca, orientacaoAtual, tam);
+				resultado.add(nova);
 			}
 		}
 		
-		return nova;
+		return resultado;
 	}
 
 	// Funções usadas pela IA para simulação de jogadas

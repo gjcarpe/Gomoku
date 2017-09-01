@@ -54,6 +54,7 @@ public class Controle
 	public void jogadaComputador(int x, int y) 
 	{
 		this.janela.jogadaComputador(x,y);
+		this.janela.atualizarTurno();
 	}
 	
 	public void fimDeJogo(int num)

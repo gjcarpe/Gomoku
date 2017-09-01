@@ -44,7 +44,7 @@ public class TratadorBotaoTabuleiro implements MouseListener
 			{
 				System.out.println("CLICOU NO BOTÃO [" + this.x + "][" + this.y + "]");
 				System.out.println("TURNO:" + turno);
-				pai.jogada(x, y, turno);
+				pai.jogada(x, y);
 				if(turno % 2 == 0)
 					botao.setIcon(Janela.iconePosicaoPecaBranca);
 				else
