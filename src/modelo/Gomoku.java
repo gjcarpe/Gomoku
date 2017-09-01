@@ -16,6 +16,7 @@ public class Gomoku
 	private ArrayList<Sequencia> sequenciasDois;
 	private ArrayList<Sequencia> sequenciasTres;
 	private ArrayList<Sequencia> sequenciasQuatro;
+	private ArrayList<Sequencia> sequenciasTemporarias;
 	
 	private int valorDupla;
 	private int valorTripla;
@@ -46,6 +47,7 @@ public class Gomoku
 		this.sequenciasDois = new ArrayList<Sequencia>();
 		this.sequenciasTres = new ArrayList<Sequencia>();
 		this.sequenciasQuatro = new ArrayList<Sequencia>();
+		this.sequenciasTemporarias = new ArrayList<Sequencia>();
 		
 		// Valores arbitrários - TODO Verificar
 		// Valor 1 peça = 1
@@ -74,6 +76,11 @@ public class Gomoku
 	public ArrayList<Sequencia> getSequenciasQuatro()
 	{
 		return sequenciasQuatro;
+	}
+	
+	public ArrayList<Sequencia> getSequenciasTemporarias()
+	{
+		return this.sequenciasTemporarias;
 	}
 	
 	public int getValorDupla()
@@ -140,14 +147,14 @@ public class Gomoku
 			if (this.getTurno() % 2 == 0)
 			{
 				this.tabuleiro[x][y] = Peca.PECA_BRANCA;
-				jogada = this.crieSequencia(x, y, Peca.PECA_BRANCA);
+				jogada = this.crieSequencias(x, y, Peca.PECA_BRANCA);
 				this.adicioneSequencia(jogada);
 				this.passeTurno();
 			}
 			else
 			{
 				this.tabuleiro[x][y] = Peca.PECA_PRETA;
-				jogada = this.crieSequencia(x, y, Peca.PECA_PRETA);
+				jogada = this.crieSequencias(x, y, Peca.PECA_PRETA);
 				this.adicioneSequencia(jogada);
 				this.passeTurno();
 			}
@@ -155,14 +162,14 @@ public class Gomoku
 		else // Modo de jogo individual
 		{
 			this.tabuleiro[x][y] = Peca.PECA_BRANCA;
-			jogada = this.crieSequencia(x, y, Peca.PECA_BRANCA);
+			jogada = this.crieSequencias(x, y, Peca.PECA_BRANCA);
 			this.adicioneSequencia(jogada);
 			this.passeTurno();
 			
 			ParOrdenado ponto = this.computador.jogadaComputador(); // Computador calcula sua jogada
 			this.controle.jogadaComputador(ponto.getX(), ponto.getY()); // Atualiza interface
 			this.tabuleiro[ponto.getX()][ponto.getY()] = Peca.PECA_PRETA;
-			jogada = this.crieSequencia(ponto.getX(), ponto.getY(), Peca.PECA_PRETA);
+			jogada = this.crieSequencias(ponto.getX(), ponto.getY(), Peca.PECA_PRETA);
 			this.adicioneSequencia(jogada);
 			this.passeTurno();
 		}
@@ -177,18 +184,18 @@ public class Gomoku
 			if(origem.getY() > destino.getY())
 				resultado = Orientacao.NOROESTE;
 			if(origem.getY() == destino.getY())
-				resultado = Orientacao.OESTE;
+				resultado = Orientacao.NORTE;
 			if(origem.getY() < destino.getY())
-				resultado = Orientacao.SUDOESTE;
+				resultado = Orientacao.NORDESTE;
 		}
 		else
 		{
 			if(origem.getX() < destino.getX())
 			{
 				if(origem.getY() > destino.getY())
-					resultado = Orientacao.NORDESTE;
+					resultado = Orientacao.SUDOESTE;
 				if(origem.getY() == destino.getY())
-					resultado = Orientacao.LESTE;
+					resultado = Orientacao.SUL;
 				if(origem.getY() < destino.getY())
 					resultado = Orientacao.SUDESTE;
 			}
@@ -197,9 +204,9 @@ public class Gomoku
 				if(origem.getX() == destino.getX())
 				{
 					if(origem.getY() > destino.getY())
-						resultado = Orientacao.NORTE;
+						resultado = Orientacao.OESTE;
 					if(origem.getY() < destino.getY())
-						resultado = Orientacao.SUL;
+						resultado = Orientacao.LESTE;
 				}
 			}
 		}
@@ -336,7 +343,7 @@ public class Gomoku
 	}
 	
 	// Com base em uma jogada vai criar e atualizar as sequências
-	public Sequencia crieSequencia(int x, int y, Peca corPeca)
+	public Sequencia crieSequencias(int x, int y, Peca corPeca)
 	{
 		ArrayList<ParOrdenado> adjacentes = this.encontreAdjacentes(x, y, corPeca);
 		ParOrdenado pontoInicial = new ParOrdenado(x, y);
@@ -351,7 +358,7 @@ public class Gomoku
 		}
 		else // Senão verifica os adjacentes
 		{
-			adjacentes = this.limparAdj(adjacentes, pontoInicial); // Remove as redundancias
+			adjacentes = this.limparAdj(adjacentes, pontoInicial); // Remove as redundâncias
 			ParOrdenado atual = null;
 			int tam = 0; // tamanho da sequência
 			int xAtual = 0;
@@ -366,179 +373,97 @@ public class Gomoku
 				xAtual = atual.getX();
 				yAtual = atual.getY();
 				
-				// Verifica a primeira metade
-				while(this.tabuleiro[xAtual][yAtual] == corPeca)
+				for(int j = 0; j < 2; j++)
 				{
-					tam++;
-					if(orientacaoAtual == Orientacao.NORTE)
+					if(j == 1) // Verifica a outra potencial metade
 					{
-						yAtual--;
-						if(yAtual < 0)
-						{
-							yAtual++;
-							break;
-						}
+						orientacaoAtual = this.orientacaoReversa(orientacaoAtual); // Reverte a orientação
+						xAtual = pontoInicial.getX(); // Restaura X
+						yAtual = pontoInicial.getY(); // Restaura Y
 					}
-					if(orientacaoAtual == Orientacao.SUL)
+					
+					while(this.tabuleiro[xAtual][yAtual] == corPeca)
 					{
-						yAtual++;
-						if(yAtual > 14)
-						{
-							yAtual--;
-							break;
-						}
-					}
-					if(orientacaoAtual == Orientacao.LESTE)
-					{
-						xAtual++;
-						if(xAtual > 14)
+						tam++;
+						if(orientacaoAtual == Orientacao.NORTE)
 						{
 							xAtual--;
-							break;
+							if(xAtual < 0)
+							{
+								xAtual++;
+								break;
+							}
 						}
-					}
-					if(orientacaoAtual == Orientacao.OESTE)
-					{
-						xAtual--;
-						if(xAtual < 0)
+						if(orientacaoAtual == Orientacao.SUL)
 						{
 							xAtual++;
-							break;
+							if(xAtual > 14)
+							{
+								xAtual--;
+								break;
+							}
 						}
-					}
-					if(orientacaoAtual == Orientacao.NORDESTE)
-					{
-						xAtual++;
-						yAtual--;
-						if(xAtual > 14 || yAtual < 0)
-						{
-							xAtual--;
-							yAtual++;
-							break;
-						}
-					}
-					if(orientacaoAtual == Orientacao.NOROESTE)
-					{
-						xAtual--;
-						yAtual--;
-						if(xAtual < 0 || yAtual < 0)
-						{
-							xAtual++;
-							yAtual++;
-							break;
-						}
-					}
-					if(orientacaoAtual == Orientacao.SUDOESTE)
-					{
-						xAtual--;
-						yAtual++;
-						if(xAtual < 0 || yAtual > 14)
-						{
-							xAtual++;
-							yAtual--;
-							break;
-						}
-					}
-					if(orientacaoAtual == Orientacao.SUDESTE)
-					{
-						xAtual++;
-						yAtual++;
-						if(xAtual > 14 || yAtual > 14)
-						{
-							xAtual--;
-							yAtual--;
-							break;
-						}
-					}
-				}
-				
-				// Verifica a outra potencial metade
-				
-				orientacaoAtual = this.orientacaoReversa(orientacaoAtual); // Reverte a orientação
-				xAtual = pontoInicial.getX(); // Restaura X
-				yAtual = pontoInicial.getY(); // Restaura Y
-				
-				while(this.tabuleiro[xAtual][yAtual] == corPeca)
-				{
-					tam++;
-					if(orientacaoAtual == Orientacao.NORTE)
-					{
-						yAtual--;
-						if(yAtual < 0)
+						if(orientacaoAtual == Orientacao.LESTE)
 						{
 							yAtual++;
-							break;
+							if(yAtual > 14)
+							{
+								yAtual--;
+								break;
+							}
 						}
-					}
-					if(orientacaoAtual == Orientacao.SUL)
-					{
-						yAtual++;
-						if(yAtual > 14)
+						if(orientacaoAtual == Orientacao.OESTE)
 						{
 							yAtual--;
-							break;
+							if(yAtual < 0)
+							{
+								yAtual++;
+								break;
+							}
 						}
-					}
-					if(orientacaoAtual == Orientacao.LESTE)
-					{
-						xAtual++;
-						if(xAtual > 14)
-						{
-							xAtual--;
-							break;
-						}
-					}
-					if(orientacaoAtual == Orientacao.OESTE)
-					{
-						xAtual--;
-						if(xAtual < 0)
-						{
-							xAtual++;
-							break;
-						}
-					}
-					if(orientacaoAtual == Orientacao.NORDESTE)
-					{
-						xAtual++;
-						yAtual--;
-						if(xAtual > 14 || yAtual < 0)
+						if(orientacaoAtual == Orientacao.NORDESTE)
 						{
 							xAtual--;
 							yAtual++;
-							break;
+							if(xAtual < 0 || yAtual > 14)
+							{
+								xAtual++;
+								yAtual--;
+								break;
+							}
 						}
-					}
-					if(orientacaoAtual == Orientacao.NOROESTE)
-					{
-						xAtual--;
-						yAtual--;
-						if(xAtual < 0 || yAtual < 0)
-						{
-							xAtual++;
-							yAtual++;
-							break;
-						}
-					}
-					if(orientacaoAtual == Orientacao.SUDOESTE)
-					{
-						xAtual--;
-						yAtual++;
-						if(xAtual < 0 || yAtual > 14)
-						{
-							xAtual++;
-							yAtual--;
-							break;
-						}
-					}
-					if(orientacaoAtual == Orientacao.SUDESTE)
-					{
-						xAtual++;
-						yAtual++;
-						if(xAtual > 14 || yAtual > 14)
+						if(orientacaoAtual == Orientacao.NOROESTE)
 						{
 							xAtual--;
 							yAtual--;
-							break;
+							if(xAtual < 0 || yAtual < 0)
+							{
+								xAtual++;
+								yAtual++;
+								break;
+							}
+						}
+						if(orientacaoAtual == Orientacao.SUDOESTE)
+						{
+							xAtual++;
+							yAtual--;
+							if(xAtual > 14 || yAtual < 0)
+							{
+								xAtual--;
+								yAtual++;
+								break;
+							}
+						}
+						if(orientacaoAtual == Orientacao.SUDESTE)
+						{
+							xAtual++;
+							yAtual++;
+							if(xAtual > 14 || yAtual > 14)
+							{
+								xAtual--;
+								yAtual--;
+								break;
+							}
 						}
 					}
 				}
@@ -549,6 +474,18 @@ public class Gomoku
 		}
 		
 		return nova;
+	}
+
+	// Funções usadas pela IA para simulação de jogadas
+
+	public void crieSequenciasTemporarias(int x, int y, Peca corPeca) 
+	{
+		// TODO
+	}
+
+	public void removaSequenciasTemporarias(int x, int y, Peca corPeca) 
+	{
+		// TODO Auto-generated method stub
 	}
 	
 }
