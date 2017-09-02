@@ -46,11 +46,13 @@ public class Computador
 			resultado = this.min();
 		}
 		
+		// TODO parte inteligente com recursividade
+		
 		return resultado;
 	}
 	
 	// Encontra a melhor jogada no seu turno
-	public ParOrdenado max() // TODO MAX
+	public ParOrdenado max()
 	{
 		ArrayList<ParOrdenado> jogadas = this.encontrePontosAdjacentesDeSequencias();
 		ParOrdenado resultado = null;
@@ -66,7 +68,6 @@ public class Computador
 			resultado = jogadas.get(0); // Caso base
 		else // No caso de não existirem jogadas candidatas é o caso do tabuleiro vazio
 			resultado = this.jogadaAleatoria(); // Realiza uma jogada qualquer
-		
 		
 		for(int i = 0; i < jogadas.size(); i++)
 		{
@@ -85,10 +86,36 @@ public class Computador
 	}
 	
 	// Encontra a melhor jogada no turno oponente
-	public ParOrdenado min() // TODO MIN
+	public ParOrdenado min()
 	{
+		ArrayList<ParOrdenado> jogadas = this.encontrePontosAdjacentesDeSequencias();
 		ParOrdenado resultado = null;
-		//ArrayList<ParOrdenado> jogadas = this.encontrePontosAdjacentesDeSequencias(Peca.PECA_BRANCA);
+		ParOrdenado parAtual = null;
+		int xAtual = 0;
+		int yAtual = 0;
+		
+		int valorInicial = this.calculePontuacaoDoTabuleiro();
+		int menorValor = valorInicial; // Começa com a pontuação atual do tabuleiro
+		int valorAtual = 0;
+		
+		if(jogadas.size() > 0) // Caso de início de jogo - Jogar em algum ponto do centro
+			resultado = jogadas.get(0); // Caso base
+		else // No caso de não existirem jogadas candidatas é o caso do tabuleiro vazio
+			resultado = this.jogadaAleatoria(); // Realiza uma jogada qualquer
+		
+		for(int i = 0; i < jogadas.size(); i++)
+		{
+			parAtual = jogadas.get(i); // Pega um ponto candidato
+			this.gomoku.crieSequenciasTemporarias(xAtual, yAtual, Peca.PECA_BRANCA); // Realiza uma jogada
+			valorAtual = this.calculePontuacaoDoTabuleiro(); // Calcula quanto vale agora
+			if(valorAtual < menorValor) // Se é menor do que o atual - Melhor para o oponente
+			{
+				menorValor = valorAtual; // Substitui
+				resultado = parAtual;
+			}
+			this.gomoku.removaSequenciasTemporarias(); // Restaura o tabuleiro
+		}
+		
 		return resultado;
 	}
 
@@ -180,13 +207,27 @@ public class Computador
 				if(tam == 1)
 					resultado += this.gomoku.getValorUma();
 			}
+			else
+			{
+				tam = temporarias.get(i).getTamanho();
+				if(tam == 5)
+					resultado -= this.gomoku.getValorQuintupla();
+				if(tam == 4)
+					resultado -= this.gomoku.getValorQuatro();
+				if(tam == 3)
+					resultado -= this.gomoku.getValorQuatro();
+				if(tam == 2)
+					resultado -= this.gomoku.getValorQuatro();
+				if(tam == 1)
+					resultado -= this.gomoku.getValorUma();
+			}
 		}
 		
 		return resultado;
 	}
 	
 	// Retorna uma lista com todos os pontos adjacentes de sequências candidatos a jogada da cor parâmetro
-	public ArrayList<ParOrdenado> encontrePontosAdjacentesDeSequencias() // TODO Testar
+	public ArrayList<ParOrdenado> encontrePontosAdjacentesDeSequencias()
 	{
 		ArrayList<ParOrdenado> resultado = new ArrayList<ParOrdenado>();
 		Peca[][] tabuleiro = this.gomoku.getTabuleiro();
