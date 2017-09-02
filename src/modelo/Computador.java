@@ -52,7 +52,7 @@ public class Computador
 	// Encontra a melhor jogada no seu turno
 	public ParOrdenado max() // TODO MAX
 	{
-		ArrayList<ParOrdenado> jogadas = this.encontrePontosAdjacentesDeSequencias(Peca.PECA_PRETA);
+		ArrayList<ParOrdenado> jogadas = this.encontrePontosAdjacentesDeSequencias();
 		ParOrdenado resultado = null;
 		ParOrdenado parAtual = null;
 		int xAtual = 0;
@@ -186,7 +186,7 @@ public class Computador
 	}
 	
 	// Retorna uma lista com todos os pontos adjacentes de sequências candidatos a jogada da cor parâmetro
-	public ArrayList<ParOrdenado> encontrePontosAdjacentesDeSequencias(Peca corPeca) // TODO Testar
+	public ArrayList<ParOrdenado> encontrePontosAdjacentesDeSequencias() // TODO Testar
 	{
 		ArrayList<ParOrdenado> resultado = new ArrayList<ParOrdenado>();
 		Peca[][] tabuleiro = this.gomoku.getTabuleiro();
@@ -201,148 +201,135 @@ public class Computador
 		for(int i = 0; i < this.gomoku.getSequenciasQuatro().size(); i++)
 		{
 			seqAtual = this.gomoku.getSequenciasQuatro().get(i);
-			
-			// Se é uma sequência da cor pedida
-			if(seqAtual.getCorPeca().equals(corPeca))
+			orAtual = seqAtual.getOrientacao();
+			for(int j = 0; j < 2; j++)
 			{
-				orAtual = seqAtual.getOrientacao();
-				
-				for(int j = 0; j < 2; j++)
+				if(j == 1) // Depois pega o seguinte do fim
 				{
-					if(j == 1) // Depois pega o seguinte do fim
-					{
-						orAtual = this.gomoku.orientacaoReversa(orAtual);
-						atual = seqAtual.getFim();
-					}
-					else
-						atual = seqAtual.getInicio(); // Primeiro pega o seguinte do começo
-					
-					xAtual = atual.getX();
-					yAtual = atual.getY();
-					
-					// Ajusta as coordenadas para as do ponto seguinte
-					
-					if(orAtual == Orientacao.NORTE)
-					{
-						xAtual--;
-					}
-					if(orAtual == Orientacao.SUL)
-					{
-						xAtual++;
-					}
-					if(orAtual == Orientacao.LESTE)
-					{
-						yAtual++;
-					}
-					if(orAtual == Orientacao.OESTE)
-					{
-						yAtual--;
-					}
-					if(orAtual == Orientacao.NORDESTE)
-					{
-						xAtual--;
-						yAtual++;
-					}
-					if(orAtual == Orientacao.NOROESTE)
-					{
-						xAtual--;
-						yAtual--;
-					}
-					if(orAtual == Orientacao.SUDOESTE)
-					{
-						xAtual++;
-						yAtual--;
-					}
-					if(orAtual == Orientacao.SUDESTE)
-					{
-						xAtual++;
-						yAtual++;
-					}
-					
-					// Se está dentro dos limites do tabuleiro
-					if(xAtual >= 0 && xAtual <= 14 && yAtual >= 0 && yAtual <= 14)
-					{
-						candidata = tabuleiro[xAtual][yAtual];
-						if(candidata.equals(Peca.SEM_PECA)) // E é um espaço vago de jogada
-							resultado.add(new ParOrdenado(xAtual, yAtual));
-					}
+					orAtual = this.gomoku.orientacaoReversa(orAtual);
+					atual = seqAtual.getFim();
+				}
+				else
+					atual = seqAtual.getInicio(); // Primeiro pega o seguinte do começo
+				
+				xAtual = atual.getX();
+				yAtual = atual.getY();
+				
+				// Ajusta as coordenadas para as do ponto seguinte
+				
+				if(orAtual == Orientacao.NORTE)
+				{
+					xAtual--;
+				}
+				if(orAtual == Orientacao.SUL)
+				{
+					xAtual++;
+				}
+				if(orAtual == Orientacao.LESTE)
+				{
+					yAtual++;
+				}
+				if(orAtual == Orientacao.OESTE)
+				{
+					yAtual--;
+				}
+				if(orAtual == Orientacao.NORDESTE)
+				{
+					xAtual--;
+					yAtual++;
+				}
+				if(orAtual == Orientacao.NOROESTE)
+				{
+					xAtual--;
+					yAtual--;
+				}
+				if(orAtual == Orientacao.SUDOESTE)
+				{
+					xAtual++;
+					yAtual--;
+				}
+				if(orAtual == Orientacao.SUDESTE)
+				{
+					xAtual++;
+					yAtual++;
 				}
 				
-			}	
-			
+				// Se está dentro dos limites do tabuleiro
+				if(xAtual >= 0 && xAtual <= 14 && yAtual >= 0 && yAtual <= 14)
+				{
+					candidata = tabuleiro[xAtual][yAtual];
+					if(candidata.equals(Peca.SEM_PECA)) // E é um espaço vago de jogada
+						resultado.add(new ParOrdenado(xAtual, yAtual));
+				}
+			}
+					
 		}
 		
 		// Faça o mesmo para as de três
 		for(int i = 0; i < this.gomoku.getSequenciasTres().size(); i++)
 		{
 			seqAtual = this.gomoku.getSequenciasTres().get(i);
+			orAtual = seqAtual.getOrientacao();
 			
-			// Se é uma sequência da cor pedida
-			if(seqAtual.getCorPeca().equals(corPeca))
+			for(int j = 0; j < 2; j++)
 			{
-				orAtual = seqAtual.getOrientacao();
-				
-				for(int j = 0; j < 2; j++)
+				if(j == 1) // Depois pega o seguinte do fim
 				{
-					if(j == 1) // Depois pega o seguinte do fim
-					{
-						orAtual = this.gomoku.orientacaoReversa(orAtual);
-						atual = seqAtual.getFim();
-					}
-					else
-						atual = seqAtual.getInicio(); // Primeiro pega o seguinte do começo
-					
-					xAtual = atual.getX();
-					yAtual = atual.getY();
-					
-					// Ajusta as coordenadas para as do ponto seguinte
-					
-					if(orAtual == Orientacao.NORTE)
-					{
-						xAtual--;
-					}
-					if(orAtual == Orientacao.SUL)
-					{
-						xAtual++;
-					}
-					if(orAtual == Orientacao.LESTE)
-					{
-						yAtual++;
-					}
-					if(orAtual == Orientacao.OESTE)
-					{
-						yAtual--;
-					}
-					if(orAtual == Orientacao.NORDESTE)
-					{
-						xAtual--;
-						yAtual++;
-					}
-					if(orAtual == Orientacao.NOROESTE)
-					{
-						xAtual--;
-						yAtual--;
-					}
-					if(orAtual == Orientacao.SUDOESTE)
-					{
-						xAtual++;
-						yAtual--;
-					}
-					if(orAtual == Orientacao.SUDESTE)
-					{
-						xAtual++;
-						yAtual++;
-					}
-					
-					// Se está dentro dos limites do tabuleiro
-					if(xAtual >= 0 && xAtual <= 14 && yAtual >= 0 && yAtual <= 14)
-					{
-						candidata = tabuleiro[xAtual][yAtual];
-						if(candidata.equals(Peca.SEM_PECA)) // E é um espaço vago de jogada
-							resultado.add(new ParOrdenado(xAtual, yAtual));
-					}
+					orAtual = this.gomoku.orientacaoReversa(orAtual);
+					atual = seqAtual.getFim();
+				}
+				else
+					atual = seqAtual.getInicio(); // Primeiro pega o seguinte do começo
+				
+				xAtual = atual.getX();
+				yAtual = atual.getY();
+				
+				// Ajusta as coordenadas para as do ponto seguinte
+				
+				if(orAtual == Orientacao.NORTE)
+				{
+					xAtual--;
+				}
+				if(orAtual == Orientacao.SUL)
+				{
+					xAtual++;
+				}
+				if(orAtual == Orientacao.LESTE)
+				{
+					yAtual++;
+				}
+				if(orAtual == Orientacao.OESTE)
+				{
+					yAtual--;
+				}
+				if(orAtual == Orientacao.NORDESTE)
+				{
+					xAtual--;
+					yAtual++;
+				}
+				if(orAtual == Orientacao.NOROESTE)
+				{
+					xAtual--;
+					yAtual--;
+				}
+				if(orAtual == Orientacao.SUDOESTE)
+				{
+					xAtual++;
+					yAtual--;
+				}
+				if(orAtual == Orientacao.SUDESTE)
+				{
+					xAtual++;
+					yAtual++;
 				}
 				
+				// Se está dentro dos limites do tabuleiro
+				if(xAtual >= 0 && xAtual <= 14 && yAtual >= 0 && yAtual <= 14)
+				{
+					candidata = tabuleiro[xAtual][yAtual];
+					if(candidata.equals(Peca.SEM_PECA)) // E é um espaço vago de jogada
+						resultado.add(new ParOrdenado(xAtual, yAtual));
+				}
 			}
 		}
 		
@@ -350,73 +337,67 @@ public class Computador
 		for(int i = 0; i < this.gomoku.getSequenciasDois().size(); i++)
 		{
 			seqAtual = this.gomoku.getSequenciasDois().get(i);
-			
-			// Se é uma sequência da cor pedida
-			if(seqAtual.getCorPeca().equals(corPeca))
-			{
-				orAtual = seqAtual.getOrientacao();
+			orAtual = seqAtual.getOrientacao();
 				
-				for(int j = 0; j < 2; j++)
+			for(int j = 0; j < 2; j++)
+			{
+				if(j == 1) // Depois pega o seguinte do fim
 				{
-					if(j == 1) // Depois pega o seguinte do fim
-					{
-						orAtual = this.gomoku.orientacaoReversa(orAtual);
-						atual = seqAtual.getFim();
-					}
-					else
-						atual = seqAtual.getInicio(); // Primeiro pega o seguinte do começo
-					
-					xAtual = atual.getX();
-					yAtual = atual.getY();
-					
-					// Ajusta as coordenadas para as do ponto seguinte
-					
-					if(orAtual == Orientacao.NORTE)
-					{
-						xAtual--;
-					}
-					if(orAtual == Orientacao.SUL)
-					{
-						xAtual++;
-					}
-					if(orAtual == Orientacao.LESTE)
-					{
-						yAtual++;
-					}
-					if(orAtual == Orientacao.OESTE)
-					{
-						yAtual--;
-					}
-					if(orAtual == Orientacao.NORDESTE)
-					{
-						xAtual--;
-						yAtual++;
-					}
-					if(orAtual == Orientacao.NOROESTE)
-					{
-						xAtual--;
-						yAtual--;
-					}
-					if(orAtual == Orientacao.SUDOESTE)
-					{
-						xAtual++;
-						yAtual--;
-					}
-					if(orAtual == Orientacao.SUDESTE)
-					{
-						xAtual++;
-						yAtual++;
-					}
-					
-					// Se está dentro dos limites do tabuleiro
-					if(xAtual >= 0 && xAtual <= 14 && yAtual >= 0 && yAtual <= 14)
-					{
-						candidata = tabuleiro[xAtual][yAtual];
-						if(candidata.equals(Peca.SEM_PECA)) // E é um espaço vago de jogada
-							resultado.add(new ParOrdenado(xAtual, yAtual));
-					}
+					orAtual = this.gomoku.orientacaoReversa(orAtual);
+					atual = seqAtual.getFim();
+				}
+				else
+					atual = seqAtual.getInicio(); // Primeiro pega o seguinte do começo
+				
+				xAtual = atual.getX();
+				yAtual = atual.getY();
+				
+				// Ajusta as coordenadas para as do ponto seguinte
+				
+				if(orAtual == Orientacao.NORTE)
+				{
+					xAtual--;
+				}
+				if(orAtual == Orientacao.SUL)
+				{
+					xAtual++;
+				}
+				if(orAtual == Orientacao.LESTE)
+				{
+					yAtual++;
+				}
+				if(orAtual == Orientacao.OESTE)
+				{
+					yAtual--;
+				}
+				if(orAtual == Orientacao.NORDESTE)
+				{
+					xAtual--;
+					yAtual++;
+				}
+				if(orAtual == Orientacao.NOROESTE)
+				{
+					xAtual--;
+					yAtual--;
+				}
+				if(orAtual == Orientacao.SUDOESTE)
+				{
+					xAtual++;
+					yAtual--;
+				}
+				if(orAtual == Orientacao.SUDESTE)
+				{
+					xAtual++;
+					yAtual++;
 				}
 				
+				// Se está dentro dos limites do tabuleiro
+				if(xAtual >= 0 && xAtual <= 14 && yAtual >= 0 && yAtual <= 14)
+				{
+					candidata = tabuleiro[xAtual][yAtual];
+					if(candidata.equals(Peca.SEM_PECA)) // E é um espaço vago de jogada
+						resultado.add(new ParOrdenado(xAtual, yAtual));
+				}
 			}
 		}
 		

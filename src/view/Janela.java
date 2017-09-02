@@ -403,7 +403,6 @@ public class Janela extends JFrame
 		} 
 		catch (Exception e) 
 		{
-			e.printStackTrace();
 			System.out.println("EXCEPTION TURNO");
 		}
 		return resultado;
