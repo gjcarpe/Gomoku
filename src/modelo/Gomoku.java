@@ -504,12 +504,14 @@ public class Gomoku
 
 	public void crieSequenciasTemporarias(int x, int y, Peca corPeca) 
 	{
-		// TODO
+		ArrayList<Sequencia> sequencias = this.crieSequencias(x, y, corPeca);
+		for(int i = 0; i < sequencias.size(); i++)
+			this.sequenciasTemporarias.add(sequencias.get(i));
 	}
 
 	public void removaSequenciasTemporarias() 
 	{
-		// TODO Auto-generated method stub
+		this.sequenciasTemporarias.clear();
 	}
 	
 }
