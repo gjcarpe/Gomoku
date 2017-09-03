@@ -35,7 +35,7 @@ public class Janela extends JFrame
 								getClass().getResource("/imagens/PosicaoPecaPreta.png"));
 	}
 	
-	private void criarBotoesTabuleiro()
+	private void criarBotoesTabuleiro(Botao info)
 	{
 		int x = 0;
 		this.botoesTabuleiro = new Botao[15][15];
@@ -49,6 +49,8 @@ public class Janela extends JFrame
 				botao.setVisible(true);
 				botao.setIcon(iconePosicaoSemPeca);
 				botao.addMouseListener(new TratadorBotaoTabuleiro(this, botao, i, j));
+				botao.addMouseListener(new TratadorMousePassou(botao, info));
+				botao.setDescricao("[" + i + "][" + j + "]");
 				this.container.add(botao);
 				this.botoesTabuleiro[i][j] = botao;
 				x++;
@@ -244,7 +246,7 @@ public class Janela extends JFrame
 		container.add(sair);
 		
 		this.criarIconesPecas();
-		this.criarBotoesTabuleiro();
+		this.criarBotoesTabuleiro(info);
 
 		setVisible(true);
 	}

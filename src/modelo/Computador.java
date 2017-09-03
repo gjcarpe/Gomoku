@@ -72,6 +72,8 @@ public class Computador
 		for(int i = 0; i < jogadas.size(); i++)
 		{
 			parAtual = jogadas.get(i); // Pega um ponto candidato
+			xAtual = parAtual.getX();
+			yAtual = parAtual.getY();
 			this.gomoku.crieSequenciasTemporarias(xAtual, yAtual, Peca.PECA_PRETA); // Realiza uma jogada
 			valorAtual = this.calculePontuacaoDoTabuleiro(); // Calcula quanto vale agora
 			if(valorAtual > maiorValor) // Se é melhor que o atual
@@ -106,6 +108,8 @@ public class Computador
 		for(int i = 0; i < jogadas.size(); i++)
 		{
 			parAtual = jogadas.get(i); // Pega um ponto candidato
+			xAtual = parAtual.getX();
+			yAtual = parAtual.getY();
 			this.gomoku.crieSequenciasTemporarias(xAtual, yAtual, Peca.PECA_BRANCA); // Realiza uma jogada
 			valorAtual = this.calculePontuacaoDoTabuleiro(); // Calcula quanto vale agora
 			if(valorAtual < menorValor) // Se é menor do que o atual - Melhor para o oponente

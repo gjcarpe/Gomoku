@@ -42,13 +42,22 @@ public class TratadorBotaoTabuleiro implements MouseListener
 		{
 			if(turno >= 0)
 			{
-				System.out.println("CLICOU NO BOTÃO [" + this.x + "][" + this.y + "]");
+				String cor = "";
+				if(turno % 2 == 0)
+				{
+					botao.setIcon(Janela.iconePosicaoPecaBranca);
+					cor = "BRANCO";
+				}
+				else
+				{
+					botao.setIcon(Janela.iconePosicaoPecaPreta);
+					cor = "PRETO";
+				}
+				
+				System.out.println("JOGADOR " + cor + " CLICOU NO BOTÃO [" + this.x + "][" + this.y + "]");
 				System.out.println("TURNO:" + turno);
 				pai.jogada(x, y);
-				if(turno % 2 == 0)
-					botao.setIcon(Janela.iconePosicaoPecaBranca);
-				else
-					botao.setIcon(Janela.iconePosicaoPecaPreta);
+
 			}
 		}
 	}

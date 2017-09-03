@@ -57,7 +57,7 @@ public class Gomoku
 		this.valorDupla = 10;
 		this.valorTripla = 100;
 		this.valorQuadra = 1000;
-		this.valorQuintupla = Integer.MAX_VALUE;
+		this.valorQuintupla = 1000000;
 		
 		this.inicializarTabuleiro();
 	}
@@ -182,9 +182,12 @@ public class Gomoku
 				this.adicioneSequencia(jogadas.get(i));
 			this.passeTurno();
 			
+			System.out.println("TURNO DO COMPUTADOR.");
+			
 			if(this.vitoria == false)
 			{
 				ParOrdenado ponto = this.computador.jogadaComputador(); // Computador calcula sua jogada
+				System.out.println("COMPUTADOR JOGOU NO PONTO [" + ponto.getX() + "][" + ponto.getY() + "]");
 				this.controle.jogadaComputador(ponto.getX(), ponto.getY()); // Atualiza interface
 				this.tabuleiro[ponto.getX()][ponto.getY()] = Peca.PECA_PRETA;
 				jogadas = this.crieSequencias(ponto.getX(), ponto.getY(), Peca.PECA_PRETA);
@@ -336,21 +339,29 @@ public class Gomoku
 		{
 			this.sequenciasUm.add(sequencia);
 			System.out.println("Adicionada nova Sequência-1");
+			System.out.println("Início: [" + sequencia.getInicio().getX() + "][" + sequencia.getInicio().getY() + "]");
+			System.out.println("Fim: [" + sequencia.getFim().getX() + "][" + sequencia.getFim().getY() + "]");
 		}
 		if(sequencia.getTamanho() == 2)
 		{
 			this.sequenciasDois.add(sequencia);
 			System.out.println("Adicionada nova Sequência-2");
+			System.out.println("Início: [" + sequencia.getInicio().getX() + "][" + sequencia.getInicio().getY() + "]");
+			System.out.println("Fim: [" + sequencia.getFim().getX() + "][" + sequencia.getFim().getY() + "]");
 		}
 		if(sequencia.getTamanho() == 3)
 		{
 			this.sequenciasTres.add(sequencia);
 			System.out.println("Adicionada nova Sequência-3");
+			System.out.println("Início: [" + sequencia.getInicio().getX() + "][" + sequencia.getInicio().getY() + "]");
+			System.out.println("Fim: [" + sequencia.getFim().getX() + "][" + sequencia.getFim().getY() + "]");
 		}
 		if(sequencia.getTamanho() == 4)
 		{
 			this.sequenciasQuatro.add(sequencia);
 			System.out.println("Adicionada nova Sequência-4");
+			System.out.println("Início: [" + sequencia.getInicio().getX() + "][" + sequencia.getInicio().getY() + "]");
+			System.out.println("Fim: [" + sequencia.getFim().getX() + "][" + sequencia.getFim().getY() + "]");
 		}
 		if(sequencia.getTamanho() == 5) // Caso detectada sequência 5 encerra o jogo
 		{
@@ -368,20 +379,22 @@ public class Gomoku
 	{
 		ArrayList<Sequencia> resultado = new ArrayList<Sequencia>();
 		ArrayList<ParOrdenado> adjacentes = this.encontreAdjacentes(x, y, corPeca);
-		ParOrdenado pontoInicial = new ParOrdenado(x, y);
+		ParOrdenado pontoCentral = new ParOrdenado(x, y);
+		ParOrdenado pontoInicial = null;
 		ParOrdenado pontoFinal = null;
 		Sequencia nova = null;
 		
 		if(adjacentes.size() == 0) // Se não tem pontos de mesma cor adjacentes
 		{	
 			// Cria uma sequência de 1 ponto
-			pontoFinal = pontoInicial;
+			pontoInicial = pontoCentral;
+			pontoFinal = pontoCentral;
 			nova = new Sequencia(pontoInicial, pontoFinal, corPeca, Orientacao.SEM_ORIENTACAO, 1);
 			resultado.add(nova);
 		}
 		else // Senão verifica os adjacentes
 		{
-			adjacentes = this.limparAdj(adjacentes, pontoInicial); // Remove as redundâncias
+			adjacentes = this.limparAdj(adjacentes, pontoCentral); // Remove as redundâncias
 			ParOrdenado atual = null;
 			int tam = 0; // tamanho da sequência
 			int xAtual = 0;
@@ -392,7 +405,7 @@ public class Gomoku
 			{
 				tam = 0;
 				atual = adjacentes.get(i);
-				orientacaoAtual = this.determineOrientacao(pontoInicial, atual);
+				orientacaoAtual = this.determineOrientacao(pontoCentral, atual);
 				xAtual = atual.getX();
 				yAtual = atual.getY();
 				
@@ -401,8 +414,8 @@ public class Gomoku
 					if(j == 1) // Verifica a outra potencial metade
 					{
 						orientacaoAtual = this.orientacaoReversa(orientacaoAtual); // Reverte a orientação
-						xAtual = pontoInicial.getX(); // Restaura X
-						yAtual = pontoInicial.getY(); // Restaura Y
+						xAtual = pontoCentral.getX(); // Restaura X
+						yAtual = pontoCentral.getY(); // Restaura Y
 					}
 					
 					while(this.tabuleiro[xAtual][yAtual] == corPeca)
@@ -416,11 +429,21 @@ public class Gomoku
 								xAtual++;
 								break;
 							}
+							if(this.tabuleiro[xAtual][yAtual] != corPeca)
+							{
+								xAtual++;
+								break;
+							}
 						}
 						if(orientacaoAtual == Orientacao.SUL)
 						{
 							xAtual++;
 							if(xAtual > 14)
+							{
+								xAtual--;
+								break;
+							}
+							if(this.tabuleiro[xAtual][yAtual] != corPeca)
 							{
 								xAtual--;
 								break;
@@ -434,11 +457,21 @@ public class Gomoku
 								yAtual--;
 								break;
 							}
+							if(this.tabuleiro[xAtual][yAtual] != corPeca)
+							{
+								yAtual--;
+								break;
+							}
 						}
 						if(orientacaoAtual == Orientacao.OESTE)
 						{
 							yAtual--;
 							if(yAtual < 0)
+							{
+								yAtual++;
+								break;
+							}
+							if(this.tabuleiro[xAtual][yAtual] != corPeca)
 							{
 								yAtual++;
 								break;
@@ -449,6 +482,12 @@ public class Gomoku
 							xAtual--;
 							yAtual++;
 							if(xAtual < 0 || yAtual > 14)
+							{
+								xAtual++;
+								yAtual--;
+								break;
+							}
+							if(this.tabuleiro[xAtual][yAtual] != corPeca)
 							{
 								xAtual++;
 								yAtual--;
@@ -465,12 +504,24 @@ public class Gomoku
 								yAtual++;
 								break;
 							}
+							if(this.tabuleiro[xAtual][yAtual] != corPeca)
+							{
+								xAtual++;
+								yAtual++;
+								break;
+							}
 						}
 						if(orientacaoAtual == Orientacao.SUDOESTE)
 						{
 							xAtual++;
 							yAtual--;
 							if(xAtual > 14 || yAtual < 0)
+							{
+								xAtual--;
+								yAtual++;
+								break;
+							}
+							if(this.tabuleiro[xAtual][yAtual] != corPeca)
 							{
 								xAtual--;
 								yAtual++;
@@ -487,10 +538,18 @@ public class Gomoku
 								yAtual--;
 								break;
 							}
+							if(this.tabuleiro[xAtual][yAtual] != corPeca)
+							{
+								xAtual--;
+								yAtual--;
+								break;
+							}
 						}
 					}
+					
+					if(j == 0)
+						pontoInicial = new ParOrdenado(xAtual, yAtual);
 				}
-				
 				pontoFinal = new ParOrdenado(xAtual, yAtual);
 				nova = new Sequencia(pontoInicial, pontoFinal, corPeca, orientacaoAtual, tam);
 				resultado.add(nova);
