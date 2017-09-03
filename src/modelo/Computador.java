@@ -60,6 +60,15 @@ public class Computador
 		int xAtual = 0;
 		int yAtual = 0;
 		
+		System.out.println("*****************************************\n");
+		
+		for(int i = 0; i < jogadas.size(); i++)
+		{
+			System.out.println("PONTO CANDIDATO: [" + jogadas.get(i).getX() + "][" + jogadas.get(i).getY() + "]");
+		}
+		
+		System.out.println("\n*****************************************\n");
+		
 		int valorInicial = this.calculePontuacaoDoTabuleiro();
 		int maiorValor = valorInicial; // Começa com a pontuação atual do tabuleiro
 		int valorAtual = 0;
@@ -83,7 +92,7 @@ public class Computador
 			}
 			this.gomoku.removaSequenciasTemporarias(); // Restaura o tabuleiro
 		}
-
+		System.out.println("MAIOR VALOR ENCONTRADO PELO PC: " + maiorValor);
 		return resultado;
 	}
 	
@@ -252,10 +261,10 @@ public class Computador
 				if(j == 1) // Depois pega o seguinte do fim
 				{
 					orAtual = this.gomoku.orientacaoReversa(orAtual);
-					atual = seqAtual.getFim();
+					atual = seqAtual.getInicio();
 				}
 				else
-					atual = seqAtual.getInicio(); // Primeiro pega o seguinte do começo
+					atual = seqAtual.getFim(); // Primeiro pega o seguinte do começo
 				
 				xAtual = atual.getX();
 				yAtual = atual.getY();
@@ -321,10 +330,10 @@ public class Computador
 				if(j == 1) // Depois pega o seguinte do fim
 				{
 					orAtual = this.gomoku.orientacaoReversa(orAtual);
-					atual = seqAtual.getFim();
+					atual = seqAtual.getInicio();
 				}
 				else
-					atual = seqAtual.getInicio(); // Primeiro pega o seguinte do começo
+					atual = seqAtual.getFim(); // Primeiro pega o seguinte do começo
 				
 				xAtual = atual.getX();
 				yAtual = atual.getY();
@@ -389,10 +398,10 @@ public class Computador
 				if(j == 1) // Depois pega o seguinte do fim
 				{
 					orAtual = this.gomoku.orientacaoReversa(orAtual);
-					atual = seqAtual.getFim();
+					atual = seqAtual.getInicio();
 				}
 				else
-					atual = seqAtual.getInicio(); // Primeiro pega o seguinte do começo
+					atual = seqAtual.getFim(); // Primeiro pega o seguinte do começo
 				
 				xAtual = atual.getX();
 				yAtual = atual.getY();
@@ -508,4 +517,5 @@ public class Computador
 		
 		return resultado;
 	}
+	
 }
