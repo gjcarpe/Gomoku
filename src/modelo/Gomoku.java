@@ -18,6 +18,7 @@ public class Gomoku
 	private ArrayList<Sequencia> sequenciasTres;
 	private ArrayList<Sequencia> sequenciasQuatro;
 	private ArrayList<Sequencia> sequenciasTemporarias;
+	private ArrayList<ParOrdenado> jogadasTemporarias;
 	
 	private int valorUma;
 	private int valorDupla;
@@ -51,6 +52,7 @@ public class Gomoku
 		this.sequenciasTres = new ArrayList<Sequencia>();
 		this.sequenciasQuatro = new ArrayList<Sequencia>();
 		this.sequenciasTemporarias = new ArrayList<Sequencia>();
+		this.jogadasTemporarias = new ArrayList<ParOrdenado>();
 		
 		// Valores arbitrários - TODO Verificar
 		this.valorUma = 1;
@@ -84,6 +86,11 @@ public class Gomoku
 	public ArrayList<Sequencia> getSequenciasTemporarias()
 	{
 		return this.sequenciasTemporarias;
+	}
+	
+	public ArrayList<ParOrdenado> getJogadasTemporarias()
+	{
+		return this.jogadasTemporarias;
 	}
 	
 	public int getValorUma()
@@ -561,15 +568,28 @@ public class Gomoku
 
 	// Funções usadas pela IA para simulação de jogadas
 
+	// Cria as jogadas temporárias 
 	public void crieSequenciasTemporarias(int x, int y, Peca corPeca) 
 	{
-		ArrayList<Sequencia> sequencias = this.crieSequencias(x, y, corPeca);
+		this.tabuleiro[x][y] = corPeca; // Jogada temporária
+		this.jogadasTemporarias.add(new ParOrdenado(x, y)); // Adiciona o par da jogada
+		ArrayList<Sequencia> sequencias = this.crieSequencias(x, y, corPeca); // Cria as seq. temporárias
 		for(int i = 0; i < sequencias.size(); i++)
 			this.sequenciasTemporarias.add(sequencias.get(i));
 	}
 
+	// Reverte as jogadas temporárias
 	public void removaSequenciasTemporarias() 
 	{
+		int x = 0;
+		int y = 0;
+		for(int i = 0; i < this.jogadasTemporarias.size(); i++)
+		{
+			x = this.jogadasTemporarias.get(i).getX();
+			y = this.jogadasTemporarias.get(i).getY();
+			this.tabuleiro[x][y] = Peca.SEM_PECA;
+		}
+		this.jogadasTemporarias.clear(); // Limpa as listas de jogadas
 		this.sequenciasTemporarias.clear();
 	}
 	

@@ -159,6 +159,7 @@ public class Computador
 		ArrayList<Sequencia> sequencias4 = this.gomoku.getSequenciasQuatro();
 		ArrayList<Sequencia> temporarias = this.gomoku.getSequenciasTemporarias();
 		
+		
 		for (int i = 0; i < sequencias4.size(); i++)
 		{
 			if(sequencias4.get(i).getCorPeca().equals(Peca.PECA_PRETA))
@@ -214,9 +215,9 @@ public class Computador
 				if(tam == 4)
 					resultado += this.gomoku.getValorQuatro();
 				if(tam == 3)
-					resultado += this.gomoku.getValorQuatro();
+					resultado += this.gomoku.getValorTripla();
 				if(tam == 2)
-					resultado += this.gomoku.getValorQuatro();
+					resultado += this.gomoku.getValorDupla();
 				if(tam == 1)
 					resultado += this.gomoku.getValorUma();
 			}
@@ -228,9 +229,9 @@ public class Computador
 				if(tam == 4)
 					resultado -= this.gomoku.getValorQuatro();
 				if(tam == 3)
-					resultado -= this.gomoku.getValorQuatro();
+					resultado -= this.gomoku.getValorTripla();
 				if(tam == 2)
-					resultado -= this.gomoku.getValorQuatro();
+					resultado -= this.gomoku.getValorDupla();
 				if(tam == 1)
 					resultado -= this.gomoku.getValorUma();
 			}
