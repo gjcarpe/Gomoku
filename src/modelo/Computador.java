@@ -6,6 +6,8 @@ import java.util.Random;
 public class Computador 
 {
 	private Gomoku gomoku;
+	private ParOrdenado ultimaJogada;
+	private ArrayList<Sequencia> sequenciasUltimaJogada;
 	
 	public Computador(Gomoku gomoku)
 	{
@@ -18,36 +20,75 @@ public class Computador
 	{
 		ParOrdenado resultado = null;
 		
-		resultado = this.miniMax(0);
+		resultado = this.miniMax(2, 2);
 		
 		return resultado;
 	}
 	
-	public ParOrdenado miniMax(int profundidade)
+	public ParOrdenado miniMax(int profundidade, int base) // TODO - conferir cores
 	{
-		ArrayList<ParOrdenado> jogadasPossiveis = this.encontrePontosAdjacentesDeSequencias();
-		ArrayList<ParOrdenado> sequenciaDeJogadas = new ArrayList<ParOrdenado>();
 		ParOrdenado resultado = null;
-		ParOrdenado melhor = jogadasPossiveis.get(0); // Inicializado com o primeiro
-		ParOrdenado atual = null;
-		int pontuacaoMelhor = 0;
-		int pontuacaoAtual = 0;
-		int xMelhor = 0;
-		int yMelhor = 0;
-		int xAtual = 0;
-		int yAtual = 0;
-		
-		for(int i = 0; i < jogadasPossiveis.size(); i++) // Para cada ramo da árvore de jogadas
-		{
-			atual = jogadasPossiveis.get(i);
-			xAtual = atual.getX();
-			yAtual = atual.getY();
-			this.gomoku.crieSequenciasMinimax(xAtual, yAtual, Peca.PECA_PRETA);
-			ArrayList<ParOrdenado> jogadasProximoNivel = this.encontrePontosAdjacentesDeSequencias();
-			// TODO Continuar
-		}
 
-		
+		if(profundidade == 0) // Fronteira
+		{
+			if(base % 2 == 0) // Fronteira é seu turno
+				resultado = this.max();
+			else // Fronteira é turno do oponente
+				resultado = this.min();
+		}
+		else // Demais casos da recursão
+		{
+			ArrayList<ParOrdenado> jogadasPossiveis = this.encontrePontosAdjacentesDeSequencias();
+			ParOrdenado melhor = jogadasPossiveis.get(0); // Inicializado com o primeiro
+			ParOrdenado atual = null;
+			ParOrdenado fronteira = null;
+			int pontuacaoMelhor = 0;
+			int pontuacaoFronteira = 0;
+			for(int i = 0; i < jogadasPossiveis.size(); i++) // Para cada ramo da árvore de jogadas
+			{
+				atual = jogadasPossiveis.get(i);
+				if(profundidade % 2 == 0) // Turno preto - Max
+				{
+					pontuacaoMelhor = Integer.MIN_VALUE;
+					this.gomoku.crieSequenciasMinimax(atual.getX(), atual.getY(), Peca.PECA_PRETA);
+					fronteira = this.miniMax(profundidade-1, base);
+					
+					// Simula que este ponto está marcado no tabuleiro
+					this.gomoku.crieSequenciasTemporarias(fronteira.getX(), fronteira.getY(), Peca.PECA_PRETA);
+					pontuacaoFronteira = this.calculePontuacaoDoTabuleiro();
+					this.gomoku.removaSequenciasTemporarias();
+					
+					// Verifique se é maior
+					if(pontuacaoFronteira > pontuacaoMelhor) // Queremos a melhor jogada
+					{
+						pontuacaoMelhor = pontuacaoFronteira;
+						melhor = fronteira;
+					}
+				}
+				else // Turno branco - Min
+				{
+					pontuacaoMelhor = Integer.MAX_VALUE;
+					this.gomoku.crieSequenciasMinimax(atual.getX(), atual.getY(), Peca.PECA_BRANCA);
+					fronteira = this.miniMax(profundidade-1, base);
+					
+					// Simula que este ponto está marcado no tabuleiro
+					this.gomoku.crieSequenciasTemporarias(fronteira.getX(), fronteira.getY(), Peca.PECA_BRANCA);
+					pontuacaoFronteira = this.calculePontuacaoDoTabuleiro();
+					this.gomoku.removaSequenciasTemporarias();
+					
+					// Verifique se é menor
+					if(pontuacaoFronteira < pontuacaoMelhor) // Queremos a pior jogada
+					{
+						pontuacaoMelhor = pontuacaoFronteira;
+						melhor = fronteira;
+					}
+				}
+			}
+			// Reverta a última jogada
+			this.gomoku.revertaUltimaJogadaMinimax();
+			resultado = melhor;
+		}
+			
 		return resultado;
 	}
 	

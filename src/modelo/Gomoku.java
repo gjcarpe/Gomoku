@@ -635,5 +635,5 @@ public class Gomoku
 		this.jogadasMinimax.clear(); // Limpa as listas de jogadas
 		this.sequenciasMinimax.clear();
 	}
-	
+
 }
