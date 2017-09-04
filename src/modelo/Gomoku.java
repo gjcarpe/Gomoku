@@ -17,8 +17,12 @@ public class Gomoku
 	private ArrayList<Sequencia> sequenciasDois;
 	private ArrayList<Sequencia> sequenciasTres;
 	private ArrayList<Sequencia> sequenciasQuatro;
+	
 	private ArrayList<Sequencia> sequenciasTemporarias;
 	private ArrayList<ParOrdenado> jogadasTemporarias;
+	
+	private ArrayList<Sequencia> sequenciasMinimax;
+	private ArrayList<ParOrdenado> jogadasMinimax;
 	
 	private int valorUma;
 	private int valorDupla;
@@ -51,8 +55,12 @@ public class Gomoku
 		this.sequenciasDois = new ArrayList<Sequencia>();
 		this.sequenciasTres = new ArrayList<Sequencia>();
 		this.sequenciasQuatro = new ArrayList<Sequencia>();
+		
 		this.sequenciasTemporarias = new ArrayList<Sequencia>();
 		this.jogadasTemporarias = new ArrayList<ParOrdenado>();
+		
+		this.sequenciasMinimax = new ArrayList<Sequencia>();
+		this.jogadasMinimax = new ArrayList<ParOrdenado>();
 		
 		// Valores arbitrários - TODO Verificar
 		this.valorUma = 1;
@@ -93,6 +101,16 @@ public class Gomoku
 		return this.jogadasTemporarias;
 	}
 	
+	public ArrayList<Sequencia> getSequenciasMinimax()
+	{
+		return this.sequenciasMinimax;
+	}
+	
+	public ArrayList<ParOrdenado> getJogadasMinimax()
+	{
+		return this.jogadasMinimax;
+	}
+	
 	public int getValorUma()
 	{
 		return this.valorUma;
@@ -108,7 +126,7 @@ public class Gomoku
 		return this.valorTripla;
 	}
 	
-	public int getValorQuatro()
+	public int getValorQuadra()
 	{
 		return this.valorQuadra;
 	}
@@ -591,6 +609,31 @@ public class Gomoku
 		}
 		this.jogadasTemporarias.clear(); // Limpa as listas de jogadas
 		this.sequenciasTemporarias.clear();
+	}
+	
+	// Cria as jogadas Minimax
+	public void crieSequenciasMinimax(int x, int y, Peca corPeca) 
+	{
+		this.tabuleiro[x][y] = corPeca; // Jogada miniMax
+		this.jogadasMinimax.add(new ParOrdenado(x, y)); // Adiciona o par da jogada
+		ArrayList<Sequencia> sequencias = this.crieSequencias(x, y, corPeca); // Cria as seq. miniMax
+		for(int i = 0; i < sequencias.size(); i++)
+			this.sequenciasMinimax.add(sequencias.get(i));
+	}
+
+	// Reverte as jogadas Minimax
+	public void removaSequenciasMinimax() 
+	{
+		int x = 0;
+		int y = 0;
+		for(int i = 0; i < this.jogadasMinimax.size(); i++)
+		{
+			x = this.jogadasMinimax.get(i).getX();
+			y = this.jogadasMinimax.get(i).getY();
+			this.tabuleiro[x][y] = Peca.SEM_PECA;
+		}
+		this.jogadasMinimax.clear(); // Limpa as listas de jogadas
+		this.sequenciasMinimax.clear();
 	}
 	
 }

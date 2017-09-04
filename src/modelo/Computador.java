@@ -17,36 +17,36 @@ public class Computador
 	public ParOrdenado jogadaComputador() 
 	{
 		ParOrdenado resultado = null;
-		resultado = this.miniMax(0); // Testando nível zero por enquanto
-		//resultado = this.jogadaAleatoria();
-		return resultado;
-	}
-	
-	public ParOrdenado jogadaAleatoria() // Método para testes
-	{
-		ArrayList<ParOrdenado> jogadasPossiveis = this.pegarJogadasPossiveis();
-		ParOrdenado resultado = null;
-		Random rand = new Random();
-		int sorteado = rand.nextInt(jogadasPossiveis.size());
-		resultado = jogadasPossiveis.get(sorteado);
+		
+		resultado = this.miniMax(0);
 		
 		return resultado;
 	}
 	
-	public ParOrdenado miniMax(int profundidade) // TODO minimax profundidade - recursividade
+	public ParOrdenado miniMax(int profundidade)
 	{
+		ArrayList<ParOrdenado> jogadasPossiveis = this.encontrePontosAdjacentesDeSequencias();
+		ArrayList<ParOrdenado> sequenciaDeJogadas = new ArrayList<ParOrdenado>();
 		ParOrdenado resultado = null;
+		ParOrdenado melhor = jogadasPossiveis.get(0); // Inicializado com o primeiro
+		ParOrdenado atual = null;
+		int pontuacaoMelhor = 0;
+		int pontuacaoAtual = 0;
+		int xMelhor = 0;
+		int yMelhor = 0;
+		int xAtual = 0;
+		int yAtual = 0;
 		
-		if(profundidade % 2 == 0) // Verifique em seu turno
+		for(int i = 0; i < jogadasPossiveis.size(); i++) // Para cada ramo da árvore de jogadas
 		{
-			resultado = this.max();
+			atual = jogadasPossiveis.get(i);
+			xAtual = atual.getX();
+			yAtual = atual.getY();
+			this.gomoku.crieSequenciasMinimax(xAtual, yAtual, Peca.PECA_PRETA);
+			ArrayList<ParOrdenado> jogadasProximoNivel = this.encontrePontosAdjacentesDeSequencias();
+			// TODO Continuar
 		}
-		else // Verifique no turno do oponente
-		{
-			resultado = this.min();
-		}
-		
-		// TODO parte inteligente com recursividade
+
 		
 		return resultado;
 	}
@@ -59,16 +59,6 @@ public class Computador
 		ParOrdenado parAtual = null;
 		int xAtual = 0;
 		int yAtual = 0;
-		
-		System.out.println("*****************************************\n");
-		
-		for(int i = 0; i < jogadas.size(); i++)
-		{
-			System.out.println("PONTO CANDIDATO: [" + jogadas.get(i).getX() + "][" + jogadas.get(i).getY() + "]");
-		}
-		
-		System.out.println("\n*****************************************\n");
-		
 		int valorInicial = this.calculePontuacaoDoTabuleiro();
 		int maiorValor = valorInicial; // Começa com a pontuação atual do tabuleiro
 		int valorAtual = 0;
@@ -104,7 +94,6 @@ public class Computador
 		ParOrdenado parAtual = null;
 		int xAtual = 0;
 		int yAtual = 0;
-		
 		int valorInicial = this.calculePontuacaoDoTabuleiro();
 		int menorValor = valorInicial; // Começa com a pontuação atual do tabuleiro
 		int valorAtual = 0;
@@ -131,6 +120,17 @@ public class Computador
 		
 		return resultado;
 	}
+	
+	public ParOrdenado jogadaAleatoria() // Método para testes
+	{
+		ArrayList<ParOrdenado> jogadasPossiveis = this.pegarJogadasPossiveis();
+		ParOrdenado resultado = null;
+		Random rand = new Random();
+		int sorteado = rand.nextInt(jogadasPossiveis.size());
+		resultado = jogadasPossiveis.get(sorteado);
+		
+		return resultado;
+	}
 
 	// Retorna uma lista com todos os espaços sem peça do tabuleiro
 	public ArrayList<ParOrdenado> pegarJogadasPossiveis()
@@ -148,6 +148,7 @@ public class Computador
 		return jogadas;
 	}
 	
+	
 	// Dá um valor de pontuação para o tabuleiro - Na forma de "Vantagem"
 	// Vantagem = suaPontuação - pontuaçãoOponente
 	public int calculePontuacaoDoTabuleiro()
@@ -158,16 +159,17 @@ public class Computador
 		ArrayList<Sequencia> sequencias3 = this.gomoku.getSequenciasTres();
 		ArrayList<Sequencia> sequencias4 = this.gomoku.getSequenciasQuatro();
 		ArrayList<Sequencia> temporarias = this.gomoku.getSequenciasTemporarias();
+		ArrayList<Sequencia> sequMinimax = this.gomoku.getSequenciasMinimax();
 		
 		
 		for (int i = 0; i < sequencias4.size(); i++)
 		{
 			if(sequencias4.get(i).getCorPeca().equals(Peca.PECA_PRETA))
-				resultado += this.gomoku.getValorQuatro();
+				resultado += this.gomoku.getValorQuadra();
 			else
 			{
 				if(sequencias4.get(i).getCorPeca().equals(Peca.PECA_BRANCA))
-					resultado -= this.gomoku.getValorQuatro();
+					resultado -= this.gomoku.getValorQuadra();
 			}	
 		}
 
@@ -213,7 +215,7 @@ public class Computador
 				if(tam == 5)
 					resultado += this.gomoku.getValorQuintupla();
 				if(tam == 4)
-					resultado += this.gomoku.getValorQuatro();
+					resultado += this.gomoku.getValorQuadra();
 				if(tam == 3)
 					resultado += this.gomoku.getValorTripla();
 				if(tam == 2)
@@ -227,7 +229,40 @@ public class Computador
 				if(tam == 5)
 					resultado -= this.gomoku.getValorQuintupla();
 				if(tam == 4)
-					resultado -= this.gomoku.getValorQuatro();
+					resultado -= this.gomoku.getValorQuadra();
+				if(tam == 3)
+					resultado -= this.gomoku.getValorTripla();
+				if(tam == 2)
+					resultado -= this.gomoku.getValorDupla();
+				if(tam == 1)
+					resultado -= this.gomoku.getValorUma();
+			}
+		}
+		
+		for(int i = 0; i < sequMinimax.size(); i++)
+		{
+			int tam = 0;
+			if(sequMinimax.get(i).getCorPeca().equals(Peca.PECA_PRETA))
+			{
+				tam = sequMinimax.get(i).getTamanho();
+				if(tam == 5)
+					resultado += this.gomoku.getValorQuintupla();
+				if(tam == 4)
+					resultado += this.gomoku.getValorQuadra();
+				if(tam == 3)
+					resultado += this.gomoku.getValorTripla();
+				if(tam == 2)
+					resultado += this.gomoku.getValorDupla();
+				if(tam == 1)
+					resultado += this.gomoku.getValorUma();
+			}
+			else
+			{
+				tam = sequMinimax.get(i).getTamanho();
+				if(tam == 5)
+					resultado -= this.gomoku.getValorQuintupla();
+				if(tam == 4)
+					resultado -= this.gomoku.getValorQuadra();
 				if(tam == 3)
 					resultado -= this.gomoku.getValorTripla();
 				if(tam == 2)
