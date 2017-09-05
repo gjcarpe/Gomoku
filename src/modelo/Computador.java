@@ -21,31 +21,32 @@ public class Computador
 		// Passagem de parâmetros para o minimax com podas alfa e beta.
 		// Profundidade deve ser igual a base.
 		// Alfa e beta devem possuir os valores respectivos de -infinito e +infinito.
-		resultado = this.miniMax(0, 0, Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
+		
+		resultado = this.miniMax(4, 4, Integer.MIN_VALUE, Integer.MAX_VALUE);
+		
+		// Jogada que usa apenas o MAX
+		// resultado = this.max();
+		// Jogada que usa apenas o MIN
+		// resultado = this.min();
 		
 		return resultado;
 	}
 	
 	// Busca por profundidade com podas alfa e beta.
-	// Implementado com auxílio do pseudo-código da Wikipédia.
-	// Link: https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
-	public ParOrdenado miniMax(int profundidade, int base, int alfa, int beta, int indiceFor) // TODO WIP
+
+	public ParOrdenado miniMax(int profundidade, int base, int alfa, int beta) // TODO WIP
 	{
 		ParOrdenado resultado = null;
 		
-		if(profundidade == 0) // Retorna valor heurístico - no caso, o próprio ponto que será simulado e calculado depois
+		if(profundidade == 0) // Fronteira
 		{
-			System.err.println("PROFUNDIDADE DA RECURSAO ATUAL = " + profundidade);
-			if(base == 0) // Caso de nível zero
+			if(base % 2 == 0)
 				return this.max();
 			else
-				return this.encontrePontosAdjacentesDeSequencias().get(indiceFor);
-			
+				return this.min();
 		}
 		else
 		{
-			System.err.println("PROFUNDIDADE DA RECURSAO ATUAL = " + profundidade);
-
 			ArrayList<ParOrdenado> jogadasPossiveis = this.encontrePontosAdjacentesDeSequencias();
 			ParOrdenado jogadaAtual = null;
 			
@@ -62,8 +63,8 @@ public class Computador
 					
 					jogadaAtual = jogadasPossiveis.get(i);
 					this.gomoku.crieSequenciasMinimax(jogadaAtual.getX(), jogadaAtual.getY(), Peca.PECA_PRETA);
-					resultadoProxNivel = this.miniMax(profundidade-1, base, alfa, beta, i);
-					this.gomoku.crieSequenciasTemporarias(resultadoProxNivel.getX(), resultadoProxNivel.getY(), Peca.PECA_BRANCA);
+					resultadoProxNivel = this.miniMax(profundidade-1, base, alfa, beta);
+					this.gomoku.crieSequenciasTemporarias(resultadoProxNivel.getX(), resultadoProxNivel.getY(), Peca.PECA_PRETA);
 					valorResultadoProxNivel = this.calculePontuacaoDoTabuleiro();
 					this.gomoku.removaSequenciasTemporarias();
 					
@@ -80,9 +81,8 @@ public class Computador
 					
 					if(beta <= alfa)
 						break; // Realiza a poda
-					
-					resultado = v;
 				}
+				resultado = v;
 			}
 			else // Minimizando jogador
 			{
@@ -91,9 +91,9 @@ public class Computador
 				{
 					jogadaAtual = jogadasPossiveis.get(i);
 					this.gomoku.crieSequenciasMinimax(jogadaAtual.getX(), jogadaAtual.getY(), Peca.PECA_BRANCA);
-					resultadoProxNivel = this.miniMax(profundidade-1, base, alfa, beta, i);
+					resultadoProxNivel = this.miniMax(profundidade-1, base, alfa, beta);
 					
-					this.gomoku.crieSequenciasTemporarias(resultadoProxNivel.getX(), resultadoProxNivel.getY(), Peca.PECA_PRETA);
+					this.gomoku.crieSequenciasTemporarias(resultadoProxNivel.getX(), resultadoProxNivel.getY(), Peca.PECA_BRANCA);
 					valorResultadoProxNivel = this.calculePontuacaoDoTabuleiro();
 					this.gomoku.removaSequenciasTemporarias();
 					
@@ -110,9 +110,9 @@ public class Computador
 					
 					if(beta <= alfa)
 						break; // Realiza a poda
-					
-					resultado = v;	
+						
 				}
+				resultado = v;
 			}
 		}
 		
@@ -221,7 +221,7 @@ public class Computador
 			}
 			this.gomoku.removaSequenciasTemporarias(); // Restaura o tabuleiro
 		}
-		System.out.println("MAIOR VALOR ENCONTRADO PELO PC: " + maiorValor);
+		
 		return resultado;
 	}
 	
@@ -256,12 +256,13 @@ public class Computador
 			}
 			this.gomoku.removaSequenciasTemporarias(); // Restaura o tabuleiro
 		}
-		System.out.println("MENOR VALOR ENCONTRADO PELO PC: " + menorValor);
+		
 		return resultado;
 	}
 	
 	public ParOrdenado jogadaAleatoria() // Método para testes
 	{
+		System.out.println("JOGADA ALEATORIA");
 		ArrayList<ParOrdenado> jogadasPossiveis = this.pegarJogadasPossiveis();
 		ParOrdenado resultado = null;
 		Random rand = new Random();

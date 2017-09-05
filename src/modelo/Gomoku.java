@@ -235,7 +235,7 @@ public class Gomoku
 			if(this.vitoria == false) // Jogada do computador
 			{
 				ParOrdenado ponto = this.computador.jogadaComputador(); // Computador calcula sua jogada
-				System.out.println("COMPUTADOR JOGOU NO PONTO [" + ponto.getX() + "][" + ponto.getY() + "]");
+				System.err.println("COMPUTADOR JOGOU NO PONTO [" + ponto.getX() + "][" + ponto.getY() + "]");
 				this.controle.jogadaComputador(ponto.getX(), ponto.getY()); // Atualiza interface
 				this.tabuleiro[ponto.getX()][ponto.getY()] = Peca.PECA_PRETA;
 				jogadas = this.crieSequencias(ponto.getX(), ponto.getY(), Peca.PECA_PRETA);
