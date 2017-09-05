@@ -22,7 +22,7 @@ public class Computador
 		// Profundidade deve ser igual a base.
 		// Alfa e beta devem possuir os valores respectivos de -infinito e +infinito.
 		
-		resultado = this.miniMax(4, 4, Integer.MIN_VALUE, Integer.MAX_VALUE);
+		resultado = this.miniMax(2, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, null);
 		
 		// Jogada que usa apenas o MAX
 		// resultado = this.max();
@@ -34,7 +34,152 @@ public class Computador
 	
 	// Busca por profundidade com podas alfa e beta.
 
-	public ParOrdenado miniMax(int profundidade, int base, int alfa, int beta) // TODO WIP
+	public ParOrdenado miniMax(int profundidade, int base, int alfa, int beta, ArrayList<ParOrdenado> seqJogadas) // TODO WIP
+	{
+		ParOrdenado resultado = null;
+		
+		if(profundidade == 0) // Fronteira
+		{
+			if(seqJogadas != null)
+			{
+				for(int i = 0; i < seqJogadas.size(); i++) // Simula a árvore de jogadas
+				{
+					if(base % 2 == 0)
+					{
+						if(i % 2 == 0)
+							this.gomoku.crieSequenciasTemporarias(seqJogadas.get(i).getX(), seqJogadas.get(i).getY(), Peca.PECA_PRETA);
+						else
+							this.gomoku.crieSequenciasTemporarias(seqJogadas.get(i).getX(), seqJogadas.get(i).getY(), Peca.PECA_BRANCA);
+					}
+					else
+						if(i % 2 == 0)
+							this.gomoku.crieSequenciasTemporarias(seqJogadas.get(i).getX(), seqJogadas.get(i).getY(), Peca.PECA_BRANCA);
+						else
+							this.gomoku.crieSequenciasTemporarias(seqJogadas.get(i).getX(), seqJogadas.get(i).getY(), Peca.PECA_PRETA);
+				}
+				if(base % 2 == 0) // Calcula o valor da fronteira e retorna para o nível anterior da recursão
+					resultado = this.max();
+				else
+					resultado = this.min();
+				this.gomoku.removaSequenciasTemporarias(); // Reverte as jogadas temporárias usadas para avaliação
+			}
+			else
+			{
+				if(base % 2 == 0) // Calcula o valor da fronteira e retorna para o nível anterior da recursão
+					resultado = this.max();
+				else
+					resultado = this.min();
+			}
+		}
+		else
+		{
+			ArrayList<ParOrdenado> jogadasPossiveis = this.encontrePontosAdjacentesDeSequencias();
+			ParOrdenado jogadaAtual = null;
+			
+			ParOrdenado v = null;
+			int valorV = 0;
+			ParOrdenado resultadoProxNivel = null;
+			int valorResultadoProxNivel = 0;
+			
+			if(profundidade % 2 == 0) // Maximizando jogador
+			{
+				valorV = Integer.MIN_VALUE; // -infinito
+				for(int i = 0; i < jogadasPossiveis.size(); i++)
+				{
+					ArrayList<ParOrdenado> jogadasRecursao = new ArrayList<ParOrdenado>();
+					
+					if(seqJogadas != null) // Caso base
+						for(int j = 0; j < seqJogadas.size(); j++)
+							jogadasRecursao.add(seqJogadas.get(j)); // Carrega a árvore de jogadas
+
+					jogadaAtual = jogadasPossiveis.get(i);
+					jogadasRecursao.add(jogadaAtual);
+					resultadoProxNivel = this.miniMax(profundidade-1, base, alfa, beta, jogadasRecursao);
+					// Simula as jogadas que o trouxeram até aqui
+					if(seqJogadas != null) // Caso base
+						for(int j = 0; j < seqJogadas.size(); j++) // TODO VERIFICAR CORES
+						{
+							if(j % 2 == 0)
+								this.gomoku.crieSequenciasTemporarias(seqJogadas.get(j).getX(), seqJogadas.get(j).getY(), Peca.PECA_PRETA);
+							else
+								this.gomoku.crieSequenciasTemporarias(seqJogadas.get(j).getX(), seqJogadas.get(j).getY(), Peca.PECA_BRANCA);
+						}
+					// E a jogada atual em questão
+					this.gomoku.crieSequenciasTemporarias(resultadoProxNivel.getX(), resultadoProxNivel.getY(), Peca.PECA_PRETA);
+					// Calcula seu valor
+					valorResultadoProxNivel = this.calculePontuacaoDoTabuleiro();
+					// Reverte as jogadas temporárias
+					this.gomoku.removaSequenciasTemporarias();
+					
+					// Faz as verificações
+					
+					if(valorV < valorResultadoProxNivel) // Pega o maior valor heurístico
+					{
+						v = resultadoProxNivel;
+						valorV = valorResultadoProxNivel;
+					}
+					
+					if(alfa < valorV)
+						alfa = valorV;
+					
+					if(beta <= alfa)
+						break; // Realiza a poda
+				}
+				resultado = v;
+			}
+			else // Minimizando jogador
+			{
+				valorV = Integer.MAX_VALUE; // +infinito
+				for(int i = 0; i < jogadasPossiveis.size(); i++)
+				{
+					ArrayList<ParOrdenado> jogadasRecursao = new ArrayList<ParOrdenado>();
+					
+					if(seqJogadas != null) // Caso base
+						for(int j = 0; j < seqJogadas.size(); j++)
+							jogadasRecursao.add(seqJogadas.get(j)); // Carrega a árvore de jogadas
+
+					jogadaAtual = jogadasPossiveis.get(i);
+					jogadasRecursao.add(jogadaAtual);
+					resultadoProxNivel = this.miniMax(profundidade-1, base, alfa, beta, jogadasRecursao);
+					// Simula as jogadas que o trouxeram até aqui
+					if(seqJogadas != null) // Caso base
+						for(int j = 0; j < seqJogadas.size(); j++) // TODO VERIFICAR CORES
+						{
+							if(j % 2 == 0)
+								this.gomoku.crieSequenciasTemporarias(seqJogadas.get(j).getX(), seqJogadas.get(j).getY(), Peca.PECA_BRANCA);
+							else
+								this.gomoku.crieSequenciasTemporarias(seqJogadas.get(j).getX(), seqJogadas.get(j).getY(), Peca.PECA_PRETA);
+						}
+					// E a jogada atual em questão
+					this.gomoku.crieSequenciasTemporarias(resultadoProxNivel.getX(), resultadoProxNivel.getY(), Peca.PECA_BRANCA);
+					// Calcula seu valor
+					valorResultadoProxNivel = this.calculePontuacaoDoTabuleiro();
+					// Reverte as jogadas temporárias
+					this.gomoku.removaSequenciasTemporarias();
+					
+					if(valorV > valorResultadoProxNivel) // Pega o menor valor heurístico
+					{
+						v = resultadoProxNivel;
+						valorV = valorResultadoProxNivel;
+					}
+					
+					if(beta > valorV)
+						beta = valorV;
+					
+					if(beta <= alfa)
+						break; // Realiza a poda
+						
+				}
+				resultado = v;
+			}
+		}
+		
+		return resultado;
+	}
+	
+	// Busca por profundidade com podas alfa e beta. // Não está funcionando adequadamente
+	/*
+	public ParOrdenado miniMax(int profundidade, int base, int alfa, int beta)
 	{
 		ParOrdenado resultado = null;
 		
@@ -118,6 +263,7 @@ public class Computador
 		
 		return resultado;
 	}
+	*/
 	
 	// Antigo - BUSCA POR LARGURA - POSSUI ERROS
 	
