@@ -6,8 +6,6 @@ import java.util.Random;
 public class Computador 
 {
 	private Gomoku gomoku;
-	private ParOrdenado ultimaJogada;
-	private ArrayList<Sequencia> sequenciasUltimaJogada;
 	
 	public Computador(Gomoku gomoku)
 	{
@@ -20,12 +18,12 @@ public class Computador
 	{
 		ParOrdenado resultado = null;
 		
-		resultado = this.miniMax(2, 2);
+		resultado = this.miniMax(1, 1);
 		
 		return resultado;
 	}
 	
-	public ParOrdenado miniMax(int profundidade, int base) // TODO - conferir cores
+	public ParOrdenado miniMax(int profundidade, int base) // TODO WIP
 	{
 		ParOrdenado resultado = null;
 
@@ -83,9 +81,9 @@ public class Computador
 						melhor = fronteira;
 					}
 				}
+				// Reverta a última jogada
+				this.gomoku.revertaUltimaJogadaMinimax();
 			}
-			// Reverta a última jogada
-			this.gomoku.revertaUltimaJogadaMinimax();
 			resultado = melhor;
 		}
 			
@@ -590,6 +588,74 @@ public class Computador
 						resultado.add(new ParOrdenado(xAtual, yAtual));
 				}
 			}	
+		}
+		
+		// Pegar todos os pontos adjacentes das sequências minimax
+		for(int i = 0; i < this.gomoku.getSequenciasMinimax().size(); i++)
+		{
+			seqAtual = this.gomoku.getSequenciasMinimax().get(i);
+			orAtual = seqAtual.getOrientacao();
+				
+			for(int j = 0; j < 2; j++)
+			{
+				if(j == 1) // Depois pega o seguinte do fim
+				{
+					orAtual = this.gomoku.orientacaoReversa(orAtual);
+					atual = seqAtual.getInicio();
+				}
+				else
+					atual = seqAtual.getFim(); // Primeiro pega o seguinte do começo
+				
+				xAtual = atual.getX();
+				yAtual = atual.getY();
+				
+				// Ajusta as coordenadas para as do ponto seguinte
+				
+				if(orAtual == Orientacao.NORTE)
+				{
+					xAtual--;
+				}
+				if(orAtual == Orientacao.SUL)
+				{
+					xAtual++;
+				}
+				if(orAtual == Orientacao.LESTE)
+				{
+					yAtual++;
+				}
+				if(orAtual == Orientacao.OESTE)
+				{
+					yAtual--;
+				}
+				if(orAtual == Orientacao.NORDESTE)
+				{
+					xAtual--;
+					yAtual++;
+				}
+				if(orAtual == Orientacao.NOROESTE)
+				{
+					xAtual--;
+					yAtual--;
+				}
+				if(orAtual == Orientacao.SUDOESTE)
+				{
+					xAtual++;
+					yAtual--;
+				}
+				if(orAtual == Orientacao.SUDESTE)
+				{
+					xAtual++;
+					yAtual++;
+				}
+				
+				// Se está dentro dos limites do tabuleiro
+				if(xAtual >= 0 && xAtual <= 14 && yAtual >= 0 && yAtual <= 14)
+				{
+					candidata = tabuleiro[xAtual][yAtual];
+					if(candidata.equals(Peca.SEM_PECA)) // E é um espaço vago de jogada
+						resultado.add(new ParOrdenado(xAtual, yAtual));
+				}
+			}
 		}
 		
 		return resultado;

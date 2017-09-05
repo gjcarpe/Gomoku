@@ -24,6 +24,10 @@ public class Gomoku
 	private ArrayList<Sequencia> sequenciasMinimax;
 	private ArrayList<ParOrdenado> jogadasMinimax;
 	
+	private ParOrdenado ultimaJogada;
+	private ArrayList<Sequencia> sequenciasUltimaJogada;
+	private Peca pecaUltimaJogada;
+	
 	private int valorUma;
 	private int valorDupla;
 	private int valorTripla;
@@ -62,7 +66,11 @@ public class Gomoku
 		this.sequenciasMinimax = new ArrayList<Sequencia>();
 		this.jogadasMinimax = new ArrayList<ParOrdenado>();
 		
-		// Valores arbitrários - TODO Verificar
+		this.ultimaJogada = null;
+		this.sequenciasUltimaJogada = new ArrayList<Sequencia>();
+		this.pecaUltimaJogada = Peca.SEM_PECA;
+		
+		// Valores arbitrários
 		this.valorUma = 1;
 		this.valorDupla = 10;
 		this.valorTripla = 100;
@@ -109,6 +117,21 @@ public class Gomoku
 	public ArrayList<ParOrdenado> getJogadasMinimax()
 	{
 		return this.jogadasMinimax;
+	}
+	
+	public ParOrdenado getUltimaJogada()
+	{
+		return this.ultimaJogada;
+	}
+	
+	public ArrayList<Sequencia> getSequenciasUltimaJogada()
+	{
+		return this.sequenciasUltimaJogada;
+	}
+	
+	public Peca getPecaUltimaJogada()
+	{
+		return this.pecaUltimaJogada;
 	}
 	
 	public int getValorUma()
@@ -613,12 +636,16 @@ public class Gomoku
 	
 	// Cria as jogadas Minimax
 	public void crieSequenciasMinimax(int x, int y, Peca corPeca) 
-	{
+	{	
 		this.tabuleiro[x][y] = corPeca; // Jogada miniMax
 		this.jogadasMinimax.add(new ParOrdenado(x, y)); // Adiciona o par da jogada
 		ArrayList<Sequencia> sequencias = this.crieSequencias(x, y, corPeca); // Cria as seq. miniMax
 		for(int i = 0; i < sequencias.size(); i++)
 			this.sequenciasMinimax.add(sequencias.get(i));
+		
+		this.ultimaJogada = new ParOrdenado(x,y);
+		this.sequenciasUltimaJogada = sequencias;
+		this.pecaUltimaJogada = corPeca;
 	}
 
 	// Reverte as jogadas Minimax
@@ -634,6 +661,34 @@ public class Gomoku
 		}
 		this.jogadasMinimax.clear(); // Limpa as listas de jogadas
 		this.sequenciasMinimax.clear();
+	}
+
+	public void revertaUltimaJogadaMinimax() 
+	{
+		// Reverte a última jogada
+		this.tabuleiro[this.ultimaJogada.getX()][this.getUltimaJogada().getY()] = Peca.SEM_PECA;
+		this.jogadasMinimax.remove(this.ultimaJogada);
+		int ultimo = this.jogadasMinimax.size() - 1;
+		if(ultimo >= 0)
+			this.ultimaJogada = this.jogadasMinimax.get(ultimo);
+		else
+			this.ultimaJogada = null;
+		
+		// Reverte cor
+		
+		if(this.pecaUltimaJogada.equals(Peca.PECA_BRANCA))
+			this.pecaUltimaJogada = Peca.PECA_PRETA;
+		else
+			this.pecaUltimaJogada = Peca.PECA_BRANCA;
+		
+		// Reverter as sequências
+		
+		for(int i = 0; i < this.sequenciasUltimaJogada.size(); i++)
+		{
+			this.sequenciasMinimax.remove(sequenciasUltimaJogada.get(i));
+		}
+		this.sequenciasUltimaJogada.clear();
+		this.sequenciasUltimaJogada = this.crieSequencias(this.ultimaJogada.getX(), this.getUltimaJogada().getY(), this.pecaUltimaJogada);
 	}
 
 }
