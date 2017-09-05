@@ -41,4 +41,20 @@ public class Sequencia
 	{
 		return this.tamanho;
 	}
+	
+	public boolean eIgual(Sequencia outra)
+	{
+		boolean resultado = false;
+		
+		int xInicioOutra = outra.getInicio().getX();
+		int yInicioOutra = outra.getInicio().getY();
+		int xFimOutra = outra.getFim().getX();
+		int yfimOutra = outra.getFim().getY();
+		
+		if(xInicioOutra == this.getInicio().getX() && yInicioOutra == this.getInicio().getY())
+			if(xFimOutra == this.getFim().getX() && yfimOutra == this.getFim().getY())
+				resultado = true;
+				
+		return resultado;
+	}
 }

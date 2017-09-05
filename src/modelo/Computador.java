@@ -18,12 +18,111 @@ public class Computador
 	{
 		ParOrdenado resultado = null;
 		
-		resultado = this.miniMax(2, 2);
+		// Passagem de parâmetros para o minimax com podas alfa e beta.
+		// Profundidade deve ser igual a base.
+		// Alfa e beta devem possuir os valores respectivos de -infinito e +infinito.
+		resultado = this.miniMax(0, 0, Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
 		
 		return resultado;
 	}
 	
-	public ParOrdenado miniMax(int profundidade, int base) // TODO WIP
+	// Busca por profundidade com podas alfa e beta.
+	// Implementado com auxílio do pseudo-código da Wikipédia.
+	// Link: https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
+	public ParOrdenado miniMax(int profundidade, int base, int alfa, int beta, int indiceFor) // TODO WIP
+	{
+		ParOrdenado resultado = null;
+		
+		if(profundidade == 0) // Retorna valor heurístico - no caso, o próprio ponto que será simulado e calculado depois
+		{
+			System.err.println("PROFUNDIDADE DA RECURSAO ATUAL = " + profundidade);
+			if(base == 0) // Caso de nível zero
+				return this.max();
+			else
+				return this.encontrePontosAdjacentesDeSequencias().get(indiceFor);
+			
+		}
+		else
+		{
+			System.err.println("PROFUNDIDADE DA RECURSAO ATUAL = " + profundidade);
+
+			ArrayList<ParOrdenado> jogadasPossiveis = this.encontrePontosAdjacentesDeSequencias();
+			ParOrdenado jogadaAtual = null;
+			
+			ParOrdenado v = null;
+			int valorV = 0;
+			ParOrdenado resultadoProxNivel = null;
+			int valorResultadoProxNivel = 0;
+			
+			if(profundidade % 2 == 0) // Maximizando jogador
+			{
+				valorV = Integer.MIN_VALUE; // -infinito
+				for(int i = 0; i < jogadasPossiveis.size(); i++)
+				{
+					
+					jogadaAtual = jogadasPossiveis.get(i);
+					this.gomoku.crieSequenciasMinimax(jogadaAtual.getX(), jogadaAtual.getY(), Peca.PECA_PRETA);
+					resultadoProxNivel = this.miniMax(profundidade-1, base, alfa, beta, i);
+					this.gomoku.crieSequenciasTemporarias(resultadoProxNivel.getX(), resultadoProxNivel.getY(), Peca.PECA_BRANCA);
+					valorResultadoProxNivel = this.calculePontuacaoDoTabuleiro();
+					this.gomoku.removaSequenciasTemporarias();
+					
+					this.gomoku.revertaUltimaJogadaMinimax();
+					
+					if(valorV < valorResultadoProxNivel) // Pega o maior valor heurístico
+					{
+						v = resultadoProxNivel;
+						valorV = valorResultadoProxNivel;
+					}
+					
+					if(alfa < valorV)
+						alfa = valorV;
+					
+					if(beta <= alfa)
+						break; // Realiza a poda
+					
+					resultado = v;
+				}
+			}
+			else // Minimizando jogador
+			{
+				valorV = Integer.MAX_VALUE; // +infinito
+				for(int i = 0; i < jogadasPossiveis.size(); i++)
+				{
+					jogadaAtual = jogadasPossiveis.get(i);
+					this.gomoku.crieSequenciasMinimax(jogadaAtual.getX(), jogadaAtual.getY(), Peca.PECA_BRANCA);
+					resultadoProxNivel = this.miniMax(profundidade-1, base, alfa, beta, i);
+					
+					this.gomoku.crieSequenciasTemporarias(resultadoProxNivel.getX(), resultadoProxNivel.getY(), Peca.PECA_PRETA);
+					valorResultadoProxNivel = this.calculePontuacaoDoTabuleiro();
+					this.gomoku.removaSequenciasTemporarias();
+					
+					this.gomoku.revertaUltimaJogadaMinimax();
+					
+					if(valorV > valorResultadoProxNivel) // Pega o menor valor heurístico
+					{
+						v = resultadoProxNivel;
+						valorV = valorResultadoProxNivel;
+					}
+					
+					if(beta > valorV)
+						beta = valorV;
+					
+					if(beta <= alfa)
+						break; // Realiza a poda
+					
+					resultado = v;	
+				}
+			}
+		}
+		
+		return resultado;
+	}
+	
+	// Antigo - BUSCA POR LARGURA - POSSUI ERROS
+	
+	/*
+	public ParOrdenado miniMax(int profundidade, int base)
 	{
 		ParOrdenado resultado = null;
 
@@ -86,13 +185,10 @@ public class Computador
 			}
 			resultado = melhor;
 		}
-		
-		if(profundidade == base)
-			this.gomoku.removaSequenciasMinimax();
-		System.out.println("TAM SEQ MINIMAX = " + this.gomoku.getSequenciasMinimax().size());
 			
 		return resultado;
 	}
+	*/
 	
 	// Encontra a melhor jogada no seu turno
 	public ParOrdenado max()

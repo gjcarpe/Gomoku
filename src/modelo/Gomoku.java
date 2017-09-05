@@ -232,7 +232,7 @@ public class Gomoku
 			
 			System.out.println("TURNO DO COMPUTADOR.");
 			
-			if(this.vitoria == false)
+			if(this.vitoria == false) // Jogada do computador
 			{
 				ParOrdenado ponto = this.computador.jogadaComputador(); // Computador calcula sua jogada
 				System.out.println("COMPUTADOR JOGOU NO PONTO [" + ponto.getX() + "][" + ponto.getY() + "]");
@@ -667,12 +667,16 @@ public class Gomoku
 	{
 		// Reverte a última jogada
 		this.tabuleiro[this.ultimaJogada.getX()][this.getUltimaJogada().getY()] = Peca.SEM_PECA;
-		this.jogadasMinimax.remove(this.ultimaJogada);
 		int ultimo = this.jogadasMinimax.size() - 1;
-		if(ultimo >= 0)
-			this.ultimaJogada = this.jogadasMinimax.get(ultimo);
-		else
+		this.jogadasMinimax.remove(ultimo);
+
+		if(ultimo == 0)
 			this.ultimaJogada = null;
+		else
+		{
+			ultimo = this.jogadasMinimax.size() - 1;
+			this.ultimaJogada = this.jogadasMinimax.get(ultimo);
+		}
 		
 		// Reverte cor
 		
@@ -682,13 +686,24 @@ public class Gomoku
 			this.pecaUltimaJogada = Peca.PECA_BRANCA;
 		
 		// Reverter as sequências
-		
-		for(int i = 0; i < this.sequenciasUltimaJogada.size(); i++)
+		Sequencia velha = null;
+		Sequencia atual = null;
+
+		while(this.sequenciasUltimaJogada.size() != 0) // Enquanto existirem jogadas a ser removidas
 		{
-			this.sequenciasMinimax.remove(sequenciasUltimaJogada.get(i));
+			velha = this.sequenciasUltimaJogada.remove(0); // Pega a primeira
+
+			for(int i = 0; i < this.sequenciasMinimax.size(); i++) // Pesquise as jogadas a serem removidas
+			{
+				atual = this.sequenciasMinimax.get(i);
+				if(atual.eIgual(velha))
+					this.sequenciasMinimax.remove(i);
+			}
 		}
+		
 		this.sequenciasUltimaJogada.clear();
-		this.sequenciasUltimaJogada = this.crieSequencias(this.ultimaJogada.getX(), this.getUltimaJogada().getY(), this.pecaUltimaJogada);
+		if(this.ultimaJogada != null)
+			this.sequenciasUltimaJogada = this.crieSequencias(this.ultimaJogada.getX(), this.getUltimaJogada().getY(), this.pecaUltimaJogada);
 	}
 
 }
