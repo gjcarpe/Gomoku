@@ -18,7 +18,7 @@ public class Computador
 	{
 		ParOrdenado resultado = null;
 		
-		resultado = this.miniMax(1, 1);
+		resultado = this.miniMax(2, 2);
 		
 		return resultado;
 	}
@@ -50,6 +50,7 @@ public class Computador
 					pontuacaoMelhor = Integer.MIN_VALUE;
 					this.gomoku.crieSequenciasMinimax(atual.getX(), atual.getY(), Peca.PECA_PRETA);
 					fronteira = this.miniMax(profundidade-1, base);
+					this.gomoku.revertaUltimaJogadaMinimax();
 					
 					// Simula que este ponto está marcado no tabuleiro
 					this.gomoku.crieSequenciasTemporarias(fronteira.getX(), fronteira.getY(), Peca.PECA_PRETA);
@@ -68,6 +69,7 @@ public class Computador
 					pontuacaoMelhor = Integer.MAX_VALUE;
 					this.gomoku.crieSequenciasMinimax(atual.getX(), atual.getY(), Peca.PECA_BRANCA);
 					fronteira = this.miniMax(profundidade-1, base);
+					this.gomoku.revertaUltimaJogadaMinimax();
 					
 					// Simula que este ponto está marcado no tabuleiro
 					this.gomoku.crieSequenciasTemporarias(fronteira.getX(), fronteira.getY(), Peca.PECA_BRANCA);
@@ -81,11 +83,13 @@ public class Computador
 						melhor = fronteira;
 					}
 				}
-				// Reverta a última jogada
-				this.gomoku.revertaUltimaJogadaMinimax();
 			}
 			resultado = melhor;
 		}
+		
+		if(profundidade == base)
+			this.gomoku.removaSequenciasMinimax();
+		System.out.println("TAM SEQ MINIMAX = " + this.gomoku.getSequenciasMinimax().size());
 			
 		return resultado;
 	}
@@ -156,7 +160,7 @@ public class Computador
 			}
 			this.gomoku.removaSequenciasTemporarias(); // Restaura o tabuleiro
 		}
-		
+		System.out.println("MENOR VALOR ENCONTRADO PELO PC: " + menorValor);
 		return resultado;
 	}
 	
