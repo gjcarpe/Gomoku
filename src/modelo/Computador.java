@@ -22,7 +22,7 @@ public class Computador
 		// Profundidade deve ser igual a base.
 		// Alfa e beta devem possuir os valores respectivos de -infinito e +infinito.
 		
-		resultado = this.miniMax(2, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, null);
+		resultado = this.miniMax(1, 1, Integer.MIN_VALUE, Integer.MAX_VALUE, null);
 		
 		// Jogada que usa apenas o MAX
 		// resultado = this.max();

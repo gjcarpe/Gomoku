@@ -21,7 +21,7 @@ public class Controle
 		this.janela = new Janela(this);
 	}
 	
-	public Janela getJanela() // Usado apenas para testes
+	public Janela getJanela()
 	{
 		return this.janela;
 	}

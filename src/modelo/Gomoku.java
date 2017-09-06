@@ -70,7 +70,7 @@ public class Gomoku
 		this.sequenciasUltimaJogada = new ArrayList<Sequencia>();
 		this.pecaUltimaJogada = Peca.SEM_PECA;
 		
-		// Valores arbitrários
+		// Valores das sequências
 		this.valorUma = 1;
 		this.valorDupla = 10;
 		this.valorTripla = 100;
@@ -382,34 +382,34 @@ public class Gomoku
 	
 	public void adicioneSequencia(Sequencia sequencia)
 	{
-		
+		// Para log de sequências descomentar as linhas de Syso
 		if(sequencia.getTamanho() == 1)
 		{
 			this.sequenciasUm.add(sequencia);
-			System.out.println("Adicionada nova Sequência-1");
-			System.out.println("Início: [" + sequencia.getInicio().getX() + "][" + sequencia.getInicio().getY() + "]");
-			System.out.println("Fim: [" + sequencia.getFim().getX() + "][" + sequencia.getFim().getY() + "]");
+			//System.out.println("Adicionada nova Sequência-1");
+			//System.out.println("Início: [" + sequencia.getInicio().getX() + "][" + sequencia.getInicio().getY() + "]");
+			//System.out.println("Fim: [" + sequencia.getFim().getX() + "][" + sequencia.getFim().getY() + "]");
 		}
 		if(sequencia.getTamanho() == 2)
 		{
 			this.sequenciasDois.add(sequencia);
-			System.out.println("Adicionada nova Sequência-2");
-			System.out.println("Início: [" + sequencia.getInicio().getX() + "][" + sequencia.getInicio().getY() + "]");
-			System.out.println("Fim: [" + sequencia.getFim().getX() + "][" + sequencia.getFim().getY() + "]");
+			//System.out.println("Adicionada nova Sequência-2");
+			//System.out.println("Início: [" + sequencia.getInicio().getX() + "][" + sequencia.getInicio().getY() + "]");
+			//System.out.println("Fim: [" + sequencia.getFim().getX() + "][" + sequencia.getFim().getY() + "]");
 		}
 		if(sequencia.getTamanho() == 3)
 		{
 			this.sequenciasTres.add(sequencia);
-			System.out.println("Adicionada nova Sequência-3");
-			System.out.println("Início: [" + sequencia.getInicio().getX() + "][" + sequencia.getInicio().getY() + "]");
-			System.out.println("Fim: [" + sequencia.getFim().getX() + "][" + sequencia.getFim().getY() + "]");
+			//System.out.println("Adicionada nova Sequência-3");
+			//System.out.println("Início: [" + sequencia.getInicio().getX() + "][" + sequencia.getInicio().getY() + "]");
+			//System.out.println("Fim: [" + sequencia.getFim().getX() + "][" + sequencia.getFim().getY() + "]");
 		}
 		if(sequencia.getTamanho() == 4)
 		{
 			this.sequenciasQuatro.add(sequencia);
-			System.out.println("Adicionada nova Sequência-4");
-			System.out.println("Início: [" + sequencia.getInicio().getX() + "][" + sequencia.getInicio().getY() + "]");
-			System.out.println("Fim: [" + sequencia.getFim().getX() + "][" + sequencia.getFim().getY() + "]");
+			//System.out.println("Adicionada nova Sequência-4");
+			//System.out.println("Início: [" + sequencia.getInicio().getX() + "][" + sequencia.getInicio().getY() + "]");
+			//System.out.println("Fim: [" + sequencia.getFim().getX() + "][" + sequencia.getFim().getY() + "]");
 		}
 		if(sequencia.getTamanho() == 5) // Caso detectada sequência 5 encerra o jogo
 		{
